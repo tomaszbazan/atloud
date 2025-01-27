@@ -1,9 +1,8 @@
-import 'dart:math';
-
 import 'package:atloud/components/app_bar.dart';
 import 'package:atloud/settings/footer.dart';
 import 'package:atloud/settings/settings_data.dart';
 import 'package:atloud/shared/user_data_storage.dart';
+import 'package:atloud/sound/alarm_type.dart';
 import 'package:atloud/theme/colors.dart';
 import 'package:atloud/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -213,8 +212,8 @@ class _SettingsPageState extends State<SettingsPage> {
                             alignment: AlignmentDirectional.center,
                             style: CustomTheme.settingsTextTheme,
                             underline: const SizedBox(),
-                            value: data.alarmTypeValue,
-                            items: ['FANFARY', 'DZWONKI', 'PIANO'].map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                            value: data.alarmTypeValue.displayName,
+                            items: AlarmType.values.map((e) => DropdownMenuItem(value: e.displayName, child: Text(e.displayName))).toList(),
                             onChanged: (value) {
                               setState(() {
                                 UserDataStorage.storeAlarmTypeValue(value!);

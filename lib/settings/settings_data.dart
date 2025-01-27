@@ -1,9 +1,11 @@
+import 'package:atloud/sound/alarm_type.dart';
+
 class SettingsData {
   final double volumeValue;
   final int periodValue;
   final bool backgroundSoundValue;
   final bool screenLockValue;
-  final String alarmTypeValue;
+  final AlarmType alarmTypeValue;
   final String languageValue;
   final bool vibrationValue;
   final bool continuationAfterTimeValue;
