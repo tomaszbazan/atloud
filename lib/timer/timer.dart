@@ -113,7 +113,7 @@ class _TimerPageState extends State<TimerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const AppBarWidget(text: 'MINUTNIK ATLOUD'),
+        appBar: const AppBarWidget(text: ''),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
