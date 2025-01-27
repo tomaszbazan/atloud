@@ -1,10 +1,13 @@
+import 'dart:math';
+
+import 'package:atloud/components/app_bar.dart';
 import 'package:atloud/settings/footer.dart';
 import 'package:atloud/settings/settings_data.dart';
-import 'package:atloud/components/app_bar.dart';
 import 'package:atloud/shared/user_data_storage.dart';
 import 'package:atloud/theme/colors.dart';
 import 'package:atloud/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:volume_controller/volume_controller.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -15,10 +18,11 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  bool backgroundSound = false;
-  bool screenLock = false;
-  bool vibration = false;
-  bool continueAfterTimer = false;
+  bool _backgroundSound = false;
+  bool _screenLock = false;
+  bool _vibration = false;
+  bool _continueAfterTimer = false;
+  int _versionCounter = 0;
 
   // final FlutterTts _flutterTts = FlutterTts();
   // Future<dynamic> _getLanguages() async => await _flutterTts.getLanguages;
@@ -68,6 +72,28 @@ class _SettingsPageState extends State<SettingsPage> {
   //   return items;
   // }
 
+  void _incrementShowVersionCounter() {
+    _versionCounter++;
+    if (_versionCounter >= 5) {
+      _displayAppVersion();
+    }
+  }
+
+  void _displayAppVersion() async {
+    var version = await _appVersion();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Version $version'),
+        duration: const Duration(seconds: 1),
+      ),
+    );
+  }
+
+  Future<String> _appVersion() async {
+    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    return '${packageInfo.version}+${packageInfo.buildNumber}';
+  }
+
   @override
   Widget build(BuildContext context) {
     const double iconSize = 40.0;
@@ -77,7 +103,7 @@ class _SettingsPageState extends State<SettingsPage> {
       body: FutureBuilder<SettingsData>(
         future: _loadPreferences(),
         builder: (BuildContext context, AsyncSnapshot<SettingsData> snapshot) {
-          if(snapshot.hasData) {
+          if (snapshot.hasData) {
             SettingsData data = snapshot.requireData;
             return Container(
               margin: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 30.0),
@@ -85,7 +111,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(margin: const EdgeInsets.only(bottom: 50.0), child: const Icon(Icons.settings, size: 70.0, color: CustomColors.textColor)),
+                  Container(
+                      margin: const EdgeInsets.only(bottom: 50.0),
+                      child: IconButton(icon: const Icon(Icons.settings, size: 70.0, color: CustomColors.textColor), onPressed: () => _incrementShowVersionCounter())),
                   Row(children: [
                     const Icon(Icons.volume_up, size: iconSize, color: CustomColors.textColor),
                     Container(margin: const EdgeInsets.symmetric(horizontal: 10.0), child: Text('Głośność', style: CustomTheme.settingsTextTheme)),
@@ -135,7 +163,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         },
                       ),
                     ),
-                    SizedBox(width: 40.0, child: Text(data.periodValue.toString(), textAlign: TextAlign.end ,style: CustomTheme.settingsTextTheme)),
+                    SizedBox(width: 40.0, child: Text(data.periodValue.toString(), textAlign: TextAlign.end, style: CustomTheme.settingsTextTheme)),
                   ]),
                   Row(
                     children: [
@@ -147,9 +175,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           inactiveTrackColor: Colors.black,
                           activeColor: Colors.white,
                           onChanged: (_) => setState(() {
-                            backgroundSound = !backgroundSound;
-                            UserDataStorage.storeBackgroundSoundValue(backgroundSound);
-                          }))
+                                _backgroundSound = !_backgroundSound;
+                                UserDataStorage.storeBackgroundSoundValue(_backgroundSound);
+                              }))
                     ],
                   ),
                   Row(
@@ -162,9 +190,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           inactiveTrackColor: Colors.black,
                           activeColor: Colors.white,
                           onChanged: (_) => setState(() {
-                            screenLock = !screenLock;
-                            UserDataStorage.storeScreenLockValue(screenLock);
-                          }))
+                                _screenLock = !_screenLock;
+                                UserDataStorage.storeScreenLockValue(_screenLock);
+                              }))
                     ],
                   ),
                   Row(
@@ -224,9 +252,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           inactiveTrackColor: Colors.black,
                           activeColor: Colors.white,
                           onChanged: (_) => setState(() {
-                            vibration = !vibration;
-                            UserDataStorage.storeVibrationValue(vibration);
-                          }))
+                                _vibration = !_vibration;
+                                UserDataStorage.storeVibrationValue(_vibration);
+                              }))
                     ],
                   ),
                   Row(
@@ -239,9 +267,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           inactiveTrackColor: Colors.black,
                           activeColor: Colors.white,
                           onChanged: (_) => setState(() {
-                            continueAfterTimer = !continueAfterTimer;
-                            UserDataStorage.storeContinueAfterTimeValue(continueAfterTimer);
-                          }))
+                                _continueAfterTimer = !_continueAfterTimer;
+                                UserDataStorage.storeContinueAfterTimeValue(_continueAfterTimer);
+                              }))
                     ],
                   ),
                   const SettingsFooterWidget()
