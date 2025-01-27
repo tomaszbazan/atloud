@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:vibration/vibration.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
-import '../voice/speaker.dart';
+import '../sound/speaker.dart';
 import '../theme/colors.dart';
 
 class _ClockPageState extends State<ClockPage> {

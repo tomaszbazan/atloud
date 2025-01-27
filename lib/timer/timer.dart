@@ -13,7 +13,7 @@ import 'package:atloud/timer/time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:vibration/vibration.dart';
 
-import '../voice/speaker.dart';
+import '../sound/speaker.dart';
 import '../theme/colors.dart';
 
 class _TimerPageState extends State<TimerPage> {

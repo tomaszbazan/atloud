@@ -1,5 +1,6 @@
 import 'package:atloud/converters/duration_to_string.dart';
 import 'package:atloud/converters/string_to_duration.dart';
+import 'package:atloud/sound/alarm_type.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -91,8 +92,9 @@ class UserDataStorage {
     _storage.write(key: _alarmTypeValueKey, value: value);
   }
 
-  static Future<String> alarmTypeValue() async {
-    return await _storage.read(key: _alarmTypeValueKey) ?? "FANFARY";
+  static Future<AlarmType> alarmTypeValue() async {
+    var value = await _storage.read(key: _alarmTypeValueKey);
+    return AlarmType.values.firstWhere((alarm) => alarm.displayName == value, orElse: () => AlarmType.brass);
   }
 
   static void storeLanguageValue(String value) async {

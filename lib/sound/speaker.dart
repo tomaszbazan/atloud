@@ -28,12 +28,7 @@ class Speaker {
       return;
     }
     var alarmType = await UserDataStorage.alarmTypeValue();
-    var asset = switch (alarmType) {
-      'FANFARY' => AssetSource('sounds/alarms/fanfares.mp3'),
-      'DZWONKI' => AssetSource('sounds/alarms/bells.mp3'),
-      'PIANO' => AssetSource('sounds/alarms/piano.mp3'),
-      _ => AssetSource('sounds/alarms/fanfares.mp3'),
-    };
-    _audioPlayer.play(asset);
+    var alarm = AssetSource(alarmType.filePath);
+    _audioPlayer.play(alarm);
   }
 }
