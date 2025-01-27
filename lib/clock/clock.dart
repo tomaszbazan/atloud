@@ -77,7 +77,7 @@ class _ClockPageState extends State<ClockPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppBarWidget(text: 'ZEGAR ATLOUD'),
+      appBar: const AppBarWidget(text: ''),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
