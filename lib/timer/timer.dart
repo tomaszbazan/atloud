@@ -18,12 +18,14 @@ import '../theme/colors.dart';
 
 class _TimerPageState extends State<TimerPage> {
   static const _refreshRate = Duration(seconds: 1);
+
   var _currentTime = const Duration();
   var _startingTime = const Duration();
+
   var _continueAfterTimer = false;
   var _period = 1;
-
   var _vibrationOn = true;
+
   Timer? _timer;
   final _speaker = Speaker();
 
