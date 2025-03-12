@@ -1,5 +1,6 @@
 import 'package:atloud/converters/duration_to_string.dart';
 import 'package:atloud/converters/string_to_duration.dart';
+import 'package:atloud/shared/available_page.dart';
 import 'package:atloud/sound/alarm_type.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -18,6 +19,7 @@ class UserDataStorage {
   static const String _vibrationValueKey = 'vibrationValue';
   static const String _continuationAfterTimeValueKey = 'continuationAfterTimeValue';
   static const String _soundOnValueKey = 'soundOnValue';
+  static const String _lastVisitedPageValueKey = 'lastVisitedPageValue';
 
   static const FlutterSecureStorage _storage = FlutterSecureStorage();
 
@@ -47,7 +49,7 @@ class UserDataStorage {
   }
 
   static Future<Duration> startingTimerValue() async {
-    var value = await _storage.read(key: _startingTimerValueKey) ?? "00:00";
+    var value = await _storage.read(key: _startingTimerValueKey) ?? "10:00";
     return StringToDuration.convert(value);
   }
 
@@ -130,5 +132,14 @@ class UserDataStorage {
   static Future<bool> soundOnValue() async {
     var value = await _storage.read(key: _soundOnValueKey) ?? "true";
     return value.toLowerCase() == 'true';
+  }
+
+  static void storeLastVisitedPageValue(AvailablePage value) async {
+    _storage.write(key: _lastVisitedPageValueKey, value: value.name);
+  }
+
+  static Future<AvailablePage> lastVisitedPageValue() async {
+    var value = await _storage.read(key: _lastVisitedPageValueKey);
+    return AvailablePage.values.firstWhere((val) => value == val.name, orElse: () => AvailablePage.clock);
   }
 }

@@ -7,14 +7,19 @@ import 'package:atloud/shared/user_data_storage.dart';
 import 'package:atloud/theme/fonts.dart';
 import 'package:atloud/timer/timer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:intl/intl.dart';
 import 'package:vibration/vibration.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
+import '../foreground_task/clock_task.dart';
+import '../foreground_task/foreground_task_starter.dart';
 import '../sound/speaker.dart';
 import '../theme/colors.dart';
 
 class _ClockPageState extends State<ClockPage> {
+  final ValueNotifier<Object?> _taskDataListenable = ValueNotifier(null);
+
   static const _refreshRate = Duration(seconds: 1);
 
   var _firstInformationNeeded = true;
@@ -34,6 +39,11 @@ class _ClockPageState extends State<ClockPage> {
     _loadDefaultValues();
   }
 
+  void _timerTick(Object data) {
+    _taskDataListenable.value = data;
+    print('clock $data');
+  }
+
   Future<void> _loadDefaultValues() async {
     var screenLockValue = await UserDataStorage.screenLockValue();
     WakelockPlus.toggle(enable: screenLockValue);
@@ -43,6 +53,8 @@ class _ClockPageState extends State<ClockPage> {
   }
 
   void _startTimer() {
+    ForegroundTaskStarter.startService(_timerTick);
+
     _timer = Timer.periodic(_refreshRate, (timer) async {
       if (_firstInformationNeeded) {
         _speaker.currentTime();
@@ -65,13 +77,18 @@ class _ClockPageState extends State<ClockPage> {
   }
 
   void _clean() {
+    // ForegroundTaskStarter.stopService(); // TODO: To nie powinno tutaj być LUB nie powinieniem przekazywać tego do timera
+    // FlutterForegroundTask.removeTaskDataCallback(_timerTick);
+    // _taskDataListenable.dispose();
+
     _timer?.cancel();
   }
 
   void _goToTimer() {
     _clean();
+    FlutterForegroundTask.sendDataToTask(ClockTaskHandler.setTimerCommand);
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const TimerPage()));
+        context, MaterialPageRoute(builder: (context) => const TimerPage(isTimerPage: true)));
   }
 
   @override

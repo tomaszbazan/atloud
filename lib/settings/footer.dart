@@ -1,8 +1,6 @@
-import 'package:atloud/theme/colors.dart';
 import 'package:flutter/material.dart';
 
-import '../clock/clock.dart';
-import '../theme/fonts.dart';
+import '../theme/theme.dart';
 import '../timer/timer.dart';
 
 class SettingsFooterWidget extends StatelessWidget {
@@ -10,12 +8,12 @@ class SettingsFooterWidget extends StatelessWidget {
 
   void _goToTimer(context) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const TimerPage()));
+        context, MaterialPageRoute(builder: (context) => const TimerPage(isTimerPage: true)));
   }
 
   void _goToClock(context) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const ClockPage()));
+        context, MaterialPageRoute(builder: (context) => const TimerPage(isTimerPage: false)));
   }
 
   @override
@@ -23,31 +21,23 @@ class SettingsFooterWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        TextButton(
-          onPressed: () => _goToTimer(context),
-          child: Text(
-            'MINUTNIK',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 25,
-              color: CustomColors.textColor,
-              fontFamily: CustomFonts.openSans.value,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 4.0,
+        FittedBox(
+          child: TextButton(
+            onPressed: () => _goToTimer(context),
+            child: Text(
+              'MINUTNIK',
+              textAlign: TextAlign.center,
+              style: CustomTheme.navigationTextTheme,
             ),
           ),
         ),
-        TextButton(
-          onPressed: () => _goToClock(context),
-          child: Text(
-            'ZEGAR',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 25,
-              color: CustomColors.textColor,
-              fontFamily: CustomFonts.openSans.value,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 4.0,
+        FittedBox(
+          child: TextButton(
+            onPressed: () => _goToClock(context),
+            child: Text(
+              'ZEGAR',
+              textAlign: TextAlign.center,
+              style: CustomTheme.navigationTextTheme,
             ),
           ),
         ),

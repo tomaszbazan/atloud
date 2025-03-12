@@ -1,8 +1,7 @@
 import 'package:atloud/settings/settings.dart';
 import 'package:atloud/theme/colors.dart';
+import 'package:atloud/theme/theme.dart';
 import 'package:flutter/material.dart';
-
-import '../theme/fonts.dart';
 
 class FooterWidget extends StatelessWidget {
   final _buttonSize = 70.0;
@@ -20,19 +19,15 @@ class FooterWidget extends StatelessWidget {
         children: [
           SizedBox(width: _buttonSize),
           Expanded(
-            child: TextButton(
-                onPressed: actionOnText,
-                child: Text(
-                  text,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 25,
-                    color: CustomColors.textColor,
-                    fontFamily: CustomFonts.openSans.value,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 4.0,
-                  ),
-                )),
+            child: FittedBox(
+              child: TextButton(
+                  onPressed: actionOnText,
+                  child: Text(
+                    text,
+                    textAlign: TextAlign.center,
+                    style: CustomTheme.navigationTextTheme,
+                  )),
+            ),
           ),
           IconButton(
             icon: Icon(Icons.settings, size: _buttonSize, color: CustomColors.textColor),
