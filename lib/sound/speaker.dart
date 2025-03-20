@@ -1,7 +1,8 @@
+import 'package:atloud/converters/date_time_to_string.dart';
 import 'package:atloud/shared/user_data_storage.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:intl/intl.dart';
+import 'package:vibration/vibration.dart';
 
 class Speaker {
   final _audioPlayer = AudioPlayer();
@@ -18,7 +19,7 @@ class Speaker {
   }
 
   void currentTime() async {
-    var now = DateFormat('HH:mm').format(DateTime.now());
+    var now = DateTimeToString.shortConvert(DateTime.now());
     speak("Jest godzina $now");
   }
 
@@ -26,6 +27,10 @@ class Speaker {
     var soundOn = await UserDataStorage.soundOnValue();
     if (!soundOn) {
       return;
+    }
+    var vibrationOn = await UserDataStorage.vibrationValue();
+    if (vibrationOn) {
+      Vibration.vibrate(duration: 1000, repeat: 3);
     }
     var alarmType = await UserDataStorage.alarmTypeValue();
     var alarm = AssetSource(alarmType.filePath);
