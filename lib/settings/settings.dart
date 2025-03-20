@@ -20,7 +20,7 @@ class _SettingsPageState extends State<SettingsPage> {
   bool _backgroundSound = false;
   bool _screenLock = false;
   bool _vibration = false;
-  bool _continueAfterTimer = false;
+  bool _continueAfterAlarm = false;
   int _versionCounter = 0;
 
   // final FlutterTts _flutterTts = FlutterTts();
@@ -130,7 +130,6 @@ class _SettingsPageState extends State<SettingsPage> {
                         label: data.volumeValue.round().toString(),
                         onChanged: (value) {
                           setState(() {
-                            UserDataStorage.storeVolumeValue(value);
                             VolumeController().setVolume(value / 100, showSystemUI: true);
                           });
                         },
@@ -261,13 +260,13 @@ class _SettingsPageState extends State<SettingsPage> {
                       const SizedBox(width: iconSize, height: iconSize),
                       Expanded(child: Container(margin: const EdgeInsets.symmetric(horizontal: 10.0), child: Text('Kontynuuj odliczanie minutnika po czasie', style: CustomTheme.settingsTextTheme))),
                       Switch(
-                          value: data.continuationAfterTimeValue,
+                          value: data.continuationAfterAlarmValue,
                           activeTrackColor: Colors.black,
                           inactiveTrackColor: Colors.black,
                           activeColor: Colors.white,
                           onChanged: (_) => setState(() {
-                                _continueAfterTimer = !_continueAfterTimer;
-                                UserDataStorage.storeContinueAfterTimeValue(_continueAfterTimer);
+                                _continueAfterAlarm = !_continueAfterAlarm;
+                                UserDataStorage.storeContinueAfterAlarmValue(_continueAfterAlarm);
                               }))
                     ],
                   ),
