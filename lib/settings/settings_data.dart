@@ -8,7 +8,7 @@ class SettingsData {
   final AlarmType alarmTypeValue;
   final String languageValue;
   final bool vibrationValue;
-  final bool continuationAfterTimeValue;
+  final bool continuationAfterAlarmValue;
 
-  SettingsData(this.volumeValue, this.periodValue, this.backgroundSoundValue, this.screenLockValue, this.alarmTypeValue, this.languageValue, this.vibrationValue, this.continuationAfterTimeValue);
+  SettingsData(this.volumeValue, this.periodValue, this.backgroundSoundValue, this.screenLockValue, this.alarmTypeValue, this.languageValue, this.vibrationValue, this.continuationAfterAlarmValue);
 }

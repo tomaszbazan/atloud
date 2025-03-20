@@ -1,112 +1,95 @@
 import 'dart:async';
 
-import 'package:atloud/clock/clock.dart';
 import 'package:atloud/components/app_bar.dart';
-import 'package:atloud/components/volume_switcher.dart';
-import 'package:atloud/converters/duration_to_string.dart';
-import 'package:atloud/converters/duration_to_voice.dart';
-import 'package:atloud/converters/time_of_day_to_duration.dart';
 import 'package:atloud/components/footer.dart';
+import 'package:atloud/components/volume_switcher.dart';
+import 'package:atloud/converters/date_time_to_string.dart';
+import 'package:atloud/converters/duration_to_string.dart';
+import 'package:atloud/converters/time_of_day_to_duration.dart';
+import 'package:atloud/foreground_task/foreground_task_starter.dart';
+import 'package:atloud/foreground_task/timer_task.dart';
+import 'package:atloud/shared/available_page.dart';
 import 'package:atloud/shared/user_data_storage.dart';
 import 'package:atloud/theme/fonts.dart';
 import 'package:atloud/timer/time_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:vibration/vibration.dart';
+import 'package:flutter_foreground_task/flutter_foreground_task.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../sound/speaker.dart';
 import '../theme/colors.dart';
 
 class _TimerPageState extends State<TimerPage> {
-  static const _refreshRate = Duration(seconds: 1);
+  final ValueNotifier<Object?> _taskDataListenable = ValueNotifier(null);
 
-  var _currentTime = const Duration();
-  var _startingTime = const Duration();
+  var _isTimerPage = true;
 
-  var _continueAfterTimer = false;
-  var _period = 1;
-  var _vibrationOn = true;
-
-  Timer? _timer;
   final _speaker = Speaker();
+
+  Duration? _startingTime;
 
   @override
   void initState() {
+    _isTimerPage = widget.isTimerPage;
+    ForegroundTaskStarter.startService(_timerTick);
+    _loadUserPreferences().then((preferences) => _initPage(preferences));
+
     super.initState();
-    _loadDefaultValues();
   }
 
-  Future<void> _loadDefaultValues() async {
-    var currentTimerValue = await UserDataStorage.currentTimerValue();
-    _continueAfterTimer = await UserDataStorage.continueAfterTimeValue();
-    _vibrationOn = await UserDataStorage.vibrationValue();
+  void _initPage(Map<String, dynamic> preferences) {
+    if (_isTimerPage) {
+      FlutterForegroundTask.sendDataToTask({...preferences, TimerTaskHandler.commandParameter: TimerTaskHandler.setTimerCommand});
+    } else {
+      FlutterForegroundTask.sendDataToTask({...preferences, TimerTaskHandler.commandParameter: TimerTaskHandler.setClockCommand});
+    }
+  }
+
+  void _timerTick(Object data) {
+    _taskDataListenable.value = data;
+  }
+
+  Future<Map<String, dynamic>> _loadUserPreferences() async {
+    var screenLockValue = await UserDataStorage.screenLockValue();
+    WakelockPlus.toggle(enable: screenLockValue);
+
     _startingTime = await UserDataStorage.startingTimerValue();
-    _period = await UserDataStorage.periodValue();
-    setState(() {
-      _currentTime = currentTimerValue;
-    });
-    _startTimer();
+
+    return {
+      TimerTaskHandler.startingTimeParameter: DurationToString.convert(_startingTime!),
+      TimerTaskHandler.periodParameter: await UserDataStorage.periodValue(),
+      TimerTaskHandler.continueAfterAlarmParameter: await UserDataStorage.continueAfterAlarmValue()
+    };
   }
 
   void _showTimePicker() async {
-    final TimeOfDay? time = await TimePicker.showPicker(context, _startingTime);
+    final TimeOfDay? time = await TimePicker.showPicker(context, _startingTime!);
     setState(() {
-      if(time != null) {
-        _currentTime = TimeOfDayToDuration.convert(time);
+      if (time != null) {
         _startingTime = TimeOfDayToDuration.convert(time);
-        UserDataStorage.storeCurrentTimerValue(_currentTime);
-        UserDataStorage.storeStartingTimerValue(_startingTime);
-        _clean();
-        _startTimer();
+        UserDataStorage.storeStartingTimerValue(_startingTime!);
+        _loadUserPreferences().then((preferences) => _initPage(preferences));
       }
     });
   }
 
-  void _goToClock() {
-    _clean();
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const ClockPage()));
-  }
-
-  void _clean() {
-    _timer?.cancel();
+  void _switchPage() {
     setState(() {
-      _currentTime = _startingTime;
+      _isTimerPage = !_isTimerPage;
     });
-  }
-
-  void _startTimer() {
-    _timer = Timer.periodic(_refreshRate, (timer) async {
-      if (_startingTime == _currentTime) {
-        _speaker.speak(DurationToVoice.covert(_startingTime));
-      }
-      final seconds = _currentTime.inSeconds - 1;
-
-      if (seconds >= 0 || _continueAfterTimer) {
-        setState(() {
-          _currentTime = Duration(seconds: seconds);
-        });
-        UserDataStorage.storeCurrentTimerValue(_currentTime);
-      } else {
-        _clean();
-        return;
-      }
-
-      if (seconds == 0) {
-        _speaker.playSound();
-        if (_vibrationOn) {
-          Vibration.vibrate(duration: 1000, repeat: 3);
-        }
-      } else {
-        var informationNeeded = (_startingTime.inMinutes - _currentTime.inMinutes.abs()) % _period == 0;
-        if (seconds % 60 == 0 && ((_continueAfterTimer && seconds < 0) || informationNeeded)) {
-          _speaker.speak(DurationToVoice.covert(_currentTime));
-        }
-      }
-    });
+    if (_isTimerPage) {
+      UserDataStorage.storeLastVisitedPageValue(AvailablePage.timer);
+    } else {
+      UserDataStorage.storeLastVisitedPageValue(AvailablePage.clock);
+    }
+    _loadUserPreferences().then((preferences) => _initPage(preferences));
   }
 
   @override
   void dispose() {
-    _clean();
+    ForegroundTaskStarter.stopService();
+    FlutterForegroundTask.removeTaskDataCallback(_timerTick);
+    _taskDataListenable.dispose();
     super.dispose();
   }
 
@@ -119,20 +102,44 @@ class _TimerPageState extends State<TimerPage> {
           children: [
             const Spacer(),
             Container(
-                margin: const EdgeInsets.symmetric(vertical: 30.0),
-                child: TextButton(
-                    onPressed: _showTimePicker,
-                    child: Text(DurationToString.convert(_currentTime), style: TextStyle(fontSize: 70, color: CustomColors.textColor, fontFamily: CustomFonts.abril.value)))),
+              margin: const EdgeInsets.symmetric(vertical: 30.0),
+              child: ValueListenableBuilder(
+                valueListenable: _taskDataListenable,
+                builder: (context, data, _) {
+                  var textStyle = TextStyle(fontSize: 120, color: CustomColors.textColor, fontFamily: CustomFonts.abril.value);
+                  if (data != null) {
+                    return TextButton(
+                      onPressed: _isTimerPage ? _showTimePicker : () => _speaker.currentTime(),
+                      child: Text(data.toString(), style: textStyle),
+                    );
+                  } else if (_isTimerPage) {
+                    return FutureBuilder(
+                        future: UserDataStorage.startingTimerValue(),
+                        builder: (BuildContext context, AsyncSnapshot<Duration> snapshot) {
+                          return Text(_getOrDefault(snapshot), style: textStyle);
+                        });
+                  } else {
+                    return TextButton(
+                      onPressed: _isTimerPage ? _showTimePicker : () => _speaker.currentTime(),
+                      child: Text(DateTimeToString.shortConvert(DateTime.now()), style: textStyle),
+                    );
+                  }
+                },
+              ),
+            ),
             const VolumeSwitcher(),
             const Spacer(),
-            FooterWidget(text: 'ZEGAR', actionOnText: _goToClock, cleanAction: () => _clean())
+            FooterWidget(text: _isTimerPage ? 'ZEGAR' : 'MINUTNIK', actionOnText: _switchPage)
           ],
         ));
   }
+
+  String _getOrDefault(AsyncSnapshot<Duration> startingTime) => startingTime.hasData ? DurationToString.shortConvert(startingTime.requireData) : '';
 }
 
 class TimerPage extends StatefulWidget {
-  const TimerPage({super.key});
+  final bool isTimerPage;
+  const TimerPage({super.key, required this.isTimerPage});
 
   @override
   State<TimerPage> createState() => _TimerPageState();
