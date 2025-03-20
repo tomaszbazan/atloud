@@ -1,1 +1,0 @@
-/home/kwasiu/projekty/prv/atloud/build/app/intermediates/cxx/Debug/634017l2/obj/x86_64
