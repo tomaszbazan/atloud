@@ -15,6 +15,7 @@ class FooterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 100,
       color: CustomColors.footerBackgroundColor,
       child: SafeArea(
         child: Stack(
@@ -34,17 +35,20 @@ class FooterWidget extends StatelessWidget {
             ),
             Positioned(
               right: 0,
-              child: IconButton(
-                icon: const Icon(
-                  Icons.settings,
-                  size: 32,
-                  color: CustomColors.footerTextColor,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.settings,
+                    size: 60,
+                    color: CustomColors.footerTextColor,
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+                  onPressed: () {
+                    cleanAction?.call();
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsPage()));
+                  },
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 24.0),
-                onPressed: () {
-                  cleanAction?.call();
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsPage()));
-                },
               ),
             ),
           ],

@@ -1,0 +1,3 @@
+enum AvailablePage {
+  timer, clock
+}

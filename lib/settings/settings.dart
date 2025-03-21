@@ -1,5 +1,4 @@
 import 'package:atloud/components/app_bar.dart';
-import 'package:atloud/settings/footer.dart';
 import 'package:atloud/settings/settings_data.dart';
 import 'package:atloud/shared/user_data_storage.dart';
 import 'package:atloud/sound/alarm_type.dart';
@@ -8,6 +7,8 @@ import 'package:atloud/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:volume_controller/volume_controller.dart';
+
+import 'footer.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -20,7 +21,7 @@ class _SettingsPageState extends State<SettingsPage> {
   bool _backgroundSound = false;
   bool _screenLock = false;
   bool _vibration = false;
-  bool _continueAfterTimer = false;
+  bool _continueAfterAlarm = false;
   int _versionCounter = 0;
 
   // final FlutterTts _flutterTts = FlutterTts();
@@ -111,6 +112,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     child: Container(
                       margin: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 30.0),
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
@@ -133,7 +135,6 @@ class _SettingsPageState extends State<SettingsPage> {
                                 label: data.volumeValue.round().toString(),
                                 onChanged: (value) {
                                   setState(() {
-                                    UserDataStorage.storeVolumeValue(value);
                                     VolumeController().setVolume(value / 100, showSystemUI: true);
                                   });
                                 },
@@ -226,8 +227,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 ),
                               ),
                             ],
-                          ),
-                          // Row(
+                          ), // Row(
                           //   children: [
                           //     const SizedBox(width: iconSize, height: iconSize),
                           //     Expanded(child: Container(margin: const EdgeInsets.symmetric(horizontal: 10.0), child: Text('Język mówienia', style: CustomTheme.settingsTextTheme))),
@@ -262,25 +262,26 @@ class _SettingsPageState extends State<SettingsPage> {
                           Row(
                             children: [
                               const SizedBox(width: iconSize, height: iconSize),
-                              Expanded(child: Container(margin: const EdgeInsets.symmetric(horizontal: 10.0), child: Text('Kontynuuj odliczanie minutnika po czasie', style: CustomTheme.settingsTextTheme))),
+                              Expanded(
+                                  child:
+                                      Container(margin: const EdgeInsets.symmetric(horizontal: 10.0), child: Text('Kontynuuj odliczanie minutnika po czasie', style: CustomTheme.settingsTextTheme))),
                               Switch(
-                                  value: data.continuationAfterTimeValue,
+                                  value: data.continuationAfterAlarmValue,
                                   activeTrackColor: Colors.black,
                                   inactiveTrackColor: Colors.black,
                                   activeColor: Colors.white,
                                   onChanged: (_) => setState(() {
-                                        _continueAfterTimer = !_continueAfterTimer;
-                                        UserDataStorage.storeContinueAfterTimeValue(_continueAfterTimer);
+                                        _continueAfterAlarm = !_continueAfterAlarm;
+                                        UserDataStorage.storeContinueAfterAlarmValue(_continueAfterAlarm);
                                       }))
                             ],
                           ),
-                          const SizedBox(height: 30),
                         ],
                       ),
                     ),
                   ),
                 ),
-                const SettingsFooterWidget(),
+                const SettingsFooterWidget()
               ],
             );
           } else {
