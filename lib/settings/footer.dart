@@ -1,4 +1,5 @@
 import 'package:atloud/theme/colors.dart';
+import 'package:atloud/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 import '../clock/clock.dart';
@@ -20,38 +21,46 @@ class SettingsFooterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        TextButton(
-          onPressed: () => _goToTimer(context),
-          child: Text(
-            'MINUTNIK',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 25,
-              color: CustomColors.textColor,
-              fontFamily: CustomFonts.openSans.value,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 4.0,
+    return Container(
+      color: CustomColors.footerBackgroundColor,
+      child: SafeArea(
+        child: Row(
+          children: [
+            Expanded(
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 24.0),
+                ),
+                onPressed: () => _goToTimer(context),
+                child: Text(
+                  'MINUTNIK',
+                  textAlign: TextAlign.center,
+                  style: CustomTheme.bottomButtonTheme,
+                ),
+              ),
             ),
-          ),
-        ),
-        TextButton(
-          onPressed: () => _goToClock(context),
-          child: Text(
-            'ZEGAR',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 25,
-              color: CustomColors.textColor,
-              fontFamily: CustomFonts.openSans.value,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 4.0,
+            Container(
+              width: 1,
+              height: 30,
+              color: Colors.white30,
             ),
-          ),
+            Expanded(
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 24.0),
+                  backgroundColor: Colors.transparent,
+                ),
+                onPressed: () => _goToClock(context),
+                child: Text(
+                  'ZEGAR',
+                  textAlign: TextAlign.center,
+                  style: CustomTheme.bottomButtonTheme,
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

@@ -104,176 +104,184 @@ class _SettingsPageState extends State<SettingsPage> {
         builder: (BuildContext context, AsyncSnapshot<SettingsData> snapshot) {
           if (snapshot.hasData) {
             SettingsData data = snapshot.requireData;
-            return Container(
-              margin: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 30.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                      margin: const EdgeInsets.only(bottom: 50.0),
-                      child: IconButton(icon: const Icon(Icons.settings, size: 70.0, color: CustomColors.textColor), onPressed: () => _incrementShowVersionCounter())),
-                  Row(children: [
-                    const Icon(Icons.volume_up, size: iconSize, color: CustomColors.textColor),
-                    Container(margin: const EdgeInsets.symmetric(horizontal: 10.0), child: Text('Głośność', style: CustomTheme.settingsTextTheme)),
-                  ]),
-                  Row(children: [
-                    const SizedBox(width: 27.0),
-                    Expanded(
-                      child: Slider(
-                        activeColor: CustomColors.textColor,
-                        inactiveColor: CustomColors.textColor,
-                        value: data.volumeValue,
-                        min: 0,
-                        max: 100,
-                        divisions: 100,
-                        label: data.volumeValue.round().toString(),
-                        onChanged: (value) {
-                          setState(() {
-                            UserDataStorage.storeVolumeValue(value);
-                            VolumeController().setVolume(value / 100, showSystemUI: true);
-                          });
-                        },
-                      ),
-                    ),
-                    SizedBox(width: 40, child: Text(data.volumeValue.round().toString(), textAlign: TextAlign.end, style: CustomTheme.settingsTextTheme)),
-                  ]),
-                  Row(
-                    children: [
-                      const Icon(Icons.play_circle_outline, size: iconSize, color: CustomColors.textColor),
-                      Container(margin: const EdgeInsets.symmetric(horizontal: 10.0), child: Text('Co ile minut', style: CustomTheme.settingsTextTheme))
-                    ],
-                  ),
-                  Row(children: [
-                    const SizedBox(width: 27.0),
-                    Expanded(
-                      child: Slider(
-                        activeColor: CustomColors.textColor,
-                        inactiveColor: CustomColors.textColor,
-                        value: data.periodValue.toDouble(),
-                        min: 1,
-                        max: 60,
-                        divisions: 59,
-                        label: data.periodValue.toString(),
-                        onChanged: (value) {
-                          setState(() {
-                            UserDataStorage.storePeriodValue(value.toInt());
-                          });
-                        },
-                      ),
-                    ),
-                    SizedBox(width: 40.0, child: Text(data.periodValue.toString(), textAlign: TextAlign.end, style: CustomTheme.settingsTextTheme)),
-                  ]),
-                  Row(
-                    children: [
-                      const SizedBox(width: iconSize, height: iconSize),
-                      Expanded(child: Container(margin: const EdgeInsets.symmetric(horizontal: 10.0), child: Text('Odtwarzaj dźwięk w tle', style: CustomTheme.settingsTextTheme))),
-                      Switch(
-                          value: data.backgroundSoundValue,
-                          activeTrackColor: Colors.black,
-                          inactiveTrackColor: Colors.black,
-                          activeColor: Colors.white,
-                          onChanged: (_) => setState(() {
-                                _backgroundSound = !_backgroundSound;
-                                UserDataStorage.storeBackgroundSoundValue(_backgroundSound);
-                              }))
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const SizedBox(width: iconSize, height: iconSize),
-                      Expanded(child: Container(margin: const EdgeInsets.symmetric(horizontal: 10.0), child: Text('Wyłącz automatyczną blokadę ekranu', style: CustomTheme.settingsTextTheme))),
-                      Switch(
-                          value: data.screenLockValue,
-                          activeTrackColor: Colors.black,
-                          inactiveTrackColor: Colors.black,
-                          activeColor: Colors.white,
-                          onChanged: (_) => setState(() {
-                                _screenLock = !_screenLock;
-                                UserDataStorage.storeScreenLockValue(_screenLock);
-                              }))
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const SizedBox(width: iconSize, height: iconSize),
-                      Expanded(child: Container(margin: const EdgeInsets.symmetric(horizontal: 10.0), child: Text('Dźwięk alarmu', style: CustomTheme.settingsTextTheme))),
-                      Container(
-                        width: 140,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Center(
-                          child: DropdownButton<String>(
-                            icon: const SizedBox.shrink(),
-                            dropdownColor: Colors.white,
-                            alignment: AlignmentDirectional.center,
-                            style: CustomTheme.settingsTextTheme,
-                            underline: const SizedBox(),
-                            value: data.alarmTypeValue.displayName,
-                            items: AlarmType.values.map((e) => DropdownMenuItem(value: e.displayName, child: Text(e.displayName))).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                UserDataStorage.storeAlarmTypeValue(value!);
-                              });
-                            },
+            return Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 30.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                              margin: const EdgeInsets.only(bottom: 50.0),
+                              child: IconButton(icon: const Icon(Icons.settings, size: 70.0, color: CustomColors.textColor), onPressed: () => _incrementShowVersionCounter())),
+                          Row(children: [
+                            const Icon(Icons.volume_up, size: iconSize, color: CustomColors.textColor),
+                            Container(margin: const EdgeInsets.symmetric(horizontal: 10.0), child: Text('Głośność', style: CustomTheme.settingsTextTheme)),
+                          ]),
+                          Row(children: [
+                            const SizedBox(width: 27.0),
+                            Expanded(
+                              child: Slider(
+                                activeColor: CustomColors.textColor,
+                                inactiveColor: CustomColors.textColor,
+                                value: data.volumeValue,
+                                min: 0,
+                                max: 100,
+                                divisions: 100,
+                                label: data.volumeValue.round().toString(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    UserDataStorage.storeVolumeValue(value);
+                                    VolumeController().setVolume(value / 100, showSystemUI: true);
+                                  });
+                                },
+                              ),
+                            ),
+                            SizedBox(width: 40, child: Text(data.volumeValue.round().toString(), textAlign: TextAlign.end, style: CustomTheme.settingsTextTheme)),
+                          ]),
+                          Row(
+                            children: [
+                              const Icon(Icons.play_circle_outline, size: iconSize, color: CustomColors.textColor),
+                              Container(margin: const EdgeInsets.symmetric(horizontal: 10.0), child: Text('Co ile minut', style: CustomTheme.settingsTextTheme))
+                            ],
                           ),
-                        ),
+                          Row(children: [
+                            const SizedBox(width: 27.0),
+                            Expanded(
+                              child: Slider(
+                                activeColor: CustomColors.textColor,
+                                inactiveColor: CustomColors.textColor,
+                                value: data.periodValue.toDouble(),
+                                min: 1,
+                                max: 60,
+                                divisions: 59,
+                                label: data.periodValue.toString(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    UserDataStorage.storePeriodValue(value.toInt());
+                                  });
+                                },
+                              ),
+                            ),
+                            SizedBox(width: 40.0, child: Text(data.periodValue.toString(), textAlign: TextAlign.end, style: CustomTheme.settingsTextTheme)),
+                          ]),
+                          Row(
+                            children: [
+                              const SizedBox(width: iconSize, height: iconSize),
+                              Expanded(child: Container(margin: const EdgeInsets.symmetric(horizontal: 10.0), child: Text('Odtwarzaj dźwięk w tle', style: CustomTheme.settingsTextTheme))),
+                              Switch(
+                                  value: data.backgroundSoundValue,
+                                  activeTrackColor: Colors.black,
+                                  inactiveTrackColor: Colors.black,
+                                  activeColor: Colors.white,
+                                  onChanged: (_) => setState(() {
+                                        _backgroundSound = !_backgroundSound;
+                                        UserDataStorage.storeBackgroundSoundValue(_backgroundSound);
+                                      }))
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const SizedBox(width: iconSize, height: iconSize),
+                              Expanded(child: Container(margin: const EdgeInsets.symmetric(horizontal: 10.0), child: Text('Wyłącz automatyczną blokadę ekranu', style: CustomTheme.settingsTextTheme))),
+                              Switch(
+                                  value: data.screenLockValue,
+                                  activeTrackColor: Colors.black,
+                                  inactiveTrackColor: Colors.black,
+                                  activeColor: Colors.white,
+                                  onChanged: (_) => setState(() {
+                                        _screenLock = !_screenLock;
+                                        UserDataStorage.storeScreenLockValue(_screenLock);
+                                      }))
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const SizedBox(width: iconSize, height: iconSize),
+                              Expanded(child: Container(margin: const EdgeInsets.symmetric(horizontal: 10.0), child: Text('Dźwięk alarmu', style: CustomTheme.settingsTextTheme))),
+                              Container(
+                                width: 140,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                child: Center(
+                                  child: DropdownButton<String>(
+                                    icon: const SizedBox.shrink(),
+                                    dropdownColor: Colors.white,
+                                    alignment: AlignmentDirectional.center,
+                                    style: CustomTheme.settingsTextTheme,
+                                    underline: const SizedBox(),
+                                    value: data.alarmTypeValue.displayName,
+                                    items: AlarmType.values.map((e) => DropdownMenuItem(value: e.displayName, child: Text(e.displayName))).toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        UserDataStorage.storeAlarmTypeValue(value!);
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          // Row(
+                          //   children: [
+                          //     const SizedBox(width: iconSize, height: iconSize),
+                          //     Expanded(child: Container(margin: const EdgeInsets.symmetric(horizontal: 10.0), child: Text('Język mówienia', style: CustomTheme.settingsTextTheme))),
+                          //     Container(
+                          //       width: 140,
+                          //       height: 40,
+                          //       decoration: BoxDecoration(
+                          //         color: Colors.white,
+                          //         borderRadius: BorderRadius.circular(30),
+                          //       ),
+                          //       child: Center(
+                          //         child: _languageBuilder(),
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
+                          Row(
+                            children: [
+                              const SizedBox(width: iconSize, height: iconSize),
+                              Expanded(child: Container(margin: const EdgeInsets.symmetric(horizontal: 10.0), child: Text('Wibracja', style: CustomTheme.settingsTextTheme))),
+                              Switch(
+                                  value: data.vibrationValue,
+                                  activeTrackColor: Colors.black,
+                                  inactiveTrackColor: Colors.black,
+                                  activeColor: Colors.white,
+                                  onChanged: (_) => setState(() {
+                                        _vibration = !_vibration;
+                                        UserDataStorage.storeVibrationValue(_vibration);
+                                      }))
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const SizedBox(width: iconSize, height: iconSize),
+                              Expanded(child: Container(margin: const EdgeInsets.symmetric(horizontal: 10.0), child: Text('Kontynuuj odliczanie minutnika po czasie', style: CustomTheme.settingsTextTheme))),
+                              Switch(
+                                  value: data.continuationAfterTimeValue,
+                                  activeTrackColor: Colors.black,
+                                  inactiveTrackColor: Colors.black,
+                                  activeColor: Colors.white,
+                                  onChanged: (_) => setState(() {
+                                        _continueAfterTimer = !_continueAfterTimer;
+                                        UserDataStorage.storeContinueAfterTimeValue(_continueAfterTimer);
+                                      }))
+                            ],
+                          ),
+                          const SizedBox(height: 30),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                  // Row(
-                  //   children: [
-                  //     const SizedBox(width: iconSize, height: iconSize),
-                  //     Expanded(child: Container(margin: const EdgeInsets.symmetric(horizontal: 10.0), child: Text('Język mówienia', style: CustomTheme.settingsTextTheme))),
-                  //     Container(
-                  //       width: 140,
-                  //       height: 40,
-                  //       decoration: BoxDecoration(
-                  //         color: Colors.white,
-                  //         borderRadius: BorderRadius.circular(30),
-                  //       ),
-                  //       child: Center(
-                  //         child: _languageBuilder(),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  Row(
-                    children: [
-                      const SizedBox(width: iconSize, height: iconSize),
-                      Expanded(child: Container(margin: const EdgeInsets.symmetric(horizontal: 10.0), child: Text('Wibracja', style: CustomTheme.settingsTextTheme))),
-                      Switch(
-                          value: data.vibrationValue,
-                          activeTrackColor: Colors.black,
-                          inactiveTrackColor: Colors.black,
-                          activeColor: Colors.white,
-                          onChanged: (_) => setState(() {
-                                _vibration = !_vibration;
-                                UserDataStorage.storeVibrationValue(_vibration);
-                              }))
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const SizedBox(width: iconSize, height: iconSize),
-                      Expanded(child: Container(margin: const EdgeInsets.symmetric(horizontal: 10.0), child: Text('Kontynuuj odliczanie minutnika po czasie', style: CustomTheme.settingsTextTheme))),
-                      Switch(
-                          value: data.continuationAfterTimeValue,
-                          activeTrackColor: Colors.black,
-                          inactiveTrackColor: Colors.black,
-                          activeColor: Colors.white,
-                          onChanged: (_) => setState(() {
-                                _continueAfterTimer = !_continueAfterTimer;
-                                UserDataStorage.storeContinueAfterTimeValue(_continueAfterTimer);
-                              }))
-                    ],
-                  ),
-                  const SettingsFooterWidget()
-                ],
-              ),
+                ),
+                const SettingsFooterWidget(),
+              ],
             );
           } else {
             return const Center(
