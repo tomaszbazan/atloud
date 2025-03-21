@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:atloud/theme/colors.dart';
+import 'package:atloud/theme/theme.dart';
 
-import '../theme/theme.dart';
 import '../timer/timer.dart';
 
 class SettingsFooterWidget extends StatelessWidget {
@@ -18,30 +19,46 @@ class SettingsFooterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        FittedBox(
-          child: TextButton(
-            onPressed: () => _goToTimer(context),
-            child: Text(
-              'MINUTNIK',
-              textAlign: TextAlign.center,
-              style: CustomTheme.navigationTextTheme,
+    return Container(
+      color: CustomColors.footerBackgroundColor,
+      child: SafeArea(
+        child: Row(
+          children: [
+            Expanded(
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 24.0),
+                ),
+                onPressed: () => _goToTimer(context),
+                child: Text(
+                  'MINUTNIK',
+                  textAlign: TextAlign.center,
+                  style: CustomTheme.bottomButtonTheme,
+                ),
+              ),
             ),
-          ),
-        ),
-        FittedBox(
-          child: TextButton(
-            onPressed: () => _goToClock(context),
-            child: Text(
-              'ZEGAR',
-              textAlign: TextAlign.center,
-              style: CustomTheme.navigationTextTheme,
+            Container(
+              width: 3,
+              height: 30,
+              color: CustomColors.footerTextColor,
             ),
-          ),
+            Expanded(
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 24.0),
+                  backgroundColor: Colors.transparent,
+                ),
+                onPressed: () => _goToClock(context),
+                child: Text(
+                  'ZEGAR',
+                  textAlign: TextAlign.center,
+                  style: CustomTheme.bottomButtonTheme,
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
