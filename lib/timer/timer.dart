@@ -97,41 +97,43 @@ class _TimerPageState extends State<TimerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: const AppBarWidget(text: ''),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Spacer(),
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 30.0),
-              child: ValueListenableBuilder(
-                valueListenable: _taskDataListenable,
-                builder: (context, data, _) {
-                  var textStyle = TextStyle(fontSize: 120, color: CustomColors.textColor, fontFamily: CustomFonts.abril.value);
-                  if (data != null) {
-                    return TextButton(
-                      onPressed: _isTimerPage ? _showTimePicker : () => _speaker.currentTime(),
-                      child: Text(data.toString(), style: textStyle),
-                    );
-                  } else if (_isTimerPage) {
-                    return FutureBuilder(
-                        future: UserDataStorage.startingTimerValue(),
-                        builder: (BuildContext context, AsyncSnapshot<Duration> snapshot) {
-                          return Text(_getOrDefault(snapshot), style: textStyle);
-                        });
-                  } else {
-                    return TextButton(
-                      onPressed: _isTimerPage ? _showTimePicker : () => _speaker.currentTime(),
-                      child: Text(DateTimeToString.shortConvert(DateTime.now()), style: textStyle),
-                    );
-                  }
-                },
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 30.0),
+                child: ValueListenableBuilder(
+                  valueListenable: _taskDataListenable,
+                  builder: (context, data, _) {
+                    var textStyle = TextStyle(fontSize: 110, color: CustomColors.textColor, fontFamily: CustomFonts.abril.value);
+                    if (data != null) {
+                      return TextButton(
+                        onPressed: _isTimerPage ? _showTimePicker : () => _speaker.currentTime(),
+                        child: Text(data.toString(), style: textStyle),
+                      );
+                    } else if (_isTimerPage) {
+                      return FutureBuilder(
+                          future: UserDataStorage.startingTimerValue(),
+                          builder: (BuildContext context, AsyncSnapshot<Duration> snapshot) {
+                            return Text(_getOrDefault(snapshot), style: textStyle);
+                          });
+                    } else {
+                      return TextButton(
+                        onPressed: _isTimerPage ? _showTimePicker : () => _speaker.currentTime(),
+                        child: Text(DateTimeToString.shortConvert(DateTime.now()), style: textStyle),
+                      );
+                    }
+                  },
+                ),
               ),
-            ),
-            const VolumeSwitcher(),
-            const Spacer(),
-            FooterWidget(text: _isTimerPage ? 'ZEGAR' : 'MINUTNIK', actionOnText: _switchPage)
-          ],
-        ));
+              const VolumeSwitcher(),
+            ],
+          ),
+        ),
+      bottomNavigationBar: FooterWidget(text: _isTimerPage ? 'ZEGAR' : 'MINUTNIK', actionOnText: _switchPage),
+    );
   }
 
   String _getOrDefault(AsyncSnapshot<Duration> startingTime) => startingTime.hasData ? DurationToString.shortConvert(startingTime.requireData) : '';

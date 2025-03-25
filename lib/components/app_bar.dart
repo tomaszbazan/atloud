@@ -8,7 +8,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsetsDirectional.fromSTEB(10.0, 20.0, 0.0, 10.0),
+      margin: const EdgeInsetsDirectional.fromSTEB(10.0, 20.0, 10.0, 0.0),
       child: Column(
         children: [
           AppBar(title: Text(text), automaticallyImplyLeading: false),
@@ -18,5 +18,5 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(90.0);
+  Size get preferredSize => const Size.fromHeight(80.0);
 }

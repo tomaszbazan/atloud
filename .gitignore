@@ -45,3 +45,5 @@ app.*.map.json
 
 .codebuddy/
 .aider*
+.pki/
+.cache/
