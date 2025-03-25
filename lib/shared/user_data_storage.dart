@@ -25,16 +25,15 @@ class UserDataStorage {
   static const FlutterSecureStorage _storage = FlutterSecureStorage();
 
   static Future<SettingsData> settings() async {
-    // var volume = await VolumeController().getVolume();
-    // var period = await periodValue();
-    // var backgroundSound = await backgroundSoundValue();
-    // var screenLock = await screenLockValue();
-    // var alarmType = await alarmTypeValue();
-    // var language = await languageValue();
-    // var vibration = await vibrationValue();
-    // var continueAfterAlarm = await continueAfterAlarmValue();
-    // return SettingsData(volume * 100, period, backgroundSound, screenLock, alarmType, language, vibration, continueAfterAlarm);
-    return SettingsData(100, 1, true, true, AlarmType.bonus, "pl", true, true);
+    var volume = await VolumeController().getVolume();
+    var period = await periodValue();
+    var backgroundSound = await backgroundSoundValue();
+    var screenLock = await screenLockValue();
+    var alarmType = await alarmTypeValue();
+    var language = await languageValue();
+    var vibration = await vibrationValue();
+    var continueAfterAlarm = await continueAfterAlarmValue();
+    return SettingsData(volume * 100, period, backgroundSound, screenLock, alarmType, language, vibration, continueAfterAlarm);
   }
 
   static Future<TimerData> timerData() async {

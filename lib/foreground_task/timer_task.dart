@@ -40,13 +40,13 @@ class TimerTaskHandler extends TaskHandler {
     }
     _seconds++;
     var returnedValue = _passInformationToSpeaker(timestamp);
-    _updateNotification(returnedValue, _seconds);
+    _updateNotification(returnedValue);
     FlutterForegroundTask.sendDataToMain(returnedValue);
   }
 
-  void _updateNotification(String returnToApp, int seconds) {
+  void _updateNotification(String returnToApp) {
     FlutterForegroundTask.updateService(
-      notificationTitle: 'At Loud! ${_taskType == TaskType.clock ? 'Godzina: ' : 'Pozostało: '} $returnToApp $seconds',
+      notificationTitle: 'At Loud! ${_taskType == TaskType.clock ? 'Godzina: ' : 'Pozostało: '} $returnToApp',
       notificationIcon: const NotificationIcon(metaDataName: 'pl.btsoftware.atloud.default_notification_icon', backgroundColor: Colors.black),
       notificationInitialRoute: _taskType == TaskType.clock ? '/clock' : '/timer',
       notificationButtons: [const NotificationButton(id: stopButtonId, text: 'Zatrzymaj'), const NotificationButton(id: muteButtonId, text: 'Wycisz')],

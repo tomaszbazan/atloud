@@ -1,13 +1,17 @@
 import 'package:atloud/components/app_bar.dart';
+import 'package:atloud/settings/alarm_type_setting.dart';
+import 'package:atloud/settings/background_sound_setting.dart';
+import 'package:atloud/settings/continue_after_alarm_setting.dart';
+import 'package:atloud/settings/period_setting.dart';
+import 'package:atloud/settings/screen_lock_setting.dart';
 import 'package:atloud/settings/settings_data.dart';
-import 'package:atloud/shared/user_data_storage.dart';
-import 'package:atloud/sound/alarm_type.dart';
-import 'package:atloud/theme/colors.dart';
-import 'package:atloud/theme/theme.dart';
+import 'package:atloud/settings/settings_icon.dart';
+import 'package:atloud/settings/vibration_setting.dart';
+import 'package:atloud/settings/volume_setting.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:volume_controller/volume_controller.dart';
 
+import '../shared/user_data_storage.dart';
 import 'footer.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -24,53 +28,9 @@ class _SettingsPageState extends State<SettingsPage> {
   bool _continueAfterAlarm = false;
   int _versionCounter = 0;
 
-  // final FlutterTts _flutterTts = FlutterTts();
-  // Future<dynamic> _getLanguages() async => await _flutterTts.getLanguages;
-  // String? language;
-
   Future<SettingsData> _loadPreferences() async {
     return UserDataStorage.settings();
   }
-
-  // Widget _languageBuilder() => FutureBuilder<dynamic>(
-  //     future: _getLanguages(),
-  //     builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-  //       if (snapshot.hasData) {
-  //         return _languageDropDownSection(snapshot.data as List<dynamic>);
-  //       } else if (snapshot.hasError) {
-  //         return const Text('Error loading languages...');
-  //       } else {
-  //         return const Text('Loading Languages...');
-  //       }
-  //     });
-  //
-  // Widget _languageDropDownSection(List<dynamic> languages) =>
-  //       DropdownButton(
-  //         icon: const SizedBox.shrink(),
-  //         dropdownColor: Colors.white,
-  //         alignment: AlignmentDirectional.center,
-  //         style: CustomTheme.settingsTextTheme,
-  //         underline: const SizedBox(),
-  //         value: language,
-  //         items: getLanguageDropDownMenuItems(languages),
-  //         onChanged: changedLanguageDropDownItem,
-  //       );
-  //
-  // void changedLanguageDropDownItem(String? selectedType) {
-  //   setState(() {
-  //     language = selectedType;
-  //     _flutterTts.setLanguage(language!);
-  //   });
-  // }
-  //
-  // List<DropdownMenuItem<String>> getLanguageDropDownMenuItems(List<dynamic> languages) {
-  //   var items = <DropdownMenuItem<String>>[];
-  //   for (dynamic type in languages) {
-  //     items.add(DropdownMenuItem(
-  //         value: type as String?, child: Text((type as String))));
-  //   }
-  //   return items;
-  // }
 
   void _incrementShowVersionCounter() {
     _versionCounter++;
@@ -96,8 +56,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    const double iconSize = 40.0;
-
     return Scaffold(
       appBar: const AppBarWidget(text: 'USTAWIENIA'),
       body: FutureBuilder<SettingsData>(
@@ -105,186 +63,35 @@ class _SettingsPageState extends State<SettingsPage> {
         builder: (BuildContext context, AsyncSnapshot<SettingsData> snapshot) {
           if (snapshot.hasData) {
             SettingsData data = snapshot.requireData;
-            return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
-              return Column(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Container(
-                        margin: const EdgeInsets.only(left: 30, top: 0, right: 30, bottom: 30),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(height: constraints.maxHeight > 600 ? 50 : 20),
-                            constraints.maxHeight > 600
-                                ? Container(
-                                    margin: const EdgeInsets.only(bottom: 20.0),
-                                    child: IconButton(icon: const Icon(Icons.settings, size: 70.0, color: CustomColors.textColor), onPressed: () => _incrementShowVersionCounter()))
-                                : const SizedBox.shrink(),
-                            Row(children: [
-                              const Icon(Icons.volume_up, size: iconSize, color: CustomColors.textColor),
-                              Container(margin: const EdgeInsets.symmetric(horizontal: 10.0), child: Text('Głośność', style: CustomTheme.settingsTextTheme)),
-                            ]),
-                            Row(children: [
-                              const SizedBox(width: 27.0),
-                              Expanded(
-                                child: Slider(
-                                  activeColor: CustomColors.textColor,
-                                  inactiveColor: CustomColors.textColor,
-                                  value: data.volumeValue,
-                                  min: 0,
-                                  max: 100,
-                                  divisions: 100,
-                                  label: data.volumeValue.round().toString(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      VolumeController().setVolume(value / 100, showSystemUI: true);
-                                    });
-                                  },
-                                ),
-                              ),
-                              SizedBox(width: 40, child: Text(data.volumeValue.round().toString(), textAlign: TextAlign.end, style: CustomTheme.settingsTextTheme)),
-                            ]),
-                            Row(
-                              children: [
-                                const Icon(Icons.play_circle_outline, size: iconSize, color: CustomColors.textColor),
-                                Container(margin: const EdgeInsets.symmetric(horizontal: 10.0), child: Text('Co ile minut', style: CustomTheme.settingsTextTheme))
-                              ],
-                            ),
-                            Row(children: [
-                              const SizedBox(width: 27.0),
-                              Expanded(
-                                child: Slider(
-                                  activeColor: CustomColors.textColor,
-                                  inactiveColor: CustomColors.textColor,
-                                  value: data.periodValue.toDouble(),
-                                  min: 1,
-                                  max: 60,
-                                  divisions: 59,
-                                  label: data.periodValue.toString(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      UserDataStorage.storePeriodValue(value.toInt());
-                                    });
-                                  },
-                                ),
-                              ),
-                              SizedBox(width: 40.0, child: Text(data.periodValue.toString(), textAlign: TextAlign.end, style: CustomTheme.settingsTextTheme)),
-                            ]),
-                            Row(
-                              children: [
-                                Expanded(child: Container(margin: CustomTheme.settingsItemsMarginTheme, child: Text('Odtwarzaj dźwięk w tle', style: CustomTheme.settingsTextTheme))),
-                                Switch(
-                                    value: data.backgroundSoundValue,
-                                    activeTrackColor: Colors.black,
-                                    inactiveTrackColor: Colors.black,
-                                    activeColor: Colors.white,
-                                    onChanged: (_) => setState(() {
-                                          _backgroundSound = !_backgroundSound;
-                                          UserDataStorage.storeBackgroundSoundValue(_backgroundSound);
-                                        }))
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                    child: Container(margin: CustomTheme.settingsItemsMarginTheme, child: Text('Wyłącz automatyczną blokadę ekranu', style: CustomTheme.settingsTextTheme))),
-                                Switch(
-                                    value: data.screenLockValue,
-                                    activeTrackColor: Colors.black,
-                                    inactiveTrackColor: Colors.black,
-                                    activeColor: Colors.white,
-                                    onChanged: (_) => setState(() {
-                                          _screenLock = !_screenLock;
-                                          UserDataStorage.storeScreenLockValue(_screenLock);
-                                        }))
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Expanded(child: Container(margin: CustomTheme.settingsItemsMarginTheme, child: Text('Dźwięk alarmu', style: CustomTheme.settingsTextTheme))),
-                                Container(
-                                  width: 140,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                  child: Center(
-                                    child: DropdownButton<String>(
-                                      icon: const SizedBox.shrink(),
-                                      dropdownColor: Colors.white,
-                                      alignment: AlignmentDirectional.center,
-                                      style: CustomTheme.settingsTextTheme,
-                                      underline: const SizedBox(),
-                                      value: data.alarmTypeValue.displayName,
-                                      items: AlarmType.values.map((e) => DropdownMenuItem(value: e.displayName, child: Text(e.displayName))).toList(),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          UserDataStorage.storeAlarmTypeValue(value!);
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            // Row(
-                            //   children: [
-                            //     Expanded(child: Container(margin:CustomTheme.settingsItemsMarginTheme, child: Text('Język mówienia', style: CustomTheme.settingsTextTheme))),
-                            //     Container(
-                            //       width: 140,
-                            //       height: 40,
-                            //       decoration: BoxDecoration(
-                            //         color: Colors.white,
-                            //         borderRadius: BorderRadius.circular(30),
-                            //       ),
-                            //       child: Center(
-                            //         child: _languageBuilder(),
-                            //       ),
-                            //     ),
-                            //   ],
-                            // ),
-                            Row(
-                              children: [
-                                Expanded(child: Container(margin: CustomTheme.settingsItemsMarginTheme, child: Text('Wibracja', style: CustomTheme.settingsTextTheme))),
-                                Switch(
-                                    value: data.vibrationValue,
-                                    activeTrackColor: Colors.black,
-                                    inactiveTrackColor: Colors.black,
-                                    activeColor: Colors.white,
-                                    onChanged: (_) => setState(() {
-                                          _vibration = !_vibration;
-                                          UserDataStorage.storeVibrationValue(_vibration);
-                                        }))
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                    child:
-                                        Container(margin: CustomTheme.settingsItemsMarginTheme, child: Text('Kontynuuj odliczanie minutnika po czasie', style: CustomTheme.settingsTextTheme))),
-                                Switch(
-                                    value: data.continuationAfterAlarmValue,
-                                    activeTrackColor: Colors.black,
-                                    inactiveTrackColor: Colors.black,
-                                    activeColor: Colors.white,
-                                    onChanged: (_) => setState(() {
-                                          _continueAfterAlarm = !_continueAfterAlarm;
-                                          UserDataStorage.storeContinueAfterAlarmValue(_continueAfterAlarm);
-                                        }))
-                              ],
-                            ),
-                          ],
+            return LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                return Column(
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 30),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SettingsIcon(constraints: constraints, incrementShowVersionCounter: _incrementShowVersionCounter),
+                              VolumeSetting(data: data),
+                              PeriodSetting(data: data),
+                              BackgroundSoundSetting(data: data, backgroundSound: _backgroundSound, setState: setState),
+                              ScreenLockSetting(data: data, screenLock: _screenLock, setState: setState),
+                              AlarmTypeSetting(data: data, setState: setState),
+                              VibrationSetting(data: data, vibration: _vibration, setState: setState),
+                              ContinueAfterAlarmSetting(data: data, continueAfterAlarm: _continueAfterAlarm, setState: setState),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SettingsFooterWidget()
-                ],
-              );
-            });
+                  ],
+                );
+              },
+            );
           } else {
             return const Center(
               child: SizedBox(
@@ -296,6 +103,7 @@ class _SettingsPageState extends State<SettingsPage> {
           }
         },
       ),
+      bottomNavigationBar: const SettingsFooterWidget(),
     );
   }
 }
