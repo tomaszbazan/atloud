@@ -3,8 +3,6 @@ import 'package:atloud/theme/colors.dart';
 import 'package:atloud/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-import '../theme/fonts.dart';
-
 class FooterWidget extends StatelessWidget {
   final String text;
   final Function() actionOnText;
