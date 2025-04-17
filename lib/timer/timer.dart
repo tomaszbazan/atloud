@@ -5,19 +5,17 @@ import 'package:atloud/components/footer.dart';
 import 'package:atloud/components/volume_switcher.dart';
 import 'package:atloud/converters/date_time_to_string.dart';
 import 'package:atloud/converters/duration_to_string.dart';
-import 'package:atloud/converters/time_of_day_to_duration.dart';
 import 'package:atloud/foreground_task/foreground_task_starter.dart';
 import 'package:atloud/foreground_task/timer_task.dart';
-import 'package:atloud/shared/available_page.dart';
 import 'package:atloud/shared/user_data_storage.dart';
-import 'package:atloud/theme/fonts.dart';
-import 'package:atloud/timer/time_picker.dart';
+import 'package:atloud/theme/theme.dart';
+import 'package:atloud/timer/timer_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
+import '../shared/available_page.dart';
 import '../sound/speaker.dart';
-import '../theme/colors.dart';
 
 class _TimerPageState extends State<TimerPage> {
   final ValueNotifier<Object?> _taskDataListenable = ValueNotifier(null);
@@ -25,8 +23,9 @@ class _TimerPageState extends State<TimerPage> {
   var _isTimerPage = true;
 
   final _speaker = Speaker();
-
   Duration? _startingTime;
+
+  bool _isPickingTime = false;
 
   @override
   void initState() {
@@ -62,19 +61,9 @@ class _TimerPageState extends State<TimerPage> {
     };
   }
 
-  void _showTimePicker() async {
-    final TimeOfDay? time = await TimePicker.showPicker(context, _startingTime!);
-    setState(() {
-      if (time != null) {
-        _startingTime = TimeOfDayToDuration.convert(time);
-        UserDataStorage.storeStartingTimerValue(_startingTime!);
-        _loadUserPreferences().then((preferences) => _initPage(preferences));
-      }
-    });
-  }
-
   void _switchPage() {
     setState(() {
+      _isPickingTime = false;
       _isTimerPage = !_isTimerPage;
     });
     if (_isTimerPage) {
@@ -93,50 +82,73 @@ class _TimerPageState extends State<TimerPage> {
     super.dispose();
   }
 
+  void _enterTimePickingMode() {
+    setState(() {
+      _isPickingTime = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const AppBarWidget(text: ''),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 30.0),
-                child: ValueListenableBuilder(
-                  valueListenable: _taskDataListenable,
-                  builder: (context, data, _) {
-                    var textStyle = TextStyle(fontSize: 110, color: CustomColors.textColor, fontFamily: CustomFonts.abril.value);
-                    if (data != null) {
-                      return TextButton(
-                        onPressed: _isTimerPage ? _showTimePicker : () => _speaker.currentTime(),
-                        child: Text(data.toString(), style: textStyle),
-                      );
-                    } else if (_isTimerPage) {
-                      return FutureBuilder(
-                          future: UserDataStorage.startingTimerValue(),
-                          builder: (BuildContext context, AsyncSnapshot<Duration> snapshot) {
-                            return Text(_getOrDefault(snapshot), style: textStyle);
-                          });
-                    } else {
-                      return TextButton(
-                        onPressed: _isTimerPage ? _showTimePicker : () => _speaker.currentTime(),
-                        child: Text(DateTimeToString.shortConvert(DateTime.now()), style: textStyle),
-                      );
-                    }
-                  },
-                ),
+      appBar: const AppBarWidget(text: ''),
+      body: Center(
+        child: _isPickingTime
+            ? TimePickerWidget(
+                initialTime: _startingTime ?? const Duration(),
+                onTimeSelected: (newTime) {
+                  if (newTime != _startingTime) {
+                    _startingTime = newTime;
+                    UserDataStorage.storeStartingTimerValue(_startingTime!);
+                    _loadUserPreferences().then((preferences) => _initPage(preferences));
+                  }
+                  setState(() {
+                    _isPickingTime = false;
+                  });
+                },
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 30.0),
+                    child: ValueListenableBuilder(
+                      valueListenable: _taskDataListenable,
+                      builder: (context, data, _) {
+                        String displayText;
+
+                        if (_isTimerPage) {
+                          print('${DateTime.now()}: ${DurationToString.convert(_startingTime!)} ${data.toString()}');
+                          displayText = data?.toString() ?? (_startingTime != null ? DurationToString.shortConvert(_startingTime!) : "--:--");
+                        } else {
+                          displayText = data?.toString() ?? DateTimeToString.shortConvert(DateTime.now());
+                        }
+
+                        return SizedBox(
+                          height: 300,
+                          child: GestureDetector(
+                            onTap: _isTimerPage ? _enterTimePickingMode : () => _speaker.currentTime(),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(child: Text(displayText.split(":").first, style: CustomTheme.clockTextTheme, textAlign: TextAlign.right)),
+                                Text(":", style: CustomTheme.clockTextTheme),
+                                Expanded(child: Text(displayText.split(":").last, style: CustomTheme.clockTextTheme, textAlign: TextAlign.left))
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const VolumeSwitcher(),
+                ],
               ),
-              const VolumeSwitcher(),
-            ],
-          ),
-        ),
+      ),
       bottomNavigationBar: FooterWidget(text: _isTimerPage ? 'ZEGAR' : 'MINUTNIK', actionOnText: _switchPage),
     );
   }
-
-  String _getOrDefault(AsyncSnapshot<Duration> startingTime) => startingTime.hasData ? DurationToString.shortConvert(startingTime.requireData) : '';
 }
 
 class TimerPage extends StatefulWidget {

@@ -6,9 +6,8 @@ import 'package:flutter/material.dart';
 class FooterWidget extends StatelessWidget {
   final String text;
   final Function() actionOnText;
-  final Function()? cleanAction;
 
-  const FooterWidget({super.key, required this.text, required this.actionOnText, this.cleanAction});
+  const FooterWidget({super.key, required this.text, required this.actionOnText});
 
   @override
   Widget build(BuildContext context) {
@@ -36,17 +35,13 @@ class FooterWidget extends StatelessWidget {
               child: Align(
                 alignment: Alignment.centerRight,
                 child: IconButton(
-                  icon: const Icon(
-                    Icons.settings,
-                    size: 60,
-                    color: CustomColors.footerTextColor,
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
-                  onPressed: () {
-                    cleanAction?.call();
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsPage()));
-                  },
-                ),
+                    icon: const Icon(
+                      Icons.settings,
+                      size: 60,
+                      color: CustomColors.footerTextColor,
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsPage()))),
               ),
             ),
           ],
