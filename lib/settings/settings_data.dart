@@ -1,7 +1,7 @@
 import 'package:atloud/sound/alarm_type.dart';
 
 class SettingsData {
-  final double volumeValue;
+  final int volumeValue;
   final int periodValue;
   final bool backgroundSoundValue;
   final bool screenLockValue;
