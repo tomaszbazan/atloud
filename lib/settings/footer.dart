@@ -20,6 +20,7 @@ class SettingsFooterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 100,
       color: CustomColors.footerBackgroundColor,
       child: SafeArea(
         child: Row(
