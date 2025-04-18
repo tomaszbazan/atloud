@@ -133,7 +133,11 @@ class TimerTaskHandler extends TaskHandler {
   void _handleStartingTime(Map<String, dynamic> data) {
     var startingTime = data[TimerTaskHandler.startingTimeParameter];
     if (startingTime != null) {
-      _startingTime = StringToDuration.convert(startingTime);
+      var startingTimeDuration = StringToDuration.convert(startingTime);
+      if (_startingTime != startingTimeDuration) {
+        _seconds = 0;
+        _startingTime = startingTimeDuration;
+      }
     }
   }
 

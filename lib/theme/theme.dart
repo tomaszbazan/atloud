@@ -41,7 +41,6 @@ class CustomTheme {
           ),
         ));
   }
-
   static TextStyle bottomButtonTheme = TextStyle(
     fontSize: 22,
     color: CustomColors.footerTextColor,
@@ -49,8 +48,8 @@ class CustomTheme {
     fontWeight: FontWeight.bold,
     letterSpacing: 6.0,
   );
-
   static TextStyle settingsTextTheme = TextStyle(fontSize: 20, color: CustomColors.textColor, fontFamily: CustomFonts.openSans.value, letterSpacing: 1.0, height: 0.95);
   static EdgeInsetsGeometry settingsItemsMarginTheme = const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0);
   static TextStyle navigationTextTheme = TextStyle(fontSize: 25, color: CustomColors.textColor, fontFamily: CustomFonts.openSans.value, fontWeight: FontWeight.bold, letterSpacing: 4.0);
+  static TextStyle clockTextTheme = TextStyle(fontSize: 110, color: CustomColors.textColor, fontFamily: CustomFonts.abril.value, height: 1.0);
 }
