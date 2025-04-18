@@ -117,7 +117,6 @@ class _TimerPageState extends State<TimerPage> {
                         String displayText;
 
                         if (_isTimerPage) {
-                          print('${DateTime.now()}: ${DurationToString.convert(_startingTime!)} ${data.toString()}');
                           displayText = data?.toString() ?? (_startingTime != null ? DurationToString.shortConvert(_startingTime!) : "--:--");
                         } else {
                           displayText = data?.toString() ?? DateTimeToString.shortConvert(DateTime.now());

@@ -40,7 +40,6 @@ class TimerTaskHandler extends TaskHandler {
     }
     _seconds++;
     var returnedValue = _passInformationToSpeaker(timestamp);
-    print('${DateTime.now()}: $returnedValue $_seconds');
     _updateNotification(returnedValue);
     FlutterForegroundTask.sendDataToMain(returnedValue);
   }
@@ -98,7 +97,6 @@ class TimerTaskHandler extends TaskHandler {
 
   @override
   void onReceiveData(Object data) {
-    print('${DateTime.now()}: $data');
     if (data is Map<String, dynamic>) {
       _handleStartingTime(data);
       _handlePeriod(data);
