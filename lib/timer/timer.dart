@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:atloud/components/app_bar.dart';
 import 'package:atloud/components/footer.dart';
 import 'package:atloud/components/volume_switcher.dart';
 import 'package:atloud/converters/date_time_to_string.dart';
@@ -91,7 +90,6 @@ class _TimerPageState extends State<TimerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppBarWidget(text: ''),
       body: Center(
         child: _isPickingTime
             ? TimePickerWidget(
