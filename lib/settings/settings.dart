@@ -1,13 +1,9 @@
 import 'package:atloud/components/app_bar.dart';
 import 'package:atloud/settings/alarm_type_setting.dart';
-import 'package:atloud/settings/background_sound_setting.dart';
-import 'package:atloud/settings/continue_after_alarm_setting.dart';
-import 'package:atloud/settings/period_setting.dart';
-import 'package:atloud/settings/screen_lock_setting.dart';
+import 'package:atloud/settings/boolean_widget.dart';
 import 'package:atloud/settings/settings_data.dart';
 import 'package:atloud/settings/settings_icon.dart';
-import 'package:atloud/settings/vibration_setting.dart';
-import 'package:atloud/settings/volume_setting.dart';
+import 'package:atloud/settings/slider_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -22,10 +18,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  bool _backgroundSound = false;
-  bool _screenLock = false;
-  bool _vibration = false;
-  bool _continueAfterAlarm = false;
   int _versionCounter = 0;
 
   Future<SettingsData> _loadPreferences() async {
@@ -76,13 +68,13 @@ class _SettingsPageState extends State<SettingsPage> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               SettingsIcon(constraints: constraints, incrementShowVersionCounter: _incrementShowVersionCounter),
-                              VolumeSetting(data: data),
-                              PeriodSetting(data: data),
-                              BackgroundSoundSetting(data: data, backgroundSound: _backgroundSound, setState: setState),
-                              ScreenLockSetting(data: data, screenLock: _screenLock, setState: setState),
+                              SliderWidget(icon: Icons.volume_up, label: 'Głośność', min: 0, max: 100, value: data.volumeValue, onChange: (value) => UserDataStorage.storeVolumeValue(value)),
+                              SliderWidget(icon: Icons.play_circle_outline, label: 'Co ile minut', min: 1, max: 60, value: data.periodValue, onChange: (value) => UserDataStorage.storePeriodValue(value)),
+                              BooleanWidget(label: 'Odtwarzaj dźwięk w tle', value: data.backgroundSoundValue, onChange: (value) => UserDataStorage.storeBackgroundSoundValue(value)),
+                              BooleanWidget(label: 'Wyłącz automatyczną blokadę ekranu', value: data.screenLockValue, onChange: (value) => UserDataStorage.storeScreenLockValue(value)),
                               AlarmTypeSetting(data: data, setState: setState),
-                              VibrationSetting(data: data, vibration: _vibration, setState: setState),
-                              ContinueAfterAlarmSetting(data: data, continueAfterAlarm: _continueAfterAlarm, setState: setState),
+                              BooleanWidget(label: 'Wibracja', value: data.vibrationValue, onChange: (value) => UserDataStorage.storeVibrationValue(value)),
+                              BooleanWidget(label: 'Kontynuuj odliczanie minutnika po czasie', value: data.continuationAfterAlarmValue, onChange: (value) => UserDataStorage.storeContinueAfterAlarmValue(value)),
                             ],
                           ),
                         ),

@@ -13,6 +13,7 @@ class UserDataStorage {
   static const String _currentTimerValueKey = 'currentTimerValue';
   static const String _startingTimerValueKey = 'startingTimerValue';
   static const String _periodValueKey = 'periodValue';
+  static const String _volumeValueKey = 'volumeValue';
   static const String _backgroundSoundValueKey = 'backgroundSoundValue';
   static const String _screenLockValueKey = 'screenLockValue';
   static const String _alarmTypeValueKey = 'alarmTypeValue';
@@ -25,7 +26,7 @@ class UserDataStorage {
   static const FlutterSecureStorage _storage = FlutterSecureStorage();
 
   static Future<SettingsData> settings() async {
-    var volume = await VolumeController().getVolume();
+    var volume = await volumeValue();
     var period = await periodValue();
     var backgroundSound = await backgroundSoundValue();
     var screenLock = await screenLockValue();
@@ -33,7 +34,7 @@ class UserDataStorage {
     var language = await languageValue();
     var vibration = await vibrationValue();
     var continueAfterAlarm = await continueAfterAlarmValue();
-    return SettingsData(volume * 100, period, backgroundSound, screenLock, alarmType, language, vibration, continueAfterAlarm);
+    return SettingsData(volume, period, backgroundSound, screenLock, alarmType, language, vibration, continueAfterAlarm);
   }
 
   static Future<TimerData> timerData() async {
@@ -68,6 +69,16 @@ class UserDataStorage {
 
   static Future<int> periodValue() async {
     var value = await _storage.read(key: _periodValueKey) ?? "1";
+    return int.parse(value);
+  }
+
+  static void storeVolumeValue(int value) async {
+    VolumeController().setVolume(value / 100, showSystemUI: true);
+    _storage.write(key: _volumeValueKey, value: value.toString());
+  }
+
+  static Future<int> volumeValue() async {
+    var value = await _storage.read(key: _volumeValueKey) ?? "50";
     return int.parse(value);
   }
 
