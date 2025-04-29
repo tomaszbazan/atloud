@@ -5,6 +5,8 @@ import '../shared/user_data_storage.dart';
 
 class _VolumeSwitcherState extends State<VolumeSwitcher> {
   late bool _soundOn;
+  static const IconData volumeUp = IconData(0xf028, fontFamily: 'FontAwesome');
+  static const IconData volumeMute = IconData(0xf6a9, fontFamily: 'FontAwesome');
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +23,8 @@ class _VolumeSwitcherState extends State<VolumeSwitcher> {
                   });
                 },
                 icon: _soundOn ?
-                const Icon(Icons.volume_up, size: 70.0, color: CustomColors.textColor) :
-                const Icon(Icons.volume_off, size: 70.0, color: CustomColors.textColor)
+                const Icon(volumeUp, size: 70.0, color: CustomColors.textColor) :
+                const Icon(volumeMute, size: 70.0, color: CustomColors.textColor)
             );
           } else if (snapshot.hasError) {
             return const Text('Error loading languages...');
