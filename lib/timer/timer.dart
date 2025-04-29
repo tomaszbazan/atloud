@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
+import '../components/app_bar.dart';
 import '../shared/available_page.dart';
 import '../sound/speaker.dart';
 
@@ -90,6 +91,7 @@ class _TimerPageState extends State<TimerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // appBar: AppBarWidget(text: _isTimerPage ? 'MINUTNIK' : 'ZEGAR'),
       body: Center(
         child: _isPickingTime
             ? TimePickerWidget(
