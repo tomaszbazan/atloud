@@ -4,15 +4,17 @@ import 'package:flutter/material.dart';
 
 class CustomTheme {
   static ThemeData get lightTheme {
-    return ThemeData(
-        useMaterial3: true,
+    return ThemeData(useMaterial3: true,
         brightness: Brightness.light,
         scaffoldBackgroundColor: CustomColors.lightBackgroundColor,
-        appBarTheme: AppBarTheme(
-            titleSpacing: 20,
+        appBarTheme: AppBarTheme(titleSpacing: 20,
             backgroundColor: CustomColors.lightBackgroundColor,
             centerTitle: true,
-            titleTextStyle: TextStyle(fontSize: 25, color: CustomColors.textColor, fontFamily: CustomFonts.openSans.value, fontWeight: FontWeight.bold, letterSpacing: 4.0)),
+            titleTextStyle: TextStyle(fontSize: 25,
+                color: CustomColors.textColor,
+                fontFamily: CustomFonts.openSans.value,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 4.0)),
         textButtonTheme: const TextButtonThemeData(style: ButtonStyle(foregroundColor: WidgetStatePropertyAll(CustomColors.textColor))),
         timePickerTheme: TimePickerThemeData(
           dialBackgroundColor: CustomColors.lightBackgroundColor,
@@ -20,36 +22,57 @@ class CustomTheme {
           hourMinuteTextColor: CustomColors.textColor,
           dialTextColor: CustomColors.textColor,
           dialHandColor: Colors.white,
-          cancelButtonStyle: ButtonStyle(
-              textStyle: WidgetStatePropertyAll(TextStyle(
+          cancelButtonStyle: ButtonStyle(textStyle: WidgetStatePropertyAll(TextStyle(
             fontSize: 20,
             color: CustomColors.textColor,
             fontFamily: CustomFonts.openSans.value,
             fontWeight: FontWeight.bold,
-            letterSpacing: 4.0,
-          ))),
-          confirmButtonStyle: ButtonStyle(
-              textStyle: WidgetStatePropertyAll(TextStyle(
+            letterSpacing: 4.0,))),
+          confirmButtonStyle: ButtonStyle(textStyle: WidgetStatePropertyAll(TextStyle(
             fontSize: 20,
             color: CustomColors.textColor,
             fontFamily: CustomFonts.openSans.value,
             fontWeight: FontWeight.bold,
-            letterSpacing: 4.0,
-          ))),
-          helpTextStyle: const TextStyle(
-            fontSize: 0,
-          ),
-        ));
+            letterSpacing: 4.0,))),
+          helpTextStyle: const TextStyle(fontSize: 0,),));
   }
+
   static TextStyle bottomButtonTheme = TextStyle(
     fontSize: 22,
     color: CustomColors.footerTextColor,
     fontFamily: CustomFonts.openSans.value,
     fontWeight: FontWeight.bold,
-    letterSpacing: 6.0,
-  );
-  static TextStyle settingsTextTheme = TextStyle(fontSize: 20, color: CustomColors.textColor, fontFamily: CustomFonts.openSans.value, letterSpacing: 1.0, height: 0.95);
+    letterSpacing: 6.0,);
+  static TextStyle settingsTextTheme = TextStyle(fontSize: 20,
+      color: CustomColors.textColor,
+      fontFamily: CustomFonts.openSans.value,
+      letterSpacing: 1.0,
+      height: 0.95);
   static EdgeInsetsGeometry settingsItemsMarginTheme = const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0);
-  static TextStyle navigationTextTheme = TextStyle(fontSize: 25, color: CustomColors.textColor, fontFamily: CustomFonts.openSans.value, fontWeight: FontWeight.bold, letterSpacing: 4.0);
-  static TextStyle clockTextTheme = TextStyle(fontSize: 110, color: CustomColors.textColor, fontFamily: CustomFonts.abril.value, height: 1.0);
+  static TextStyle navigationTextTheme = TextStyle(fontSize: 25,
+      color: CustomColors.textColor,
+      fontFamily: CustomFonts.openSans.value,
+      fontWeight: FontWeight.bold,
+      letterSpacing: 4.0);
+
+  static TextStyle clockTextTheme(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    return TextStyle(fontSize: _getAdaptiveSize(screenWidth, 70, 100), color: CustomColors.textColor, fontFamily: CustomFonts.abril.value, height: 1.0);
+  }
+
+  static TextStyle smallClockTextTheme = TextStyle(fontSize: 20, color: CustomColors.textColor, fontFamily: CustomFonts.abril.value, height: 1.0);
+
+  static double _getAdaptiveSize(double screenWidth, double minSize, double maxSize) {
+    const double smallScreenWidth = 360.0;
+    const double largeScreenWidth = 480.0;
+
+    if (screenWidth <= smallScreenWidth) {
+      return minSize;
+    } else if (screenWidth >= largeScreenWidth) {
+      return maxSize;
+    } else {
+      final double ratio = (screenWidth - smallScreenWidth) / (largeScreenWidth - smallScreenWidth);
+      return minSize + (maxSize - minSize) * ratio;
+    }
+  }
 }

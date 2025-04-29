@@ -7,12 +7,14 @@ import 'package:atloud/converters/duration_to_string.dart';
 import 'package:atloud/foreground_task/foreground_task_starter.dart';
 import 'package:atloud/foreground_task/timer_task.dart';
 import 'package:atloud/shared/user_data_storage.dart';
-import 'package:atloud/theme/theme.dart';
+import 'package:atloud/timer/timer_display_row.dart';
 import 'package:atloud/timer/timer_picker_widget.dart';
+import 'package:atloud/timer/timer_ring.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
+import '../converters/string_to_duration.dart';
 import '../shared/available_page.dart';
 import '../sound/speaker.dart';
 
@@ -95,11 +97,9 @@ class _TimerPageState extends State<TimerPage> {
             ? TimePickerWidget(
                 initialTime: _startingTime ?? const Duration(),
                 onTimeSelected: (newTime) {
-                  if (newTime != _startingTime) {
-                    _startingTime = newTime;
-                    UserDataStorage.storeStartingTimerValue(_startingTime!);
-                    _loadUserPreferences().then((preferences) => _initPage(preferences));
-                  }
+                  _startingTime = newTime;
+                  UserDataStorage.storeStartingTimerValue(_startingTime!);
+                  _loadUserPreferences().then((preferences) => _initPage(preferences));
                   setState(() {
                     _isPickingTime = false;
                   });
@@ -110,31 +110,45 @@ class _TimerPageState extends State<TimerPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    margin: const EdgeInsets.symmetric(vertical: 30.0),
+                    margin: const EdgeInsets.symmetric(vertical: 60.0),
                     child: ValueListenableBuilder(
                       valueListenable: _taskDataListenable,
                       builder: (context, data, _) {
                         String displayText;
+                        Duration? currentDuration;
+                        bool isTimerFinished = false;
 
                         if (_isTimerPage) {
-                          displayText = data?.toString() ?? (_startingTime != null ? DurationToString.shortConvert(_startingTime!) : "--:--");
+                          if (data != null) {
+                            displayText = data.toString();
+                            currentDuration = StringToDuration.convert(data.toString());
+                            if (currentDuration.isNegative || currentDuration.inSeconds == 0) {
+                              isTimerFinished = true;
+                            }
+                          } else {
+                            // Initial state, not started yet
+                            displayText = _startingTime != null ? DurationToString.shortConvert(_startingTime!) : "--:--";
+                            currentDuration = _startingTime;
+                          }
                         } else {
                           displayText = data?.toString() ?? DateTimeToString.shortConvert(DateTime.now());
                         }
 
-                        return SizedBox(
-                          height: 300,
-                          child: GestureDetector(
-                            onTap: _isTimerPage ? _enterTimePickingMode : () => _speaker.currentTime(),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(child: Text(displayText.split(":").first, style: CustomTheme.clockTextTheme, textAlign: TextAlign.right)),
-                                Text(":", style: CustomTheme.clockTextTheme),
-                                Expanded(child: Text(displayText.split(":").last, style: CustomTheme.clockTextTheme, textAlign: TextAlign.left))
-                              ],
-                            ),
-                          ),
+                        return GestureDetector(
+                          onTap: _isTimerPage ? _enterTimePickingMode : () => _speaker.currentTime(),
+                          child: _isTimerPage
+                              ? TimerRing(
+                                  duration: currentDuration,
+                                  isFinished: isTimerFinished,
+                                  startingTime: _startingTime,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      TimeDisplayRow(displayText: displayText),
+                                    ],
+                                  ),
+                                )
+                              : TimeDisplayRow(displayText: displayText),
                         );
                       },
                     ),

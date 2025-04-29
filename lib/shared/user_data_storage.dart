@@ -7,7 +7,7 @@ import 'package:volume_controller/volume_controller.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../settings/settings_data.dart';
-import '../timer/timer_data.dart';
+import '../timer/timer_user_preferences.dart';
 
 class UserDataStorage {
   static const String _currentTimerValueKey = 'currentTimerValue';
@@ -37,12 +37,12 @@ class UserDataStorage {
     return SettingsData(volume, period, backgroundSound, screenLock, alarmType, language, vibration, continueAfterAlarm);
   }
 
-  static Future<TimerData> timerData() async {
+  static Future<TimerUserPreferences> timerData() async {
     var period = await periodValue();
     var screenLock = await screenLockValue();
     var startingTime = await startingTimerValue();
     var continueAfterAlarm = await continueAfterAlarmValue();
-    return TimerData(screenLock, startingTime, period, continueAfterAlarm);
+    return TimerUserPreferences(screenLock, startingTime, period, continueAfterAlarm);
   }
 
   static void storeCurrentTimerValue(Duration value) async {
