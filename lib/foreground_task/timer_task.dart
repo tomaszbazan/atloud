@@ -40,6 +40,7 @@ class TimerTaskHandler extends TaskHandler {
     }
     _seconds++;
     var returnedValue = _passInformationToSpeaker(timestamp);
+    print('Returned value: $returnedValue');
     _updateNotification(returnedValue);
     FlutterForegroundTask.sendDataToMain(returnedValue);
   }
@@ -65,7 +66,7 @@ class TimerTaskHandler extends TaskHandler {
 
       if (secondsTimeTimerEnd == 0) {
         speaker.playSound();
-        return DurationToString.shortConvert(const Duration(seconds: 0));
+        return DurationToString.convert(const Duration(seconds: 0));
       } else {
         var startSeconds = _startingTime!.inSeconds;
         var currentTime = Duration(seconds: (startSeconds - _seconds));
@@ -73,7 +74,7 @@ class TimerTaskHandler extends TaskHandler {
         if (secondsTimeTimerEnd % 60 == 0 && ((_continueAfterAlarm! && secondsTimeTimerEnd < 0) || informationNeeded)) {
           speaker.speak(DurationToVoice.covert(currentTime));
         }
-        return DurationToString.shortConvert(currentTime);
+        return DurationToString.convert(currentTime);
       }
     }
   }

@@ -31,13 +31,13 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
   );
 
   void _confirmTimeSelection() {
-    final newTime = Duration(hours: _hoursWheel.selected, minutes: _minutesWheel.selected, seconds: 3);
+    final newTime = Duration(hours: _hoursWheel.selected, minutes: _minutesWheel.selected);
     widget.onTimeSelected(newTime);
   }
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = CustomTheme.clockTextTheme;
+    final textStyle = CustomTheme.clockTextTheme(context);
     final wheelStyle = WheelPickerStyle(itemExtent: textStyle.fontSize! * textStyle.height!, diameterRatio: 1.5, squeeze: 0.8, surroundingOpacity: .50, magnification: 1.0);
 
     Widget itemBuilder(BuildContext context, int index) {
@@ -65,7 +65,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
         Container(
           margin: const EdgeInsets.symmetric(vertical: 30.0),
           child: SizedBox(
-            height: 500,
+            height: 300,
             child: Stack(
               fit: StackFit.expand,
               children: [
