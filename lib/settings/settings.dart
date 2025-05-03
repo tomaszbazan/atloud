@@ -49,7 +49,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppBarWidget(text: 'USTAWIENIA'),
+      appBar: AppBarWidget(text: 'USTAWIENIA', incrementShowVersionCounter: _incrementShowVersionCounter),
       body: FutureBuilder<SettingsData>(
         future: _loadPreferences(),
         builder: (BuildContext context, AsyncSnapshot<SettingsData> snapshot) {
