@@ -1,9 +1,11 @@
+import 'package:atloud/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final String text;
+  final Function()? incrementShowVersionCounter;
 
-  const AppBarWidget({super.key, required this.text});
+  const AppBarWidget({super.key, required this.text, this.incrementShowVersionCounter});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +13,10 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       margin: const EdgeInsetsDirectional.fromSTEB(10.0, 20.0, 10.0, 0.0),
       child: Column(
         children: [
-          AppBar(title: Text(text), automaticallyImplyLeading: false),
+          AppBar(title: TextButton(
+            onPressed: incrementShowVersionCounter != null ? () => incrementShowVersionCounter!() : null,
+            child: Text(text, style: CustomTheme.lightTheme.appBarTheme.titleTextStyle)
+          ), automaticallyImplyLeading: false),
         ],
       ),
     );

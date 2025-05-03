@@ -28,10 +28,8 @@ class _BooleanWidgetState extends State<BooleanWidget> {
 
   @override
   Widget build(BuildContext context) {
-    const double iconSize = 40.0;
     return Row(
       children: [
-        const SizedBox(width: iconSize, height: iconSize),
         Expanded(child: Container(margin: CustomTheme.settingsItemsMarginTheme, child: Text(widget.label, style: CustomTheme.settingsTextTheme))),
         Switch(
             value: _currentValue,
