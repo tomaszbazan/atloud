@@ -145,7 +145,7 @@ class _TimerPageState extends State<TimerPage> {
                 ],
               ),
       ),
-      bottomNavigationBar: FooterWidget(text: _isTimerPage ? 'ZEGAR' : 'MINUTNIK', actionOnText: _switchPage),
+      bottomNavigationBar: FooterWidget(currentPage: _isTimerPage ? AvailablePage.timer : AvailablePage.clock, actionOnClick: _switchPage,),
     );
   }
 }
