@@ -47,3 +47,4 @@ app.*.map.json
 .aider*
 .pki/
 .cache/
+keys.json
