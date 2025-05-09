@@ -39,7 +39,7 @@ class AirtableService {
 
     try {
       final response = await http.post(url, headers: headers, body: body);
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         return true;
       } else {
         print('Airtable API Error: ${response.statusCode}');
