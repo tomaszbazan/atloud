@@ -30,7 +30,6 @@ class TimerTaskHandler extends TaskHandler {
   var _secondsFromTimerStart = 0;
 
   Future<void> _incrementTime(DateTime timestamp) async {
-    print('Increment time: $_secondsFromTimerStart, time: $timestamp');
     _speakTimeForFirstTime();
     _secondsFromTimerStart++;
     var returnedValue = _passInformationToSpeaker(timestamp);
@@ -44,7 +43,6 @@ class TimerTaskHandler extends TaskHandler {
       if (_taskType == TaskType.clock) {
         speaker.currentTime();
       } else {
-        print('2');
         speaker.speak(DurationToVoice.covert(_initialTime!));
       }
     }
@@ -77,7 +75,6 @@ class TimerTaskHandler extends TaskHandler {
         var timeLeftToEnd = Duration(seconds: (initialTimeSeconds - _secondsFromTimerStart));
         var informationNeeded = (_initialTime!.inMinutes - timeLeftToEnd.inMinutes.abs()) % _period! == 0;
         if (secondsToTimerEnd % 60 == 0 && ((_continueAfterAlarm! && secondsToTimerEnd < 0) || informationNeeded)) {
-          print('1');
           speaker.speak(DurationToVoice.covert(timeLeftToEnd));
         }
         return DurationToString.shortConvert(timeLeftToEnd);
