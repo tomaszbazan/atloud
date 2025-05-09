@@ -1,3 +1,3 @@
 enum AvailablePage {
-  timer, clock, settings
+  timer, clock, feedback, settings
 }

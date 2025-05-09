@@ -10,7 +10,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../components/footer.dart';
 import '../shared/available_page.dart';
 import '../shared/user_data_storage.dart';
-import '../timer/timer.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
