@@ -5,4 +5,5 @@ class CustomColors {
   static const Color textColor = Color(0xFF3D3B3A);
   static const Color footerBackgroundColor = Color(0xFF333333);
   static const Color footerTextColor = Colors.white;
+  static const Color secondColor = Color(0xFF0097B2);
 }

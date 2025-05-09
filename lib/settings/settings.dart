@@ -7,8 +7,10 @@ import 'package:atloud/settings/slider_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../components/footer.dart';
+import '../shared/available_page.dart';
 import '../shared/user_data_storage.dart';
-import 'footer.dart';
+import '../timer/timer.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -95,7 +97,7 @@ class _SettingsPageState extends State<SettingsPage> {
           }
         },
       ),
-      bottomNavigationBar: const SettingsFooterWidget(),
+      bottomNavigationBar: const FooterWidget(currentPage: AvailablePage.settings),
     );
   }
 }

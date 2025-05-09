@@ -62,6 +62,7 @@ class _TimerPageState extends State<TimerPage> {
   }
 
   void _switchPage() {
+    print("Switching page");
     setState(() {
       _isPickingTime = false;
       _isTimerPage = !_isTimerPage;
@@ -145,7 +146,7 @@ class _TimerPageState extends State<TimerPage> {
                 ],
               ),
       ),
-      bottomNavigationBar: FooterWidget(text: _isTimerPage ? 'ZEGAR' : 'MINUTNIK', actionOnText: _switchPage),
+      bottomNavigationBar: FooterWidget(currentPage: _isTimerPage ? AvailablePage.timer : AvailablePage.clock, actionOnClick: _switchPage,),
     );
   }
 }
