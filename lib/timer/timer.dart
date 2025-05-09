@@ -62,7 +62,6 @@ class _TimerPageState extends State<TimerPage> {
   }
 
   void _switchPage() {
-    print("Switching page");
     setState(() {
       _isPickingTime = false;
       _isTimerPage = !_isTimerPage;
