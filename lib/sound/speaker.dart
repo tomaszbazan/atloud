@@ -11,6 +11,7 @@ class Speaker {
   void speak(String text) async {
     var language = await UserDataStorage.languageValue();
     var soundOn = await UserDataStorage.soundOnValue();
+    print("Speaking: $text");
     if (!soundOn) {
       return;
     }

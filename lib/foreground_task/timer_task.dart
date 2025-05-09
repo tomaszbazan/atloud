@@ -23,25 +23,31 @@ class TimerTaskHandler extends TaskHandler {
 
   var _taskType = TaskType.clock;
 
-  Duration? _startingTime;
+  Duration? _initialTime;
   int? _period;
   bool? _continueAfterAlarm;
 
-  var _seconds = 0;
+  var _secondsFromTimerStart = 0;
 
   Future<void> _incrementTime(DateTime timestamp) async {
-    if (_seconds == 0) {
+    print('Increment time: $_secondsFromTimerStart, time: $timestamp');
+    _speakTimeForFirstTime();
+    _secondsFromTimerStart++;
+    var returnedValue = _passInformationToSpeaker(timestamp);
+    _updateNotification(returnedValue);
+    FlutterForegroundTask.sendDataToMain(returnedValue);
+  }
+
+  void _speakTimeForFirstTime() {
+    if (_secondsFromTimerStart == 0) {
       var speaker = Speaker();
       if (_taskType == TaskType.clock) {
         speaker.currentTime();
       } else {
-        speaker.speak(DurationToVoice.covert(_startingTime!));
+        print('2');
+        speaker.speak(DurationToVoice.covert(_initialTime!));
       }
     }
-    _seconds++;
-    var returnedValue = _passInformationToSpeaker(timestamp);
-    _updateNotification(returnedValue);
-    FlutterForegroundTask.sendDataToMain(returnedValue);
   }
 
   void _updateNotification(String returnToApp) {
@@ -56,35 +62,31 @@ class TimerTaskHandler extends TaskHandler {
   String _passInformationToSpeaker(DateTime timestamp) {
     var speaker = Speaker();
     if (_taskType == TaskType.clock) {
-      if (timestamp.second == 0 && (_seconds ~/ 60) % _period! == 0) {
+      if (timestamp.second == 0 && (_secondsFromTimerStart ~/ 60) % _period! == 0) {
         speaker.currentTime();
       }
       return DateTimeToString.shortConvert(DateTime.now());
     } else {
-      var secondsTimeTimerEnd = _startingTime!.inSeconds - _seconds;
+      var secondsToTimerEnd = _initialTime!.inSeconds - _secondsFromTimerStart;
 
-      if (secondsTimeTimerEnd == 0) {
+      if (secondsToTimerEnd == 0) {
         speaker.playSound();
         return DurationToString.shortConvert(const Duration(seconds: 0));
       } else {
-        var startSeconds = _startingTime!.inSeconds;
-        var currentTime = Duration(seconds: (startSeconds - _seconds));
-        var informationNeeded = (_startingTime!.inMinutes - currentTime.inMinutes.abs()) % _period! == 0;
-        if (secondsTimeTimerEnd % 60 == 0 && ((_continueAfterAlarm! && secondsTimeTimerEnd < 0) || informationNeeded)) {
-          speaker.speak(DurationToVoice.covert(currentTime));
+        var initialTimeSeconds = _initialTime!.inSeconds;
+        var timeLeftToEnd = Duration(seconds: (initialTimeSeconds - _secondsFromTimerStart));
+        var informationNeeded = (_initialTime!.inMinutes - timeLeftToEnd.inMinutes.abs()) % _period! == 0;
+        if (secondsToTimerEnd % 60 == 0 && ((_continueAfterAlarm! && secondsToTimerEnd < 0) || informationNeeded)) {
+          print('1');
+          speaker.speak(DurationToVoice.covert(timeLeftToEnd));
         }
-        return DurationToString.shortConvert(currentTime);
+        return DurationToString.shortConvert(timeLeftToEnd);
       }
     }
   }
 
   @override
   Future<void> onStart(DateTime timestamp, TaskStarter starter) async {
-    if (_taskType == TaskType.clock) {
-      var speaker = Speaker();
-      speaker.currentTime();
-    }
-    _incrementTime(timestamp);
   }
 
   @override
@@ -111,7 +113,7 @@ class TimerTaskHandler extends TaskHandler {
       var oldType = _taskType;
       _taskType = command == setTimerCommand ? TaskType.timer : TaskType.clock;
       if (oldType != _taskType) {
-        _seconds = 0;
+        _secondsFromTimerStart = 0;
       }
     }
   }
@@ -134,9 +136,9 @@ class TimerTaskHandler extends TaskHandler {
     var startingTime = data[TimerTaskHandler.startingTimeParameter];
     if (startingTime != null) {
       var startingTimeDuration = StringToDuration.convert(startingTime);
-      if (_startingTime != startingTimeDuration) {
-        _seconds = 0;
-        _startingTime = startingTimeDuration;
+      if (_initialTime != startingTimeDuration) {
+        _secondsFromTimerStart = 0;
+        _initialTime = startingTimeDuration;
       }
     }
   }
