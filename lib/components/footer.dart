@@ -2,6 +2,8 @@ import 'package:atloud/settings/settings.dart';
 import 'package:atloud/theme/colors.dart';
 import 'package:flutter/material.dart';
 
+// Import FeedbackPage instead of FeedbackLauncher
+import '../feedback/feedback_page.dart'; 
 import '../shared/available_page.dart';
 import '../timer/timer.dart';
 
@@ -75,6 +77,20 @@ class FooterWidget extends StatelessWidget {
                     reverseTransitionDuration: Duration.zero,
                   ),
                 )
+            ),
+            _buildNavItem(
+              context,
+              icon: Icons.feedback_outlined,
+              label: 'OPINIA',
+              isActive: currentPage == AvailablePage.feedback,
+              onTap: () => Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation1, animation2) => const FeedbackPage(),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                ),
+              ),
             ),
             _buildNavItem(
               context,

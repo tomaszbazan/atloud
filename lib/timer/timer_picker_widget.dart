@@ -111,14 +111,8 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
           padding: const EdgeInsets.all(8.0),
           child: TextButton(
             onPressed: _confirmTimeSelection,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: CustomColors.footerBackgroundColor,
-              padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-            ),
-            child: Text("START", style: CustomTheme.bottomButtonTheme),
+            style: CustomTheme.primaryButtonStyle,
+            child: Text("START", style: CustomTheme.primaryButtonTextTheme),
           ),
         ),
       ],
