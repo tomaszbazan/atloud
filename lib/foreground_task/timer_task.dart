@@ -74,7 +74,7 @@ class TimerTaskHandler extends TaskHandler {
         var initialTimeSeconds = _initialTime!.inSeconds;
         var timeLeftToEnd = Duration(seconds: (initialTimeSeconds - _secondsFromTimerStart));
         var informationNeeded = (_initialTime!.inMinutes - timeLeftToEnd.inMinutes.abs()) % _period! == 0;
-        if (secondsToTimerEnd % 60 == 0 && ((_continueAfterAlarm! && secondsToTimerEnd < 0) || informationNeeded)) {
+        if (_secondsFromTimerStart > 5 && secondsToTimerEnd % 60 == 0 && ((_continueAfterAlarm! && secondsToTimerEnd < 0) || informationNeeded)) {
           speaker.speak(DurationToVoice.covert(timeLeftToEnd));
         }
         return DurationToString.shortConvert(timeLeftToEnd);
