@@ -11,7 +11,7 @@ class AirtableService {
   static const String _futureFunctionalitiesField = 'fldfCBH1gWCQUCJzq';
   static const String _deviceInfoField = 'fldqbzQnibueS43Cb';
 
-  static Future<bool> sendFeedback({
+  static Future<String?> sendFeedback({
     required String email,
     required String appWorksCorrectly,
     required String futureFunctionalities,
@@ -40,15 +40,12 @@ class AirtableService {
     try {
       final response = await http.post(url, headers: headers, body: body);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return true;
+        return null;
       } else {
-        print('Airtable API Error: ${response.statusCode}');
-        print('Response body: ${response.body}');
-        return false;
+        return 'Błąd API Airtable: ${response.statusCode} ${response.reasonPhrase}';
       }
     } catch (e) {
-      print('Error sending data to Airtable: $e');
-      return false;
+      return 'Błąd podczas wysyłania danych do AirTable: $e';
     }
   }
 }
