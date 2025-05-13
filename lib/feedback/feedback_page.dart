@@ -7,7 +7,7 @@ import 'package:atloud/shared/available_page.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 
-import '../theme/theme.dart'; // For CustomColors if needed for styling
+import '../theme/theme.dart';
 
 class FeedbackPage extends StatefulWidget {
   const FeedbackPage({super.key});
@@ -34,16 +34,17 @@ class _FeedbackPageState extends State<FeedbackPage> {
   }
 
   Future<String> _getDeviceInfo() async {
-    final deviceInfoPlugin = DeviceInfoPlugin();
     String deviceInfoString = "Device Info Not Available";
-    // Ensure context is still valid before accessing MediaQuery
-    if (!mounted) return "Context not available for MediaQuery";
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final pixelRatio = MediaQuery.of(context).devicePixelRatio;
-    String screenInfo = "Ekran: ${screenWidth.toStringAsFixed(0)}x${screenHeight.toStringAsFixed(0)} @${pixelRatio.toStringAsFixed(1)}x";
+
+      // Ensure context is still valid before accessing MediaQuery
+      if (!mounted) return "Context not available for MediaQuery";
+      final screenWidth = MediaQuery.of(context).size.width;
+      final screenHeight = MediaQuery.of(context).size.height;
+      final pixelRatio = MediaQuery.of(context).devicePixelRatio;
+      String screenInfo = "Ekran: ${screenWidth.toStringAsFixed(0)}x${screenHeight.toStringAsFixed(0)} @${pixelRatio.toStringAsFixed(1)}x";
 
     try {
+      final deviceInfoPlugin = DeviceInfoPlugin();
       if (Platform.isAndroid) {
         final androidInfo = await deviceInfoPlugin.androidInfo;
         deviceInfoString = 'Model: ${androidInfo.model} \n'
@@ -77,7 +78,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
       });
 
       final deviceInfo = await _getDeviceInfo();
-      final success = await AirtableService.sendFeedback(
+      final error = await AirtableService.sendFeedback(
         email: _emailController.text,
         appWorksCorrectly: _appWorksController.text,
         futureFunctionalities: _featuresController.text,
@@ -87,12 +88,12 @@ class _FeedbackPageState extends State<FeedbackPage> {
       if (mounted) {
         setState(() {
           _isLoading = false;
-          if (success) {
-            _isSubmittedSuccessfully = true;
-          } else {
+          if (error != null) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Wystąpił błąd podczas wysyłania opinii. Spróbuj ponownie.')),
+              SnackBar(content: Text(error)),
             );
+          } else {
+            _isSubmittedSuccessfully = true;
           }
         });
       }
