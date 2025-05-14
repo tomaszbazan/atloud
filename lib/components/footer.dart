@@ -18,7 +18,7 @@ class FooterWidget extends StatelessWidget {
   });
 
   Widget _buildNavItem(BuildContext context, {
-    required IconData icon,
+    required Widget iconWidget,
     required String label,
     required bool isActive,
     required VoidCallback onTap,
@@ -31,7 +31,7 @@ class FooterWidget extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 30, color: CustomColors.footerTextColor),
+              iconWidget,
               const SizedBox(height: 4),
               Text(label, style: const TextStyle(color: CustomColors.footerTextColor, fontSize: 12)),
             ],
@@ -52,7 +52,7 @@ class FooterWidget extends StatelessWidget {
           children: [
             _buildNavItem(
               context,
-              icon: Icons.watch_later_outlined,
+              iconWidget: Image.asset('assets/icons/clock.png', width: 30, height: 30, color: CustomColors.footerTextColor),
               label: 'ZEGAR',
               isActive: currentPage == AvailablePage.clock,
               onTap: () => actionOnClick != null ? actionOnClick!() : Navigator.pushReplacement(
@@ -66,7 +66,7 @@ class FooterWidget extends StatelessWidget {
             ),
             _buildNavItem(
               context,
-              icon: Icons.timer_outlined,
+              iconWidget: Image.asset('assets/icons/timer.png', width: 30, height: 30, color: CustomColors.footerTextColor),
               label: 'MINUTNIK',
               isActive: currentPage == AvailablePage.timer,
                 onTap: () => actionOnClick != null ? actionOnClick!() : Navigator.pushReplacement(
@@ -80,7 +80,7 @@ class FooterWidget extends StatelessWidget {
             ),
             _buildNavItem(
               context,
-              icon: Icons.feedback_outlined,
+              iconWidget: Image.asset('assets/icons/feedback.png', width: 30, height: 30, color: CustomColors.footerTextColor),
               label: 'OPINIA',
               isActive: currentPage == AvailablePage.feedback,
               onTap: () => Navigator.pushReplacement(
@@ -94,7 +94,7 @@ class FooterWidget extends StatelessWidget {
             ),
             _buildNavItem(
               context,
-              icon: Icons.settings_outlined,
+              iconWidget: const Icon(Icons.settings_outlined, size: 30, color: CustomColors.footerTextColor),
               label: 'USTAWIENIA',
               isActive: currentPage == AvailablePage.settings,
                 onTap: () => Navigator.pushReplacement(
