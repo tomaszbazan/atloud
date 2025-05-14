@@ -65,7 +65,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
         Container(
           margin: const EdgeInsets.symmetric(vertical: 30.0),
           child: SizedBox(
-            height: 500,
+            height: 300,
             child: Stack(
               fit: StackFit.expand,
               children: [
