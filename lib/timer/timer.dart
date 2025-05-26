@@ -53,6 +53,7 @@ class _TimerPageState extends State<TimerPage> {
     WakelockPlus.toggle(enable: screenLockValue);
 
     _startingTime = await UserDataStorage.startingTimerValue();
+    print("Starting time: $_startingTime");
 
     return {
       TimerTaskHandler.startingTimeParameter: DurationToString.convert(_startingTime!),

@@ -48,6 +48,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  golden_toolkit: ^0.15.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -84,7 +85,7 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-  - family: Open sans
+  - family: OpenSans
     fonts:
       - asset: assets/fonts/OpenSans-Regular.ttf
       - asset: assets/fonts/OpenSans-Bold.ttf
