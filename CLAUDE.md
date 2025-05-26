@@ -21,3 +21,4 @@
 - Use constants for styling values (colors, fonts)
 - Handle async operations with proper Future/async-await patterns
 - Follow standard error handling with try/catch blocks where needed
+- Don't use comments in code, except very complicated, unclear logic
