@@ -20,7 +20,6 @@ class UserDataStorage {
   static const String _languageValueKey = 'languageValue';
   static const String _vibrationValueKey = 'vibrationValue';
   static const String _continueAfterAlarmKey = 'continueAfterAlarmValue';
-  static const String _soundOnValueKey = 'soundOnValue';
   static const String _lastVisitedPageValueKey = 'lastVisitedPageValue';
 
   static const FlutterSecureStorage _storage = FlutterSecureStorage();
@@ -133,15 +132,6 @@ class UserDataStorage {
 
   static Future<bool> continueAfterAlarmValue() async {
     var value = await _storage.read(key: _continueAfterAlarmKey) ?? "true";
-    return value.toLowerCase() == 'true';
-  }
-
-  static void storeSoundOn(bool value) async {
-    _storage.write(key: _soundOnValueKey, value: value.toString());
-  }
-
-  static Future<bool> soundOnValue() async {
-    var value = await _storage.read(key: _soundOnValueKey) ?? "true";
     return value.toLowerCase() == 'true';
   }
 

@@ -1,48 +1,110 @@
 import 'package:atloud/settings/settings.dart';
 import 'package:atloud/theme/colors.dart';
-import 'package:atloud/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class FooterWidget extends StatelessWidget {
-  final String text;
-  final Function() actionOnText;
+// Import FeedbackPage instead of FeedbackLauncher
+import '../feedback/feedback_page.dart'; 
+import '../shared/available_page.dart';
+import '../timer/timer.dart';
 
-  const FooterWidget({super.key, required this.text, required this.actionOnText});
+class FooterWidget extends StatelessWidget {
+  final AvailablePage currentPage;
+  final Function()? actionOnClick;
+
+  const FooterWidget({
+    super.key,
+    required this.currentPage,
+    this.actionOnClick,
+  });
+
+  Widget _buildNavItem(BuildContext context, {
+    required Widget iconWidget,
+    required String label,
+    required bool isActive,
+    required VoidCallback onTap,
+  }) {
+    return Expanded(
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          color: isActive ? CustomColors.secondColor : CustomColors.footerBackgroundColor,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              iconWidget,
+              const SizedBox(height: 4),
+              Text(label, style: const TextStyle(color: CustomColors.footerTextColor, fontSize: 12)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
+      height: 80,
       color: CustomColors.footerBackgroundColor,
       child: SafeArea(
-        child: Stack(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Center(
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 24.0),
+            _buildNavItem(
+              context,
+              iconWidget: Image.asset('assets/icons/clock.png', width: 30, height: 30, color: CustomColors.footerTextColor),
+              label: 'ZEGAR',
+              isActive: currentPage == AvailablePage.clock,
+              onTap: () => actionOnClick != null ? actionOnClick!() : Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation1, animation2) => const TimerPage(isTimerPage: false),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
                 ),
-                onPressed: actionOnText,
-                child: Text(
-                  text,
-                  textAlign: TextAlign.center,
-                  style: CustomTheme.bottomButtonTheme,
+              )
+            ),
+            _buildNavItem(
+              context,
+              iconWidget: Image.asset('assets/icons/timer.png', width: 30, height: 30, color: CustomColors.footerTextColor),
+              label: 'MINUTNIK',
+              isActive: currentPage == AvailablePage.timer,
+                onTap: () => actionOnClick != null ? actionOnClick!() : Navigator.pushReplacement(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation1, animation2) => const TimerPage(isTimerPage: true),
+                    transitionDuration: Duration.zero,
+                    reverseTransitionDuration: Duration.zero,
+                  ),
+                )
+            ),
+            _buildNavItem(
+              context,
+              iconWidget: Image.asset('assets/icons/feedback.png', width: 30, height: 30, color: CustomColors.footerTextColor),
+              label: 'OPINIA',
+              isActive: currentPage == AvailablePage.feedback,
+              onTap: () => Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation1, animation2) => const FeedbackPage(),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
                 ),
               ),
             ),
-            Positioned(
-              right: 0,
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: IconButton(
-                    icon: const Icon(
-                      Icons.settings,
-                      size: 60,
-                      color: CustomColors.footerTextColor,
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
-                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsPage()))),
-              ),
+            _buildNavItem(
+              context,
+              iconWidget: const Icon(Icons.settings_outlined, size: 30, color: CustomColors.footerTextColor),
+              label: 'USTAWIENIA',
+              isActive: currentPage == AvailablePage.settings,
+                onTap: () => Navigator.pushReplacement(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation1, animation2) => const SettingsPage(),
+                    transitionDuration: Duration.zero,
+                    reverseTransitionDuration: Duration.zero,
+                  ),
+                )
             ),
           ],
         ),

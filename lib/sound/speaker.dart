@@ -10,10 +10,6 @@ class Speaker {
 
   void speak(String text) async {
     var language = await UserDataStorage.languageValue();
-    var soundOn = await UserDataStorage.soundOnValue();
-    if (!soundOn) {
-      return;
-    }
     await _flutterTts.setLanguage(language);
     await _flutterTts.speak(text);
   }
@@ -24,10 +20,6 @@ class Speaker {
   }
 
   void playSound() async {
-    var soundOn = await UserDataStorage.soundOnValue();
-    if (!soundOn) {
-      return;
-    }
     var vibrationOn = await UserDataStorage.vibrationValue();
     if (vibrationOn) {
       Vibration.vibrate(duration: 1000, repeat: 3);

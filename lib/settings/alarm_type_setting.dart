@@ -21,10 +21,8 @@ class AlarmTypeSetting extends StatefulWidget {
 class _AlarmTypeSettingState extends State<AlarmTypeSetting> {
   @override
   Widget build(BuildContext context) {
-    const double iconSize = 40.0;
     return Row(
       children: [
-        const SizedBox(width: iconSize, height: iconSize),
         Expanded(child: Container(margin: CustomTheme.settingsItemsMarginTheme, child: Text('Dźwięk alarmu', style: CustomTheme.settingsTextTheme))),
         Container(
           width: 140,
