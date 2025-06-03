@@ -29,7 +29,6 @@ class CustomTheme {
       height: 0.95);
   static EdgeInsetsGeometry settingsItemsMarginTheme = const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0);
   static TextStyle navigationTextTheme = TextStyle(fontSize: 25, color: CustomColors.textColor, fontFamily: CustomFonts.openSans.value, fontWeight: FontWeight.bold, letterSpacing: 4.0);
-  // static TextStyle clockTextTheme = TextStyle(fontSize: 105, color: CustomColors.textColor, fontFamily: CustomFonts.abril.value, height: 1.0);
 
   static ButtonStyle get primaryButtonStyle {
     return ElevatedButton.styleFrom(
@@ -43,10 +42,10 @@ class CustomTheme {
 
   static TextStyle clockTextTheme(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    return TextStyle(fontSize: _getAdaptiveSize(screenWidth, 70, 100), color: CustomColors.textColor, fontFamily: CustomFonts.abril.value, height: 1.0);
+    return TextStyle(fontSize: _getAdaptiveSize(screenWidth, 60, 90), color: CustomColors.textColor, fontFamily: CustomFonts.abril.value, height: 1.0);
   }
 
-  static TextStyle smallClockTextTheme = TextStyle(fontSize: 20, color: CustomColors.textColor, fontFamily: CustomFonts.abril.value, height: 1.0);
+  static TextStyle smallClockTextTheme = TextStyle(fontSize: 25, color: CustomColors.textColor, fontFamily: CustomFonts.abril.value, height: 1.0);
 
   static double _getAdaptiveSize(double screenWidth, double minSize, double maxSize) {
     const double smallScreenWidth = 360.0;

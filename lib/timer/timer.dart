@@ -59,7 +59,7 @@ class _TimerPageState extends State<TimerPage> {
     return {
       TimerTaskHandler.startingTimeParameter: DurationToString.convert(_startingTime!),
       TimerTaskHandler.periodParameter: await UserDataStorage.periodValue(),
-      TimerTaskHandler.continueAfterAlarmParameter: await UserDataStorage.continueAfterAlarmValue()
+      TimerTaskHandler.continueAfterAlarmParameter: await UserDataStorage.continueAfterAlarmValue(),
     };
   }
 
@@ -95,71 +95,64 @@ class _TimerPageState extends State<TimerPage> {
     return Scaffold(
       appBar: AppBarWidget(text: _isTimerPage ? 'MINUTNIK' : 'ZEGAR'),
       body: Center(
-        child: _isPickingTime
-            ? TimePickerWidget(
-                initialTime: _startingTime ?? const Duration(),
-                onTimeSelected: (newTime) {
-                  _startingTime = newTime;
-                  UserDataStorage.storeStartingTimerValue(_startingTime!);
-                  _loadUserPreferences().then((preferences) => _initPage(preferences));
-                  setState(() {
-                    _isPickingTime = false;
-                  });
-                },
-              )
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 60.0),
-                    child: ValueListenableBuilder(
-                      valueListenable: _taskDataListenable,
-                      builder: (context, data, _) {
-                        String displayText;
-                        Duration? currentDuration;
-                        bool isTimerFinished = false;
+        child:
+            _isPickingTime
+                ? TimePickerWidget(
+                  initialTime: _startingTime ?? const Duration(),
+                  onTimeSelected: (newTime) {
+                    _startingTime = newTime;
+                    UserDataStorage.storeStartingTimerValue(_startingTime!);
+                    _loadUserPreferences().then((preferences) => _initPage(preferences));
+                    setState(() {
+                      _isPickingTime = false;
+                    });
+                  },
+                )
+                : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.symmetric(vertical: 60.0),
+                      child: ValueListenableBuilder(
+                        valueListenable: _taskDataListenable,
+                        builder: (context, data, _) {
+                          String displayText;
+                          Duration? currentDuration;
+                          bool isTimerFinished = false;
 
-                        if (_isTimerPage) {
-                          if (data != null) {
-                            displayText = data.toString();
-                            currentDuration = StringToDuration.convert(data.toString());
-                            if (currentDuration.isNegative || currentDuration.inSeconds == 0) {
-                              isTimerFinished = true;
+                          if (_isTimerPage) {
+                            if (data != null) {
+                              displayText = data.toString();
+                              currentDuration = StringToDuration.convert(data.toString());
+                              if (currentDuration.isNegative || currentDuration.inSeconds == 0) {
+                                isTimerFinished = true;
+                              }
+                            } else {
+                              displayText = _startingTime != null ? DurationToString.convert(_startingTime!) : "--:--";
+                              currentDuration = _startingTime;
                             }
                           } else {
-                            // Initial state, not started yet
-                            displayText = _startingTime != null ? DurationToString.shortConvert(_startingTime!) : "--:--";
-                            currentDuration = _startingTime;
+                            displayText = data?.toString() ?? DateTimeToString.shortConvert(DateTime.now());
                           }
-                        } else {
-                          displayText = data?.toString() ?? DateTimeToString.shortConvert(DateTime.now());
-                        }
 
-                        return GestureDetector(
-                          onTap: _isTimerPage ? _enterTimePickingMode : () => _speaker.currentTime(),
-                          child: _isTimerPage
-                              ? TimerRing(
-                                  duration: currentDuration,
-                                  isFinished: isTimerFinished,
-                                  startingTime: _startingTime,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      TimeDisplayRow(displayText: displayText),
-                                    ],
-                                  ),
-                                )
-                              : TimeDisplayRow(displayText: displayText),
-                        );
-                      },
+                          return GestureDetector(
+                            onTap: _isTimerPage ? _enterTimePickingMode : () => _speaker.currentTime(),
+                            child: TimerRing(
+                              duration: currentDuration,
+                              isFinished: isTimerFinished,
+                              startingTime: _startingTime,
+                              child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [TimeDisplayRow(displayText: displayText)]),
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                  const VolumeSwitcher(),
-                ],
-              ),
+                    const VolumeSwitcher(),
+                  ],
+                ),
       ),
-      bottomNavigationBar: FooterWidget(currentPage: _isTimerPage ? AvailablePage.timer : AvailablePage.clock, actionOnClick: _switchPage,),
+      bottomNavigationBar: FooterWidget(currentPage: _isTimerPage ? AvailablePage.timer : AvailablePage.clock, actionOnClick: _switchPage),
     );
   }
 }
