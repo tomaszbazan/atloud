@@ -30,14 +30,14 @@ class TimerTaskHandler extends TaskHandler {
   var _secondsFromTimerStart = 0;
 
   Future<void> _incrementTime(DateTime timestamp) async {
-    _speakTimeForFirstTime(timestamp);
+    _speakTimeForFirstTime();
     _secondsFromTimerStart++;
     var returnedValue = _passInformationToSpeaker(timestamp);
     _updateNotification(returnedValue);
     FlutterForegroundTask.sendDataToMain(returnedValue);
   }
 
-  void _speakTimeForFirstTime(DateTime timestamp) {
+  void _speakTimeForFirstTime() {
     if (_secondsFromTimerStart == 0) {
       var speaker = Speaker();
       if (_taskType == TaskType.clock) {
@@ -46,11 +46,6 @@ class TimerTaskHandler extends TaskHandler {
         speaker.speak(DurationToVoice.covert(_initialTime!));
       }
     }
-    _secondsFromTimerStart++;
-    var returnedValue = _passInformationToSpeaker(timestamp);
-    print('Returned value: $returnedValue');
-    _updateNotification(returnedValue);
-    FlutterForegroundTask.sendDataToMain(returnedValue);
   }
 
   void _updateNotification(String returnToApp) {

@@ -72,6 +72,8 @@ class UserDataStorage {
   }
 
   static void storeVolumeValue(int value) async {
+    var currentValue = await volumeValue();
+    if (currentValue == value) return;
     VolumeController().setVolume(value / 100, showSystemUI: true);
     _storage.write(key: _volumeValueKey, value: value.toString());
   }
