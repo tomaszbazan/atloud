@@ -71,7 +71,6 @@ class _SettingsPageState extends State<SettingsPage> {
                               SettingsIcon(constraints: constraints, incrementShowVersionCounter: _incrementShowVersionCounter),
                               SliderWidget(icon: Icons.volume_up, label: 'Głośność', min: 0, max: 100, value: data.volumeValue, onChange: (value) => UserDataStorage.storeVolumeValue(value)),
                               SliderWidget(icon: Icons.play_circle_outline, label: 'Co ile minut', min: 1, max: 60, value: data.periodValue, onChange: (value) => UserDataStorage.storePeriodValue(value)),
-                              BooleanWidget(label: 'Odtwarzaj dźwięk w tle', value: data.backgroundSoundValue, onChange: (value) => UserDataStorage.storeBackgroundSoundValue(value)),
                               BooleanWidget(label: 'Wyłącz automatyczną blokadę ekranu', value: data.screenLockValue, onChange: (value) => UserDataStorage.storeScreenLockValue(value)),
                               AlarmTypeSetting(data: data, setState: setState),
                               BooleanWidget(label: 'Wibracja', value: data.vibrationValue, onChange: (value) => UserDataStorage.storeVibrationValue(value)),
