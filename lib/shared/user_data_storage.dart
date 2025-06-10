@@ -2,6 +2,7 @@ import 'package:atloud/converters/duration_to_string.dart';
 import 'package:atloud/converters/string_to_duration.dart';
 import 'package:atloud/shared/available_page.dart';
 import 'package:atloud/sound/alarm_type.dart';
+import 'package:atloud/sound/speaker.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:volume_controller/volume_controller.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -93,6 +94,7 @@ class UserDataStorage {
 
   static void storeAlarmTypeValue(String value) async {
     _storage.write(key: _alarmTypeValueKey, value: value);
+    Speaker().playAlarmSound(); // Play sound to notify user of change
   }
 
   static Future<AlarmType> alarmTypeValue() async {
