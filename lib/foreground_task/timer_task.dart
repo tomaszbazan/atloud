@@ -67,7 +67,7 @@ class TimerTaskHandler extends TaskHandler {
       var secondsToTimerEnd = _initialTime!.inSeconds - _secondsFromTimerStart;
 
       if (secondsToTimerEnd == 0) {
-        speaker.playSound();
+        speaker.playAlarmSoundAndVibrate();
         return DurationToString.convert(const Duration(seconds: 0));
       } else {
         if (secondsToTimerEnd < 0 && !_continueAfterAlarm!) {
