@@ -20,7 +20,7 @@ class ForegroundTaskStarter {
       notificationIcon: const NotificationIcon(metaDataName: 'pl.btsoftware.atloud.default_notification_icon', backgroundColor: Colors.black),
       notificationInitialRoute: '/clock',
       callback: startCallback,
-      notificationButtons: [const NotificationButton(id: TimerTaskHandler.stopButtonId, text: 'Zatrzymaj'), const NotificationButton(id: TimerTaskHandler.muteButtonId, text: 'Wycisz')]
+      notificationButtons: [const NotificationButton(id: TimerTaskHandler.stopButtonId, text: 'Zatrzymaj')]
     );
   }
 
