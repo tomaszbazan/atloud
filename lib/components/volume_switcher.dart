@@ -1,4 +1,3 @@
-import 'package:atloud/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:volume_controller/volume_controller.dart';
 
@@ -9,6 +8,8 @@ class _VolumeSwitcherState extends State<VolumeSwitcher> {
   final VolumeController _volumeController = VolumeController();
   static const IconData volumeUp = IconData(0xf028, fontFamily: 'FontAwesome');
   static const IconData volumeMute = IconData(0xf6a9, fontFamily: 'FontAwesome');
+  final _minimumVolume = 10;
+  final iconSize = 50.0;
 
   @override
   void initState() {
@@ -35,20 +36,17 @@ class _VolumeSwitcherState extends State<VolumeSwitcher> {
 
   @override
   Widget build(BuildContext context) {
-    // final double size = 70.0
     return FutureBuilder<int>(
       future: UserDataStorage.volumeValue(),
       builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return IconButton(
-            icon: _currentVolume > 10
-                ? const Icon(volumeUp, size: 70.0)
-                : const Icon(volumeMute, size: 70.0),
+            icon: pickIconBasedOnMinimumVolume(),
             onPressed: null,
           );
         } else if (snapshot.hasError) {
-          return const IconButton(
-            icon: Icon(Icons.error_outline, size: 70.0),
+          return IconButton(
+            icon: Icon(Icons.error_outline, size: iconSize),
             onPressed: null,
           );
         } else if (snapshot.hasData) {
@@ -68,18 +66,20 @@ class _VolumeSwitcherState extends State<VolumeSwitcher> {
               });
               UserDataStorage.storeVolumeValue(newVolume);
             },
-            icon: _currentVolume > 10
-                ? const Icon(volumeUp, size: 70.0)
-                : const Icon(volumeMute, size: 70.0),
+            icon: pickIconBasedOnMinimumVolume(),
           );
         } else {
-          return const IconButton(
-            icon: Icon(Icons.help_outline, size: 70.0),
+          return IconButton(
+            icon: Icon(Icons.help_outline, size: iconSize),
             onPressed: null,
           );
         }
       },
     );
+  }
+
+  Icon pickIconBasedOnMinimumVolume() {
+    return _currentVolume > _minimumVolume ? Icon(volumeUp, size: iconSize) : Icon(volumeMute, size: iconSize);
   }
 }
 
