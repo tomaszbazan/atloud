@@ -4,14 +4,12 @@ import 'package:flutter/material.dart';
 class TimerRing extends StatelessWidget {
   final Duration? duration;
   final Duration? startingTime;
-  final bool isFinished;
   final Widget child;
 
   const TimerRing({
     super.key,
     required this.duration,
     required this.startingTime,
-    required this.isFinished,
     required this.child,
   });
 
@@ -19,33 +17,42 @@ class TimerRing extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Calculate optimal ring size - use 80% of screen width or height, whichever is smaller
+        // Calculate optimal ring size - use 70% of screen width or height, whichever is smaller
         final screenWidth = MediaQuery.of(context).size.width;
         final screenHeight = MediaQuery.of(context).size.height;
         
         // Use the smaller dimension to ensure ring fits on screen
         final smallerDimension = screenWidth < screenHeight ? screenWidth : screenHeight;
-        final ringSize = smallerDimension * 0.7; // Use 80% of the smaller dimension
-        
-        return Center(
-          child: SizedBox(
-            width: ringSize,
-            height: ringSize,
-            child: CustomPaint(
-              painter: TimerRingPainter(
-                progress: _calculateProgress(),
-                isFinished: isFinished,
+        final ringSize = smallerDimension * 0.7; // Use 70% of the smaller dimension
+        final textSize = smallerDimension * 0.85; // Use 85% of the smaller dimension
+
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            SizedBox(
+              width: ringSize,
+              height: ringSize,
+              child: CustomPaint(
+                painter: TimerRingPainter(
+                  progress: _calculateProgress(),
+                  isFinished: isFinished,
+                ),
               ),
-              child: Center(child: child),
             ),
-          ),
+            SizedBox(
+              height: ringSize,
+              width: textSize,
+              child: child,
+            ),
+          ],
         );
       }
     );
   }
 
+  bool get isFinished => duration != null && startingTime != null && (duration!.isNegative || duration!.inSeconds == 0);
+
   double _calculateProgress() {
-    // For when timer is not active yet, or invalid state
     if (duration == null || startingTime == null || startingTime!.inSeconds == 0) {
       return 1.0;
     }

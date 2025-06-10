@@ -108,48 +108,55 @@ class _TimerPageState extends State<TimerPage> {
                     });
                   },
                 )
-                : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 60.0),
-                      child: ValueListenableBuilder(
-                        valueListenable: _taskDataListenable,
-                        builder: (context, data, _) {
-                          String displayText;
-                          Duration? currentDuration;
-                          bool isTimerFinished = false;
+                : Container(
+                  margin: const EdgeInsets.symmetric(vertical: 60.0),
+                  child: ValueListenableBuilder(
+                    valueListenable: _taskDataListenable,
+                    builder: (context, data, _) {
+                      String displayText;
+                      Duration? currentDuration;
 
-                          if (_isTimerPage) {
-                            if (data != null) {
-                              displayText = data.toString();
-                              currentDuration = StringToDuration.convert(data.toString());
-                              if (currentDuration.isNegative || currentDuration.inSeconds == 0) {
-                                isTimerFinished = true;
-                              }
-                            } else {
-                              displayText = _startingTime != null ? DurationToString.convert(_startingTime!) : "--:--";
-                              currentDuration = _startingTime;
-                            }
-                          } else {
-                            displayText = data?.toString() ?? DateTimeToString.shortConvert(DateTime.now());
-                          }
+                      if (_isTimerPage) {
+                        if (data != null) {
+                          displayText = data.toString();
+                          currentDuration = StringToDuration.convert(data.toString());
+                        } else {
+                          displayText = _startingTime != null ? DurationToString.convert(_startingTime!) : "--:--";
+                          currentDuration = _startingTime;
+                        }
+                      } else {
+                        displayText = data?.toString() ?? DateTimeToString.shortConvert(DateTime.now());
+                      }
 
-                          return GestureDetector(
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [Container(
+                          margin: const EdgeInsets.symmetric(vertical: 30.0),
+                          child: GestureDetector(
                             onTap: _isTimerPage ? _enterTimePickingMode : () => _speaker.currentTime(),
                             child: TimerRing(
                               duration: currentDuration,
-                              isFinished: isTimerFinished,
                               startingTime: _startingTime,
-                              child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [TimeDisplayRow(displayText: displayText)]),
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  TimeDisplayRow(displayText: displayText),
+                                  const Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(bottom: 20.0),
+                                      child: VolumeSwitcher(),
+                                    ),
+                                  ),
+                                ],
+                              )
                             ),
-                          );
-                        },
-                      ),
-                    ),
-                    const VolumeSwitcher(),
-                  ],
+                          ),
+                        )],
+                      );
+                    },
+                  ),
                 ),
       ),
       bottomNavigationBar: FooterWidget(currentPage: _isTimerPage ? AvailablePage.timer : AvailablePage.clock, actionOnClick: _switchPage),

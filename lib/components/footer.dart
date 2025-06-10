@@ -5,11 +5,14 @@ import 'package:flutter/material.dart';
 // Import FeedbackPage instead of FeedbackLauncher
 import '../feedback/feedback_page.dart'; 
 import '../shared/available_page.dart';
+import '../theme/theme.dart';
 import '../timer/timer.dart';
 
 class FooterWidget extends StatelessWidget {
   final AvailablePage currentPage;
   final Function()? actionOnClick;
+  final iconWidth = 30.0;
+  final iconHeight = 30.0;
 
   const FooterWidget({
     super.key,
@@ -32,7 +35,7 @@ class FooterWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               iconWidget,
-              const SizedBox(height: 4),
+              const SizedBox(height: 8),
               Text(label, style: const TextStyle(color: CustomColors.footerTextColor, fontSize: 12)),
             ],
           ),
@@ -44,7 +47,7 @@ class FooterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 80,
+      height: CustomTheme.navigationBarHeight(context),
       color: CustomColors.footerBackgroundColor,
       child: SafeArea(
         child: Row(
@@ -52,7 +55,7 @@ class FooterWidget extends StatelessWidget {
           children: [
             _buildNavItem(
               context,
-              iconWidget: Image.asset('assets/icons/clock.png', width: 30, height: 30, color: CustomColors.footerTextColor),
+              iconWidget: Image.asset('assets/icons/clock.png', width: iconWidth, height: iconHeight, color: CustomColors.footerTextColor),
               label: 'ZEGAR',
               isActive: currentPage == AvailablePage.clock,
               onTap: () => actionOnClick != null ? actionOnClick!() : Navigator.pushReplacement(
@@ -66,7 +69,7 @@ class FooterWidget extends StatelessWidget {
             ),
             _buildNavItem(
               context,
-              iconWidget: Image.asset('assets/icons/timer.png', width: 30, height: 30, color: CustomColors.footerTextColor),
+              iconWidget: Image.asset('assets/icons/timer.png', width: iconWidth, height: iconHeight, color: CustomColors.footerTextColor),
               label: 'MINUTNIK',
               isActive: currentPage == AvailablePage.timer,
                 onTap: () => actionOnClick != null ? actionOnClick!() : Navigator.pushReplacement(
@@ -80,7 +83,7 @@ class FooterWidget extends StatelessWidget {
             ),
             _buildNavItem(
               context,
-              iconWidget: Image.asset('assets/icons/feedback.png', width: 30, height: 30, color: CustomColors.footerTextColor),
+              iconWidget: Image.asset('assets/icons/feedback.png', width: iconWidth, height: iconHeight, color: CustomColors.footerTextColor),
               label: 'OPINIA',
               isActive: currentPage == AvailablePage.feedback,
               onTap: () => Navigator.pushReplacement(
@@ -94,7 +97,7 @@ class FooterWidget extends StatelessWidget {
             ),
             _buildNavItem(
               context,
-              iconWidget: const Icon(Icons.settings_outlined, size: 30, color: CustomColors.footerTextColor),
+              iconWidget: Icon(Icons.settings_outlined, size: iconWidth, color: CustomColors.footerTextColor),
               label: 'USTAWIENIA',
               isActive: currentPage == AvailablePage.settings,
                 onTap: () => Navigator.pushReplacement(
