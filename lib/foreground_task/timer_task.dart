@@ -19,7 +19,6 @@ class TimerTaskHandler extends TaskHandler {
   static const String continueAfterAlarmParameter = 'continueAfterAlarm';
 
   static const String stopButtonId = 'stop';
-  static const String muteButtonId = 'mute';
 
   var _taskType = TaskType.clock;
 
@@ -53,7 +52,7 @@ class TimerTaskHandler extends TaskHandler {
       notificationTitle: 'At Loud! ${_taskType == TaskType.clock ? 'Godzina: ' : 'Pozostało: '} $returnToApp',
       notificationIcon: const NotificationIcon(metaDataName: 'pl.btsoftware.atloud.default_notification_icon', backgroundColor: Colors.black),
       notificationInitialRoute: _taskType == TaskType.clock ? '/clock' : '/timer',
-      notificationButtons: [const NotificationButton(id: stopButtonId, text: 'Zatrzymaj'), const NotificationButton(id: muteButtonId, text: 'Wycisz')],
+      notificationButtons: [const NotificationButton(id: stopButtonId, text: 'Zatrzymaj')],
     );
   }
 
@@ -68,16 +67,19 @@ class TimerTaskHandler extends TaskHandler {
       var secondsToTimerEnd = _initialTime!.inSeconds - _secondsFromTimerStart;
 
       if (secondsToTimerEnd == 0) {
-        speaker.playSound();
-        return DurationToString.shortConvert(const Duration(seconds: 0));
+        speaker.playAlarmSoundAndVibrate();
+        return DurationToString.convert(const Duration(seconds: 0));
       } else {
+        if (secondsToTimerEnd < 0 && !_continueAfterAlarm!) {
+          return DurationToString.convert(const Duration(seconds: 0));
+        }
         var initialTimeSeconds = _initialTime!.inSeconds;
         var timeLeftToEnd = Duration(seconds: (initialTimeSeconds - _secondsFromTimerStart));
         var informationNeeded = (_initialTime!.inMinutes - timeLeftToEnd.inMinutes.abs()) % _period! == 0;
         if (_secondsFromTimerStart > 5 && secondsToTimerEnd % 60 == 0 && ((_continueAfterAlarm! && secondsToTimerEnd < 0) || informationNeeded)) {
           speaker.speak(DurationToVoice.covert(timeLeftToEnd));
         }
-        return DurationToString.shortConvert(timeLeftToEnd);
+        return DurationToString.convert(timeLeftToEnd);
       }
     }
   }
@@ -144,10 +146,6 @@ class TimerTaskHandler extends TaskHandler {
   void onNotificationButtonPressed(String id) {
     if (id == stopButtonId) {
       FlutterForegroundTask.stopService();
-    }
-    if (id == muteButtonId) {
-      var speaker = Speaker();
-      speaker.playSound();
     }
   }
 

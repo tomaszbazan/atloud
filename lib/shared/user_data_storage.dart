@@ -2,19 +2,19 @@ import 'package:atloud/converters/duration_to_string.dart';
 import 'package:atloud/converters/string_to_duration.dart';
 import 'package:atloud/shared/available_page.dart';
 import 'package:atloud/sound/alarm_type.dart';
+import 'package:atloud/sound/speaker.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:volume_controller/volume_controller.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../settings/settings_data.dart';
-import '../timer/timer_data.dart';
+import '../timer/timer_user_preferences.dart';
 
 class UserDataStorage {
   static const String _currentTimerValueKey = 'currentTimerValue';
   static const String _startingTimerValueKey = 'startingTimerValue';
   static const String _periodValueKey = 'periodValue';
   static const String _volumeValueKey = 'volumeValue';
-  static const String _backgroundSoundValueKey = 'backgroundSoundValue';
   static const String _screenLockValueKey = 'screenLockValue';
   static const String _alarmTypeValueKey = 'alarmTypeValue';
   static const String _languageValueKey = 'languageValue';
@@ -27,21 +27,20 @@ class UserDataStorage {
   static Future<SettingsData> settings() async {
     var volume = await volumeValue();
     var period = await periodValue();
-    var backgroundSound = await backgroundSoundValue();
     var screenLock = await screenLockValue();
     var alarmType = await alarmTypeValue();
     var language = await languageValue();
     var vibration = await vibrationValue();
     var continueAfterAlarm = await continueAfterAlarmValue();
-    return SettingsData(volume, period, backgroundSound, screenLock, alarmType, language, vibration, continueAfterAlarm);
+    return SettingsData(volume, period, screenLock, alarmType, language, vibration, continueAfterAlarm);
   }
 
-  static Future<TimerData> timerData() async {
+  static Future<TimerUserPreferences> timerData() async {
     var period = await periodValue();
     var screenLock = await screenLockValue();
     var startingTime = await startingTimerValue();
     var continueAfterAlarm = await continueAfterAlarmValue();
-    return TimerData(screenLock, startingTime, period, continueAfterAlarm);
+    return TimerUserPreferences(screenLock, startingTime, period, continueAfterAlarm);
   }
 
   static void storeCurrentTimerValue(Duration value) async {
@@ -72,6 +71,8 @@ class UserDataStorage {
   }
 
   static void storeVolumeValue(int value) async {
+    var currentValue = await volumeValue();
+    if (currentValue == value) return;
     VolumeController().setVolume(value / 100, showSystemUI: true);
     _storage.write(key: _volumeValueKey, value: value.toString());
   }
@@ -79,15 +80,6 @@ class UserDataStorage {
   static Future<int> volumeValue() async {
     var value = await _storage.read(key: _volumeValueKey) ?? "50";
     return int.parse(value);
-  }
-
-  static void storeBackgroundSoundValue(bool value) async {
-    _storage.write(key: _backgroundSoundValueKey, value: value.toString());
-  }
-
-  static Future<bool> backgroundSoundValue() async {
-    var value = await _storage.read(key: _backgroundSoundValueKey) ?? "true";
-    return value.toLowerCase() == 'true';
   }
 
   static void storeScreenLockValue(bool value) async {
@@ -102,6 +94,7 @@ class UserDataStorage {
 
   static void storeAlarmTypeValue(String value) async {
     _storage.write(key: _alarmTypeValueKey, value: value);
+    Speaker().playAlarmSound(); // Play sound to notify user of change
   }
 
   static Future<AlarmType> alarmTypeValue() async {
