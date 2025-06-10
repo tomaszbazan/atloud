@@ -14,7 +14,6 @@ class UserDataStorage {
   static const String _startingTimerValueKey = 'startingTimerValue';
   static const String _periodValueKey = 'periodValue';
   static const String _volumeValueKey = 'volumeValue';
-  static const String _backgroundSoundValueKey = 'backgroundSoundValue';
   static const String _screenLockValueKey = 'screenLockValue';
   static const String _alarmTypeValueKey = 'alarmTypeValue';
   static const String _languageValueKey = 'languageValue';
@@ -27,13 +26,12 @@ class UserDataStorage {
   static Future<SettingsData> settings() async {
     var volume = await volumeValue();
     var period = await periodValue();
-    var backgroundSound = await backgroundSoundValue();
     var screenLock = await screenLockValue();
     var alarmType = await alarmTypeValue();
     var language = await languageValue();
     var vibration = await vibrationValue();
     var continueAfterAlarm = await continueAfterAlarmValue();
-    return SettingsData(volume, period, backgroundSound, screenLock, alarmType, language, vibration, continueAfterAlarm);
+    return SettingsData(volume, period, screenLock, alarmType, language, vibration, continueAfterAlarm);
   }
 
   static Future<TimerUserPreferences> timerData() async {
@@ -81,15 +79,6 @@ class UserDataStorage {
   static Future<int> volumeValue() async {
     var value = await _storage.read(key: _volumeValueKey) ?? "50";
     return int.parse(value);
-  }
-
-  static void storeBackgroundSoundValue(bool value) async {
-    _storage.write(key: _backgroundSoundValueKey, value: value.toString());
-  }
-
-  static Future<bool> backgroundSoundValue() async {
-    var value = await _storage.read(key: _backgroundSoundValueKey) ?? "true";
-    return value.toLowerCase() == 'true';
   }
 
   static void storeScreenLockValue(bool value) async {
