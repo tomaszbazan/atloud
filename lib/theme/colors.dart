@@ -6,4 +6,6 @@ class CustomColors {
   static const Color footerBackgroundColor = Color(0xFF333333);
   static const Color footerTextColor = Colors.white;
   static const Color secondColor = Color(0xFF0097B2);
+  static const Color timerRingColor = Color(0xFF7DCFDC);
+  static const Color alarmRingColor = Colors.red;
 }

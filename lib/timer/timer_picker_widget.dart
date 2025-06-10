@@ -8,11 +8,7 @@ class TimePickerWidget extends StatefulWidget {
   final Duration initialTime;
   final Function(Duration) onTimeSelected;
 
-  const TimePickerWidget({
-    super.key,
-    required this.initialTime,
-    required this.onTimeSelected,
-  });
+  const TimePickerWidget({super.key, required this.initialTime, required this.onTimeSelected});
 
   @override
   State<TimePickerWidget> createState() => _TimePickerWidgetState();
@@ -20,24 +16,17 @@ class TimePickerWidget extends StatefulWidget {
 
 class _TimePickerWidgetState extends State<TimePickerWidget> {
   final now = TimeOfDay.now();
-  late final _hoursWheel = WheelPickerController(
-    itemCount: 24,
-    initialIndex: widget.initialTime.inHours.remainder(24),
-  );
-  late final _minutesWheel = WheelPickerController(
-    itemCount: 60,
-    initialIndex: widget.initialTime.inMinutes.remainder(60),
-    mounts: [_hoursWheel],
-  );
+  late final _hoursWheel = WheelPickerController(itemCount: 24, initialIndex: widget.initialTime.inHours.remainder(24));
+  late final _minutesWheel = WheelPickerController(itemCount: 60, initialIndex: widget.initialTime.inMinutes.remainder(60), mounts: [_hoursWheel]);
 
   void _confirmTimeSelection() {
-    final newTime = Duration(hours: _hoursWheel.selected, minutes: _minutesWheel.selected, seconds: 3);
+    final newTime = Duration(hours: _hoursWheel.selected, minutes: _minutesWheel.selected);
     widget.onTimeSelected(newTime);
   }
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = CustomTheme.clockTextTheme;
+    final textStyle = CustomTheme.clockTextTheme(context);
     final wheelStyle = WheelPickerStyle(itemExtent: textStyle.fontSize! * textStyle.height!, diameterRatio: 1.5, squeeze: 0.8, surroundingOpacity: .50, magnification: 1.0);
 
     Widget itemBuilder(BuildContext context, int index) {
@@ -46,73 +35,52 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
 
     final timeWheels = <Widget>[
       for (final wheelController in [_hoursWheel, _minutesWheel])
-        Expanded(
-          child: WheelPicker(
-            builder: itemBuilder,
-            controller: wheelController,
-            looping: wheelController == _minutesWheel,
-            style: wheelStyle,
-            selectedIndexColor: CustomColors.textColor,
-          ),
-        ),
+        Expanded(child: WheelPicker(builder: itemBuilder, controller: wheelController, looping: wheelController == _minutesWheel, style: wheelStyle, selectedIndexColor: CustomColors.textColor)),
     ];
     timeWheels.insert(1, Text(":", style: textStyle));
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
+    return Stack(
+      alignment: Alignment.center,
       children: [
-        Container(
-          margin: const EdgeInsets.symmetric(vertical: 30.0),
-          child: SizedBox(
-            height: 300,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // ...timeWheels
-                    Expanded(
-                      child: WheelPicker(
-                            builder: (context, index) => Row(
-                              children: [
-                                Expanded(child: Text("$index".padLeft(2, '0'), style: textStyle, textAlign: TextAlign.right)),
-                              ],
-                            ),
-                        controller: _hoursWheel,
-                        looping: true,
-                        style: wheelStyle,
-                        selectedIndexColor: CustomColors.textColor,
-                      ),
+        SizedBox(
+          height: 300,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // ...timeWheels
+                  Expanded(
+                    child: WheelPicker(
+                      builder: (context, index) => Row(children: [Expanded(child: Text("$index".padLeft(2, '0'), style: textStyle, textAlign: TextAlign.right))]),
+                      controller: _hoursWheel,
+                      looping: true,
+                      style: wheelStyle,
+                      selectedIndexColor: CustomColors.textColor,
                     ),
-                    Text(":", style: textStyle),
-                    Expanded(
-                      child: WheelPicker(
-                        builder: (context, index) => Row(
-                          children: [
-                                Expanded(child: Text("$index".padLeft(2, '0'), style: textStyle, textAlign: TextAlign.left)),
-                              ],
-                            ),
-                        controller: _minutesWheel,
-                        looping: true,
-                        style: wheelStyle,
-                        selectedIndexColor: CustomColors.textColor,
-                      ),
+                  ),
+                  Text(":", style: textStyle),
+                  Expanded(
+                    child: WheelPicker(
+                      builder: (context, index) => Row(children: [Expanded(child: Text("$index".padLeft(2, '0'), style: textStyle, textAlign: TextAlign.left))]),
+                      controller: _minutesWheel,
+                      looping: true,
+                      style: wheelStyle,
+                      selectedIndexColor: CustomColors.textColor,
                     ),
-                  ],
-                ),
-                _centerBar(context),
-              ],
-            ),
+                  ),
+                ],
+              ),
+              _centerBar(context),
+            ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextButton(
-            onPressed: _confirmTimeSelection,
-            style: CustomTheme.primaryButtonStyle,
-            child: Text("START", style: CustomTheme.primaryButtonTextTheme),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 20.0),
+            child: TextButton(onPressed: _confirmTimeSelection, style: CustomTheme.primaryButtonStyle, child: Text("START", style: CustomTheme.primaryButtonTextTheme)),
           ),
         ),
       ],
@@ -130,13 +98,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: Container(
-          height: 110.0,
-          decoration: BoxDecoration(
-            color: CustomColors.textColor.withAlpha(80),
-            borderRadius: BorderRadius.circular(14.0),
-          ),
-        ),
+        child: Container(height: 110.0, decoration: BoxDecoration(color: CustomColors.textColor.withAlpha(80), borderRadius: BorderRadius.circular(14.0))),
       ),
     );
   }

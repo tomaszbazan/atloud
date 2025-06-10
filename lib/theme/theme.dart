@@ -21,12 +21,14 @@ class CustomTheme {
     color: CustomColors.footerTextColor,
     fontFamily: CustomFonts.openSans.value,
     fontWeight: FontWeight.bold,
-    letterSpacing: 6.0,
-  );
-  static TextStyle settingsTextTheme = TextStyle(fontSize: 20, color: CustomColors.textColor, fontFamily: CustomFonts.openSans.value, letterSpacing: 1.0, height: 0.95);
+    letterSpacing: 6.0);
+  static TextStyle settingsTextTheme = TextStyle(fontSize: 20,
+      color: CustomColors.textColor,
+      fontFamily: CustomFonts.openSans.value,
+      letterSpacing: 1.0,
+      height: 0.95);
   static EdgeInsetsGeometry settingsItemsMarginTheme = const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0);
   static TextStyle navigationTextTheme = TextStyle(fontSize: 25, color: CustomColors.textColor, fontFamily: CustomFonts.openSans.value, fontWeight: FontWeight.bold, letterSpacing: 4.0);
-  static TextStyle clockTextTheme = TextStyle(fontSize: 105, color: CustomColors.textColor, fontFamily: CustomFonts.abril.value, height: 1.0);
 
   static ButtonStyle get primaryButtonStyle {
     return ElevatedButton.styleFrom(
@@ -36,5 +38,42 @@ class CustomTheme {
         borderRadius: BorderRadius.circular(15.0),
       ),
     );
+  }
+
+  static TextStyle clockTextTheme(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    return TextStyle(fontSize: _getAdaptiveWidth(screenWidth, 65, 100), color: CustomColors.textColor, fontFamily: CustomFonts.abril.value, height: 1.0);
+  }
+
+  static double navigationBarHeight(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    return _getAdaptiveHeight(screenHeight, 80, 110);
+  }
+
+  static TextStyle smallClockTextTheme = TextStyle(fontSize: 25, color: CustomColors.textColor, fontFamily: CustomFonts.abril.value, height: 1.0);
+
+  static double _getAdaptiveHeight(double screenHeight, double minElementSize, double maxElementSize) {
+    const double smallestScreenHeight = 640.0;
+    const double largestScreenHeight = 960.0;
+
+    return _calculateSize(screenHeight, smallestScreenHeight, largestScreenHeight, minElementSize, maxElementSize);
+  }
+  
+  static double _getAdaptiveWidth(double screenWidth, double minElementSize, double maxElementSize) {
+    const double smallestScreenWidth = 360.0;
+    const double largestScreenWidth = 480.0;
+
+    return _calculateSize(screenWidth, smallestScreenWidth, largestScreenWidth, minElementSize, maxElementSize);
+  }
+
+  static double _calculateSize(double currentScreenSize, double smallestScreenSize, double largestScreenSize, double minElementSize, double maxElementSize) {
+    if (currentScreenSize <= smallestScreenSize) {
+      return minElementSize;
+    } else if (currentScreenSize >= largestScreenSize) {
+      return maxElementSize;
+    } else {
+      final double ratio = (currentScreenSize - smallestScreenSize) / (largestScreenSize - smallestScreenSize);
+      return minElementSize + (maxElementSize - minElementSize) * ratio;
+    }
   }
 }

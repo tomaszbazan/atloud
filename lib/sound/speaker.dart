@@ -19,13 +19,21 @@ class Speaker {
     speak("Jest godzina $now");
   }
 
-  void playSound() async {
+  void playAlarmSound() async {
+    var alarmType = await UserDataStorage.alarmTypeValue();
+    var alarm = AssetSource(alarmType.filePath);
+    _audioPlayer.play(alarm);
+  }
+
+  void playAlarmSoundAndVibrate() async {
+    makeVibration();
+    playAlarmSound();
+  }
+
+  void makeVibration() async {
     var vibrationOn = await UserDataStorage.vibrationValue();
     if (vibrationOn) {
       Vibration.vibrate(duration: 1000, repeat: 3);
     }
-    var alarmType = await UserDataStorage.alarmTypeValue();
-    var alarm = AssetSource(alarmType.filePath);
-    _audioPlayer.play(alarm);
   }
 }

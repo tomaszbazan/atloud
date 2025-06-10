@@ -7,13 +7,15 @@ import 'package:atloud/converters/duration_to_string.dart';
 import 'package:atloud/foreground_task/foreground_task_starter.dart';
 import 'package:atloud/foreground_task/timer_task.dart';
 import 'package:atloud/shared/user_data_storage.dart';
-import 'package:atloud/theme/theme.dart';
+import 'package:atloud/timer/timer_display_row.dart';
 import 'package:atloud/timer/timer_picker_widget.dart';
+import 'package:atloud/timer/timer_ring.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../components/app_bar.dart';
+import '../converters/string_to_duration.dart';
 import '../shared/available_page.dart';
 import '../sound/speaker.dart';
 
@@ -57,7 +59,7 @@ class _TimerPageState extends State<TimerPage> {
     return {
       TimerTaskHandler.startingTimeParameter: DurationToString.convert(_startingTime!),
       TimerTaskHandler.periodParameter: await UserDataStorage.periodValue(),
-      TimerTaskHandler.continueAfterAlarmParameter: await UserDataStorage.continueAfterAlarmValue()
+      TimerTaskHandler.continueAfterAlarmParameter: await UserDataStorage.continueAfterAlarmValue(),
     };
   }
 
@@ -93,59 +95,67 @@ class _TimerPageState extends State<TimerPage> {
     return Scaffold(
       appBar: AppBarWidget(text: _isTimerPage ? 'MINUTNIK' : 'ZEGAR'),
       body: Center(
-        child: _isPickingTime
-            ? TimePickerWidget(
-                initialTime: _startingTime ?? const Duration(),
-                onTimeSelected: (newTime) {
-                  if (newTime != _startingTime) {
+        child:
+            _isPickingTime
+                ? TimePickerWidget(
+                  initialTime: _startingTime ?? const Duration(),
+                  onTimeSelected: (newTime) {
                     _startingTime = newTime;
                     UserDataStorage.storeStartingTimerValue(_startingTime!);
                     _loadUserPreferences().then((preferences) => _initPage(preferences));
-                  }
-                  setState(() {
-                    _isPickingTime = false;
-                  });
-                },
-              )
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 30.0),
-                    child: ValueListenableBuilder(
-                      valueListenable: _taskDataListenable,
-                      builder: (context, data, _) {
-                        String displayText;
+                    setState(() {
+                      _isPickingTime = false;
+                    });
+                  },
+                )
+                : Container(
+                  margin: const EdgeInsets.symmetric(vertical: 60.0),
+                  child: ValueListenableBuilder(
+                    valueListenable: _taskDataListenable,
+                    builder: (context, data, _) {
+                      String displayText;
+                      Duration? currentDuration;
 
-                        if (_isTimerPage) {
-                          displayText = data?.toString() ?? (_startingTime != null ? DurationToString.shortConvert(_startingTime!) : "--:--");
+                      if (_isTimerPage) {
+                        if (data != null) {
+                          displayText = data.toString();
+                          currentDuration = StringToDuration.convert(data.toString());
                         } else {
-                          displayText = data?.toString() ?? DateTimeToString.shortConvert(DateTime.now());
+                          displayText = _startingTime != null ? DurationToString.convert(_startingTime!) : "--:--";
+                          currentDuration = _startingTime;
                         }
+                      } else {
+                        displayText = data?.toString() ?? DateTimeToString.shortConvert(DateTime.now());
+                      }
 
-                        return SizedBox(
-                          height: 300,
-                          child: GestureDetector(
-                            onTap: _isTimerPage ? _enterTimePickingMode : () => _speaker.currentTime(),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(child: Text(displayText.split(":").first, style: CustomTheme.clockTextTheme, textAlign: TextAlign.right)),
-                                Text(":", style: CustomTheme.clockTextTheme),
-                                Expanded(child: Text(displayText.split(":").last, style: CustomTheme.clockTextTheme, textAlign: TextAlign.left))
-                              ],
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.symmetric(vertical: 30.0),
+                            child: GestureDetector(
+                              onTap: _isTimerPage ? _enterTimePickingMode : () => _speaker.currentTime(),
+                              child: TimerRing(
+                                duration: currentDuration,
+                                startingTime: _startingTime,
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    TimeDisplayRow(displayText: displayText),
+                                    const Align(alignment: Alignment.bottomCenter, child: Padding(padding: EdgeInsets.only(bottom: 20.0), child: VolumeSwitcher())),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
-                        );
-                      },
-                    ),
+                        ],
+                      );
+                    },
                   ),
-                  const VolumeSwitcher(),
-                ],
-              ),
+                ),
       ),
-      bottomNavigationBar: FooterWidget(currentPage: _isTimerPage ? AvailablePage.timer : AvailablePage.clock, actionOnClick: _switchPage,),
+      bottomNavigationBar: FooterWidget(currentPage: _isTimerPage ? AvailablePage.timer : AvailablePage.clock, actionOnClick: _switchPage),
     );
   }
 }
