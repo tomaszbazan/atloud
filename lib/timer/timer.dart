@@ -131,29 +131,25 @@ class _TimerPageState extends State<TimerPage> {
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [Container(
-                          margin: const EdgeInsets.symmetric(vertical: 30.0),
-                          child: GestureDetector(
-                            onTap: _isTimerPage ? _enterTimePickingMode : () => _speaker.currentTime(),
-                            child: TimerRing(
-                              duration: currentDuration,
-                              startingTime: _startingTime,
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  TimeDisplayRow(displayText: displayText),
-                                  const Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(bottom: 20.0),
-                                      child: VolumeSwitcher(),
-                                    ),
-                                  ),
-                                ],
-                              )
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.symmetric(vertical: 30.0),
+                            child: GestureDetector(
+                              onTap: _isTimerPage ? _enterTimePickingMode : () => _speaker.currentTime(),
+                              child: TimerRing(
+                                duration: currentDuration,
+                                startingTime: _startingTime,
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    TimeDisplayRow(displayText: displayText),
+                                    const Align(alignment: Alignment.bottomCenter, child: Padding(padding: EdgeInsets.only(bottom: 20.0), child: VolumeSwitcher())),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
-                        )],
+                        ],
                       );
                     },
                   ),
