@@ -150,9 +150,9 @@ class _FeedbackPageState extends State<FeedbackPage> {
                   children: [
                     _buildTextField(_emailController, 'Adres e-mail', isEmail: true),
                     const SizedBox(height: 16),
-                    _buildTextField(_appWorksController, 'Czy aplikacja ogólnie działa poprawnie?', maxLines: 3),
+                    _buildTextField(_appWorksController, 'Czy masz problem z aplikacją?', maxLines: 3),
                     const SizedBox(height: 16),
-                    _buildTextField(_featuresController, 'Czy są jakieś funkcjonalności, które chciałbyś mieć w aplikacji na przyszłość?', maxLines: 5),
+                    _buildTextField(_featuresController, 'Jakie funkcje chciałbyś/chciałabyś abyśmy dodali?', maxLines: 5),
                     const SizedBox(height: 24),
                     _isLoading
                         ? const Center(child: CircularProgressIndicator())
