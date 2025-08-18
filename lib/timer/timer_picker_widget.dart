@@ -1,3 +1,4 @@
+import 'package:atloud/l10n/app_localizations.dart';
 import 'package:atloud/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:wheel_picker/wheel_picker.dart';
@@ -80,7 +81,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
           alignment: Alignment.bottomCenter,
           child: Padding(
             padding: const EdgeInsets.only(bottom: 20.0),
-            child: TextButton(onPressed: _confirmTimeSelection, style: CustomTheme.primaryButtonStyle, child: Text("START", style: CustomTheme.primaryButtonTextTheme)),
+            child: TextButton(onPressed: _confirmTimeSelection, style: CustomTheme.primaryButtonStyle, child: Text(AppLocalizations.of(context)!.start, style: CustomTheme.primaryButtonTextTheme)),
           ),
         ),
       ],

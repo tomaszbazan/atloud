@@ -1,0 +1,80 @@
+{
+  "@@locale": "pl",
+  "appTitle": "Atloud",
+  "timerTab": "MINUTNIK",
+  "clockTab": "ZEGAR",
+  "settingsTab": "USTAWIENIA",
+  "feedbackTab": "OPINIA",
+  "start": "START",
+  "stop": "STOP",
+  "reset": "RESET",
+  "minutes": "min",
+  "seconds": "sek",
+  "hours": "godz",
+  "alarmSettings": "Dźwięk alarmu",
+  "volumeSettings": "Głośność",
+  "vibrationSettings": "Wibracje",
+  "screenLockSettings": "Blokada ekranu",
+  "continueAfterAlarm": "Kontynuuj odliczanie minutnika po czasie",
+  "language": "Język",
+  "feedback": "Prześlij opinię",
+  "version": "Wersja",
+  "periodSettings": "Co ile minut",
+  "automaticScreenLock": "Automatyczna blokada ekranu",
+  "timeAnnouncement": "Jest godzina {time}",
+  "@timeAnnouncement": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "polish": "Polski",
+  "english": "Angielski",
+  "alarmBrass": "ORKIESTRA",
+  "alarmFanfare": "FANFARY", 
+  "alarmFight": "WALKA",
+  "alarmBonus": "BONUS",
+  "alarmLevel": "POZIOM",
+  "alarmReveille": "POBUDKA",
+  "alarmTrombone": "PUZON",
+  "alarmUkulele": "UKULELE",
+  "feedbackTitle": "OPINIA",
+  "emailField": "Adres e-mail",
+  "appWorksField": "Czy masz problem z aplikacją?",
+  "featuresField": "Jakie funkcje chciałbyś/chciałabyś abyśmy dodali?",
+  "sendButton": "WYŚLIJ",
+  "thankYouMessage": "Dziękujemy za Twoją opinię!",
+  "fieldRequired": "To pole jest wymagane",
+  "invalidEmail": "Wprowadź poprawny adres e-mail",
+  "deviceInfoNotAvailable": "Device Info Not Available",
+  "contextNotAvailable": "Context not available for MediaQuery",
+  "screenInfo": "Ekran: {width}x{height} @{ratio}x",
+  "@screenInfo": {
+    "placeholders": {
+      "width": {"type": "String"},
+      "height": {"type": "String"},
+      "ratio": {"type": "String"}
+    }
+  },
+  "androidVersion": "Wersja androida: {version} (SDK {sdk})",
+  "@androidVersion": {
+    "placeholders": {
+      "version": {"type": "String"},
+      "sdk": {"type": "String"}
+    }
+  },
+  "deviceModel": "Model: {model}",
+  "@deviceModel": {
+    "placeholders": {
+      "model": {"type": "String"}
+    }
+  },
+  "errorGettingDeviceInfo": "Error getting device info: {error}, {screenInfo}",
+  "@errorGettingDeviceInfo": {
+    "placeholders": {
+      "error": {"type": "String"},
+      "screenInfo": {"type": "String"}
+    }
+  }
+}

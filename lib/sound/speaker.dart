@@ -1,6 +1,8 @@
 import 'package:atloud/converters/date_time_to_string.dart';
+import 'package:atloud/l10n/app_localizations.dart';
 import 'package:atloud/shared/user_data_storage.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:vibration/vibration.dart';
 
@@ -14,9 +16,21 @@ class Speaker {
     await _flutterTts.speak(text);
   }
 
-  void currentTime() async {
+  void currentTime(BuildContext context) async {
     var now = DateTimeToString.shortConvert(DateTime.now());
-    speak("Jest godzina $now");
+    var localizations = AppLocalizations.of(context)!;
+    speak(localizations.timeAnnouncement(now));
+  }
+
+  void currentTimeWithoutContext() async {
+    var now = DateTimeToString.shortConvert(DateTime.now());
+    var language = await UserDataStorage.languageValue();
+    
+    if (language.startsWith('en')) {
+      speak("It is $now o'clock");
+    } else {
+      speak("Jest godzina $now");
+    }
   }
 
   void playAlarmSound() async {

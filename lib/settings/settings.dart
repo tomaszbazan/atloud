@@ -1,6 +1,8 @@
 import 'package:atloud/components/app_bar.dart';
+import 'package:atloud/l10n/app_localizations.dart';
 import 'package:atloud/settings/alarm_type_setting.dart';
 import 'package:atloud/settings/boolean_widget.dart';
+import 'package:atloud/settings/language_setting.dart';
 import 'package:atloud/settings/settings_data.dart';
 import 'package:atloud/settings/settings_icon.dart';
 import 'package:atloud/settings/slider_widget.dart';
@@ -34,12 +36,15 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void _displayAppVersion() async {
     var version = await _appVersion();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Version $version'),
-        duration: const Duration(seconds: 1),
-      ),
-    );
+    if (mounted) {
+      final localizations = AppLocalizations.of(context)!;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${localizations.version} $version'),
+          duration: const Duration(seconds: 1),
+        ),
+      );
+    }
   }
 
   Future<String> _appVersion() async {
@@ -49,8 +54,9 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBarWidget(text: 'USTAWIENIA', incrementShowVersionCounter: _incrementShowVersionCounter),
+      appBar: AppBarWidget(text: localizations.settingsTab.toUpperCase(), incrementShowVersionCounter: _incrementShowVersionCounter),
       body: FutureBuilder<SettingsData>(
         future: _loadPreferences(),
         builder: (BuildContext context, AsyncSnapshot<SettingsData> snapshot) {
@@ -69,12 +75,13 @@ class _SettingsPageState extends State<SettingsPage> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               SettingsIcon(constraints: constraints, incrementShowVersionCounter: _incrementShowVersionCounter),
-                              SliderWidget(icon: Icons.volume_up, label: 'Głośność', min: 0, max: 100, value: data.volumeValue, onChange: (value) => UserDataStorage.storeVolumeValue(value)),
-                              SliderWidget(icon: Icons.play_circle_outline, label: 'Co ile minut', min: 1, max: 60, value: data.periodValue, onChange: (value) => UserDataStorage.storePeriodValue(value)),
-                              BooleanWidget(label: 'Automatyczna blokada ekranu', value: data.screenLockValue, onChange: (value) => UserDataStorage.storeScreenLockValue(value)),
+                              SliderWidget(icon: Icons.volume_up, label: localizations.volumeSettings, min: 0, max: 100, value: data.volumeValue, onChange: (value) => UserDataStorage.storeVolumeValue(value)),
+                              SliderWidget(icon: Icons.play_circle_outline, label: localizations.periodSettings, min: 1, max: 60, value: data.periodValue, onChange: (value) => UserDataStorage.storePeriodValue(value)),
+                              BooleanWidget(label: localizations.screenLockSettings, value: data.screenLockValue, onChange: (value) => UserDataStorage.storeScreenLockValue(value)),
                               AlarmTypeSetting(data: data, setState: setState),
-                              BooleanWidget(label: 'Wibracje', value: data.vibrationValue, onChange: (value) => UserDataStorage.storeVibrationValue(value)),
-                              BooleanWidget(label: 'Kontynuuj odliczanie minutnika po czasie', value: data.continuationAfterAlarmValue, onChange: (value) => UserDataStorage.storeContinueAfterAlarmValue(value)),
+                              BooleanWidget(label: localizations.vibrationSettings, value: data.vibrationValue, onChange: (value) => UserDataStorage.storeVibrationValue(value)),
+                              BooleanWidget(label: localizations.continueAfterAlarm, value: data.continuationAfterAlarmValue, onChange: (value) => UserDataStorage.storeContinueAfterAlarmValue(value)),
+                              LanguageSetting(data: data, setState: setState),
                             ],
                           ),
                         ),

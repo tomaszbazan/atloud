@@ -2,6 +2,7 @@ import 'dart:io' show Platform;
 
 import 'package:atloud/components/app_bar.dart';
 import 'package:atloud/components/footer.dart';
+import 'package:atloud/l10n/app_localizations.dart';
 import 'package:atloud/services/airtable_service.dart';
 import 'package:atloud/shared/available_page.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -34,21 +35,22 @@ class _FeedbackPageState extends State<FeedbackPage> {
   }
 
   Future<String> _getDeviceInfo() async {
-    String deviceInfoString = "Device Info Not Available";
+    final localizations = AppLocalizations.of(context)!;
+    String deviceInfoString = localizations.deviceInfoNotAvailable;
 
       // Ensure context is still valid before accessing MediaQuery
-      if (!mounted) return "Context not available for MediaQuery";
+      if (!mounted) return localizations.contextNotAvailable;
       final screenWidth = MediaQuery.of(context).size.width;
       final screenHeight = MediaQuery.of(context).size.height;
       final pixelRatio = MediaQuery.of(context).devicePixelRatio;
-      String screenInfo = "Ekran: ${screenWidth.toStringAsFixed(0)}x${screenHeight.toStringAsFixed(0)} @${pixelRatio.toStringAsFixed(1)}x";
+      String screenInfo = localizations.screenInfo(screenWidth.toStringAsFixed(0), screenHeight.toStringAsFixed(0), pixelRatio.toStringAsFixed(1));
 
     try {
       final deviceInfoPlugin = DeviceInfoPlugin();
       if (Platform.isAndroid) {
         final androidInfo = await deviceInfoPlugin.androidInfo;
-        deviceInfoString = 'Model: ${androidInfo.model} \n'
-            'Wersja androida: ${androidInfo.version.release} (SDK ${androidInfo.version.sdkInt}) \n'
+        deviceInfoString = '${localizations.deviceModel(androidInfo.model)} \n'
+            '${localizations.androidVersion(androidInfo.version.release, androidInfo.version.sdkInt.toString())} \n'
             '$screenInfo';
       } else if (Platform.isIOS) {
         final iosInfo = await deviceInfoPlugin.iosInfo;
@@ -66,7 +68,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
         deviceInfoString = 'Windows: ${windowsInfo.productName}, Build: ${windowsInfo.buildNumber}, $screenInfo';
       }
     } catch (e) {
-      deviceInfoString = "Error getting device info: $e, $screenInfo";
+      deviceInfoString = localizations.errorGettingDeviceInfo(e.toString(), screenInfo);
     }
     return deviceInfoString;
   }
@@ -101,6 +103,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
   }
 
   Widget _buildTextField(TextEditingController controller, String label, {int maxLines = 1, bool isEmail = false}) {
+    final localizations = AppLocalizations.of(context)!;
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
@@ -110,11 +113,11 @@ class _FeedbackPageState extends State<FeedbackPage> {
       maxLines: maxLines,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'To pole jest wymagane';
+          return localizations.fieldRequired;
         }
         if (isEmail) {
           if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
-            return 'Wprowadź poprawny adres e-mail';
+            return localizations.invalidEmail;
           }
         }
         return null;
@@ -124,23 +127,24 @@ class _FeedbackPageState extends State<FeedbackPage> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: const AppBarWidget(text: 'OPINIA'),
+      appBar: AppBarWidget(text: localizations.feedbackTitle),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: _isSubmittedSuccessfully
-            ? const Center(
+            ? Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.check_circle_outline, color: Colors.green, size: 80),
-                    SizedBox(height: 20),
+                    const Icon(Icons.check_circle_outline, color: Colors.green, size: 80),
+                    const SizedBox(height: 20),
                     Text(
-                      'Dziękujemy za Twoją opinię!',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      localizations.thankYouMessage,
+                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                   ],
                 ),
               )
@@ -148,18 +152,18 @@ class _FeedbackPageState extends State<FeedbackPage> {
                 key: _formKey,
                 child: ListView(
                   children: [
-                    _buildTextField(_emailController, 'Adres e-mail', isEmail: true),
+                    _buildTextField(_emailController, localizations.emailField, isEmail: true),
                     const SizedBox(height: 16),
-                    _buildTextField(_appWorksController, 'Czy masz problem z aplikacją?', maxLines: 3),
+                    _buildTextField(_appWorksController, localizations.appWorksField, maxLines: 3),
                     const SizedBox(height: 16),
-                    _buildTextField(_featuresController, 'Jakie funkcje chciałbyś/chciałabyś abyśmy dodali?', maxLines: 5),
+                    _buildTextField(_featuresController, localizations.featuresField, maxLines: 5),
                     const SizedBox(height: 24),
                     _isLoading
                         ? const Center(child: CircularProgressIndicator())
                         : ElevatedButton(
                             onPressed: _submitFeedback,
                             style: CustomTheme.primaryButtonStyle,
-                            child: Text('WYŚLIJ', style: CustomTheme.primaryButtonTextTheme),
+                            child: Text(localizations.sendButton, style: CustomTheme.primaryButtonTextTheme),
                           ),
                   ],
                 ),

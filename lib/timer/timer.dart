@@ -16,6 +16,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../components/app_bar.dart';
 import '../converters/string_to_duration.dart';
+import '../l10n/app_localizations.dart';
 import '../shared/available_page.dart';
 import '../sound/speaker.dart';
 
@@ -92,8 +93,9 @@ class _TimerPageState extends State<TimerPage> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBarWidget(text: _isTimerPage ? 'MINUTNIK' : 'ZEGAR'),
+      appBar: AppBarWidget(text: _isTimerPage ? localizations.timerTab : localizations.clockTab),
       body: Center(
         child:
             _isPickingTime
@@ -135,7 +137,7 @@ class _TimerPageState extends State<TimerPage> {
                           Container(
                             margin: const EdgeInsets.symmetric(vertical: 30.0),
                             child: GestureDetector(
-                              onTap: _isTimerPage ? _enterTimePickingMode : () => _speaker.currentTime(),
+                              onTap: _isTimerPage ? _enterTimePickingMode : () => _speaker.currentTime(context),
                               child: TimerRing(
                                 duration: currentDuration,
                                 startingTime: _startingTime,

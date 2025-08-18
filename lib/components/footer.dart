@@ -1,3 +1,4 @@
+import 'package:atloud/l10n/app_localizations.dart';
 import 'package:atloud/settings/settings.dart';
 import 'package:atloud/theme/colors.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +47,7 @@ class FooterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Container(
       height: CustomTheme.navigationBarHeight(context),
       color: CustomColors.footerBackgroundColor,
@@ -56,7 +58,7 @@ class FooterWidget extends StatelessWidget {
             _buildNavItem(
               context,
               iconWidget: Image.asset('assets/icons/clock.png', width: iconWidth, height: iconHeight, color: CustomColors.footerTextColor),
-              label: 'ZEGAR',
+              label: localizations.clockTab,
               isActive: currentPage == AvailablePage.clock,
               onTap: () => actionOnClick != null ? actionOnClick!() : Navigator.pushReplacement(
                 context,
@@ -70,7 +72,7 @@ class FooterWidget extends StatelessWidget {
             _buildNavItem(
               context,
               iconWidget: Image.asset('assets/icons/timer.png', width: iconWidth, height: iconHeight, color: CustomColors.footerTextColor),
-              label: 'MINUTNIK',
+              label: localizations.timerTab,
               isActive: currentPage == AvailablePage.timer,
                 onTap: () => actionOnClick != null ? actionOnClick!() : Navigator.pushReplacement(
                   context,
@@ -84,7 +86,7 @@ class FooterWidget extends StatelessWidget {
             _buildNavItem(
               context,
               iconWidget: Image.asset('assets/icons/feedback.png', width: iconWidth, height: iconHeight, color: CustomColors.footerTextColor),
-              label: 'OPINIA',
+              label: localizations.feedbackTab,
               isActive: currentPage == AvailablePage.feedback,
               onTap: () => Navigator.pushReplacement(
                 context,
@@ -98,7 +100,7 @@ class FooterWidget extends StatelessWidget {
             _buildNavItem(
               context,
               iconWidget: Icon(Icons.settings_outlined, size: iconWidth, color: CustomColors.footerTextColor),
-              label: 'USTAWIENIA',
+              label: localizations.settingsTab,
               isActive: currentPage == AvailablePage.settings,
                 onTap: () => Navigator.pushReplacement(
                   context,
