@@ -1,5 +1,6 @@
 import 'package:atloud/converters/duration_to_string.dart';
 import 'package:atloud/converters/string_to_duration.dart';
+import 'package:atloud/l10n/supported_language.dart';
 import 'package:atloud/shared/available_page.dart';
 import 'package:atloud/sound/alarm_type.dart';
 import 'package:atloud/sound/speaker.dart';
@@ -99,7 +100,7 @@ class UserDataStorage {
 
   static Future<AlarmType> alarmTypeValue() async {
     var value = await _storage.read(key: _alarmTypeValueKey);
-    return AlarmType.values.firstWhere((alarm) => alarm.displayName == value, orElse: () => AlarmType.brass);
+    return AlarmType.values.firstWhere((alarm) => alarm.name == value, orElse: () => AlarmType.brass);
   }
 
   static void storeLanguageValue(String value) async {
@@ -107,7 +108,7 @@ class UserDataStorage {
   }
 
   static Future<String> languageValue() async {
-    return await _storage.read(key: _languageValueKey) ?? "pl-PL";
+    return await _storage.read(key: _languageValueKey) ?? SupportedLanguage.defaultLanguage.code;
   }
 
   static void storeVibrationValue(bool value) async {

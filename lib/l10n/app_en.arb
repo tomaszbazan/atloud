@@ -1,0 +1,80 @@
+{
+  "@@locale": "en",
+  "appTitle": "Atloud",
+  "timerTab": "TIMER",
+  "clockTab": "CLOCK",
+  "settingsTab": "SETTINGS",
+  "feedbackTab": "FEEDBACK",
+  "start": "START",
+  "stop": "STOP",
+  "reset": "RESET",
+  "minutes": "min",
+  "seconds": "sec",
+  "hours": "hrs",
+  "alarmSettings": "Alarm sound",
+  "volumeSettings": "Volume",
+  "vibrationSettings": "Vibration",
+  "screenLockSettings": "Screen lock",
+  "continueAfterAlarm": "Continue timer countdown after time",
+  "language": "Language",
+  "feedback": "Send feedback",
+  "version": "Version",
+  "periodSettings": "Every how many minutes",
+  "automaticScreenLock": "Automatic screen lock",
+  "timeAnnouncement": "It is {time} o'clock",
+  "@timeAnnouncement": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "polish": "Polish",
+  "english": "English",
+  "alarmBrass": "BRASS",
+  "alarmFanfare": "FANFARE", 
+  "alarmFight": "FIGHT",
+  "alarmBonus": "BONUS",
+  "alarmLevel": "LEVEL",
+  "alarmReveille": "REVEILLE",
+  "alarmTrombone": "TROMBONE",
+  "alarmUkulele": "UKULELE",
+  "feedbackTitle": "FEEDBACK",
+  "emailField": "Email address",
+  "appWorksField": "Do you have any problems with the app?",
+  "featuresField": "What features would you like us to add?",
+  "sendButton": "SEND",
+  "thankYouMessage": "Thank you for your feedback!",
+  "fieldRequired": "This field is required",
+  "invalidEmail": "Enter a valid email address",
+  "deviceInfoNotAvailable": "Device Info Not Available",
+  "contextNotAvailable": "Context not available for MediaQuery",
+  "screenInfo": "Screen: {width}x{height} @{ratio}x",
+  "@screenInfo": {
+    "placeholders": {
+      "width": {"type": "String"},
+      "height": {"type": "String"},
+      "ratio": {"type": "String"}
+    }
+  },
+  "androidVersion": "Android version: {version} (SDK {sdk})",
+  "@androidVersion": {
+    "placeholders": {
+      "version": {"type": "String"},
+      "sdk": {"type": "String"}
+    }
+  },
+  "deviceModel": "Model: {model}",
+  "@deviceModel": {
+    "placeholders": {
+      "model": {"type": "String"}
+    }
+  },
+  "errorGettingDeviceInfo": "Error getting device info: {error}, {screenInfo}",
+  "@errorGettingDeviceInfo": {
+    "placeholders": {
+      "error": {"type": "String"},
+      "screenInfo": {"type": "String"}
+    }
+  }
+}

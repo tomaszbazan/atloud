@@ -40,7 +40,7 @@ class TimerTaskHandler extends TaskHandler {
     if (_secondsFromTimerStart == 0) {
       var speaker = Speaker();
       if (_taskType == TaskType.clock) {
-        speaker.currentTime();
+        speaker.currentTimeWithoutContext();
       } else {
         speaker.speak(DurationToVoice.covert(_initialTime!));
       }
@@ -60,7 +60,7 @@ class TimerTaskHandler extends TaskHandler {
     var speaker = Speaker();
     if (_taskType == TaskType.clock) {
       if (timestamp.second == 0 && (_secondsFromTimerStart ~/ 60) % _period! == 0) {
-        speaker.currentTime();
+        speaker.currentTimeWithoutContext();
       }
       return DateTimeToString.shortConvert(DateTime.now());
     } else {
