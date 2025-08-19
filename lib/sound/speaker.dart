@@ -14,15 +14,13 @@ class Speaker {
   final _flutterTts = FlutterTts();
 
   void speakText(String text) async {
-    String languageCode = await UserDataStorage.languageValue();
-    SupportedLanguage language = SupportedLanguage.fromCode(languageCode);
+    var language = await UserDataStorage.languageValue();
     await _flutterTts.setLanguage(language.code);
     await _flutterTts.speak(text);
   }
   
   void speakDuration(Duration timeLeftToEnd) async {
-    String languageCode = await UserDataStorage.languageValue();
-    SupportedLanguage language = SupportedLanguage.fromCode(languageCode);
+    var language = await UserDataStorage.languageValue();
     await _flutterTts.setLanguage(language.code);
     await _flutterTts.speak(DurationToVoice.covert(timeLeftToEnd, language));
   }
@@ -35,8 +33,7 @@ class Speaker {
 
   void currentTimeWithoutContext() async {
     var now = DateTimeToString.shortConvert(DateTime.now());
-    var languageCode = await UserDataStorage.languageValue();
-    var language = SupportedLanguage.fromCode(languageCode);
+    var language = await UserDataStorage.languageValue();
 
     switch(language) {
       case SupportedLanguage.polish:

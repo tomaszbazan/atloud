@@ -49,8 +49,7 @@ class TimerTaskHandler extends TaskHandler {
   }
 
   void _updateNotification(String returnToApp) async {
-    var languageCode = await UserDataStorage.languageValue();
-    var language = SupportedLanguage.fromCode(languageCode);
+    var language = await UserDataStorage.languageValue();
     FlutterForegroundTask.updateService(
       notificationTitle:
           'At Loud! ${_taskType == TaskType.clock ? _hourText(language) : _leftText(language)} $returnToApp',

@@ -11,8 +11,7 @@ class LanguageNotifier extends ChangeNotifier {
   Locale get locale => _locale;
 
   Future<void> loadLocale() async {
-    String languageCode = await UserDataStorage.languageValue();
-    SupportedLanguage language = SupportedLanguage.fromCode(languageCode);
+    var language = await UserDataStorage.languageValue();
     _locale = language.locale;
     notifyListeners();
   }

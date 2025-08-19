@@ -19,13 +19,6 @@ enum SupportedLanguage {
     );
   }
 
-  static SupportedLanguage fromLocale(Locale locale) {
-    return values.firstWhere(
-          (lang) => lang.locale == locale,
-      orElse: () => throw ArgumentError("Unsupported language: ${locale.languageCode}"),
-    );
-  }
-
   static List<Locale> get supportedLocales {
     return values.map((lang) => lang.locale).toList();
   }

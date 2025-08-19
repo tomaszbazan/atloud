@@ -15,8 +15,7 @@ class ForegroundTaskStarter {
     // Without this block service is not starting
     if (await FlutterForegroundTask.isRunningService) {}
     FlutterForegroundTask.addTaskDataCallback(receivedServiceData);
-    var languageCode = await UserDataStorage.languageValue();
-    var language = SupportedLanguage.fromCode(languageCode);
+    var language = await UserDataStorage.languageValue();
 
     FlutterForegroundTask.startService(
         serviceId: 8882,
