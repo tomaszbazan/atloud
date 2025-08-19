@@ -107,8 +107,9 @@ class UserDataStorage {
     _storage.write(key: _languageValueKey, value: value);
   }
 
-  static Future<String> languageValue() async {
-    return await _storage.read(key: _languageValueKey) ?? SupportedLanguage.defaultLanguage.code;
+  static Future<SupportedLanguage> languageValue() async {
+    var value = await _storage.read(key: _languageValueKey);
+    return SupportedLanguage.fromCode(value ?? SupportedLanguage.defaultLanguage.code);
   }
 
   static void storeVibrationValue(bool value) async {

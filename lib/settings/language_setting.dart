@@ -49,7 +49,7 @@ class _LanguageSettingState extends State<LanguageSetting> {
               alignment: AlignmentDirectional.center,
               style: CustomTheme.settingsTextTheme,
               underline: const SizedBox(),
-              value: widget.data.languageValue,
+              value: widget.data.languageValue.code,
               items:
                   SupportedLanguage.values.map((language) {
                     return DropdownMenuItem(
