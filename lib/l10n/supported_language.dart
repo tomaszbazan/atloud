@@ -15,7 +15,14 @@ enum SupportedLanguage {
   static SupportedLanguage fromCode(String code) {
     return values.firstWhere(
       (lang) => lang.code == code,
-      orElse: () => values.first,
+      orElse: () => throw ArgumentError("Unsupported language: $code"),
+    );
+  }
+
+  static SupportedLanguage fromLocale(Locale locale) {
+    return values.firstWhere(
+          (lang) => lang.locale == locale,
+      orElse: () => throw ArgumentError("Unsupported language: ${locale.languageCode}"),
     );
   }
 

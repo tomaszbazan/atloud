@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 
 import '../converters/duration_to_string.dart';
-import '../converters/duration_to_voice.dart';
+import '../l10n/supported_language.dart';
+import '../shared/user_data_storage.dart';
 
 enum TaskType { timer, clock }
 
@@ -42,24 +43,67 @@ class TimerTaskHandler extends TaskHandler {
       if (_taskType == TaskType.clock) {
         speaker.currentTimeWithoutContext();
       } else {
-        speaker.speak(DurationToVoice.covert(_initialTime!));
+        speaker.speakDuration(_initialTime!);
       }
     }
   }
 
-  void _updateNotification(String returnToApp) {
+  void _updateNotification(String returnToApp) async {
+    var languageCode = await UserDataStorage.languageValue();
+    var language = SupportedLanguage.fromCode(languageCode);
     FlutterForegroundTask.updateService(
-      notificationTitle: 'At Loud! ${_taskType == TaskType.clock ? 'Godzina: ' : 'Pozostało: '} $returnToApp',
-      notificationIcon: const NotificationIcon(metaDataName: 'pl.btsoftware.atloud.default_notification_icon', backgroundColor: Colors.black),
-      notificationInitialRoute: _taskType == TaskType.clock ? '/clock' : '/timer',
-      notificationButtons: [const NotificationButton(id: stopButtonId, text: 'Zatrzymaj')],
+      notificationTitle:
+          'At Loud! ${_taskType == TaskType.clock ? _hourText(language) : _leftText(language)} $returnToApp',
+      notificationIcon: const NotificationIcon(
+        metaDataName: 'pl.btsoftware.atloud.default_notification_icon',
+        backgroundColor: Colors.black,
+      ),
+      notificationInitialRoute:
+          _taskType == TaskType.clock ? '/clock' : '/timer',
+      notificationButtons: [
+        NotificationButton(id: stopButtonId, text: _stopButtonText(language)),
+      ],
     );
+  }
+
+  static String _hourText(language) {
+    switch (language) {
+      case SupportedLanguage.polish:
+        return 'Godzina: ';
+      case SupportedLanguage.english:
+        return 'Hour: ';
+      default:
+        return 'Hour: ';
+    }
+  }
+
+  static String _leftText(language) {
+    switch (language) {
+      case SupportedLanguage.polish:
+        return 'Pozostało:';
+      case SupportedLanguage.english:
+        return 'Left:';
+      default:
+        return 'Left:';
+    }
+  }
+
+  static String _stopButtonText(language) {
+    switch (language) {
+      case SupportedLanguage.polish:
+        return 'Zatrzymaj';
+      case SupportedLanguage.english:
+        return 'Stop';
+      default:
+        return 'Stop';
+    }
   }
 
   String _passInformationToSpeaker(DateTime timestamp) {
     var speaker = Speaker();
     if (_taskType == TaskType.clock) {
-      if (timestamp.second == 0 && (_secondsFromTimerStart ~/ 60) % _period! == 0) {
+      if (timestamp.second == 0 &&
+          (_secondsFromTimerStart ~/ 60) % _period! == 0) {
         speaker.currentTimeWithoutContext();
       }
       return DateTimeToString.shortConvert(DateTime.now());
@@ -74,10 +118,18 @@ class TimerTaskHandler extends TaskHandler {
           return DurationToString.convert(const Duration(seconds: 0));
         }
         var initialTimeSeconds = _initialTime!.inSeconds;
-        var timeLeftToEnd = Duration(seconds: (initialTimeSeconds - _secondsFromTimerStart));
-        var informationNeeded = (_initialTime!.inMinutes - timeLeftToEnd.inMinutes.abs()) % _period! == 0;
-        if (_secondsFromTimerStart > 5 && secondsToTimerEnd % 60 == 0 && ((_continueAfterAlarm! && secondsToTimerEnd < 0) || informationNeeded)) {
-          speaker.speak(DurationToVoice.covert(timeLeftToEnd));
+        var timeLeftToEnd = Duration(
+          seconds: (initialTimeSeconds - _secondsFromTimerStart),
+        );
+        var informationNeeded =
+            (_initialTime!.inMinutes - timeLeftToEnd.inMinutes.abs()) %
+                _period! ==
+            0;
+        if (_secondsFromTimerStart > 5 &&
+            secondsToTimerEnd % 60 == 0 &&
+            ((_continueAfterAlarm! && secondsToTimerEnd < 0) ||
+                informationNeeded)) {
+          speaker.speakDuration(timeLeftToEnd);
         }
         return DurationToString.convert(timeLeftToEnd);
       }
@@ -85,8 +137,7 @@ class TimerTaskHandler extends TaskHandler {
   }
 
   @override
-  Future<void> onStart(DateTime timestamp, TaskStarter starter) async {
-  }
+  Future<void> onStart(DateTime timestamp, TaskStarter starter) async {}
 
   @override
   void onRepeatEvent(DateTime timestamp) {

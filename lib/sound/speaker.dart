@@ -6,30 +6,45 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:vibration/vibration.dart';
 
+import '../converters/duration_to_voice.dart';
+import '../l10n/supported_language.dart';
+
 class Speaker {
   final _audioPlayer = AudioPlayer();
   final _flutterTts = FlutterTts();
 
-  void speak(String text) async {
-    var language = await UserDataStorage.languageValue();
-    await _flutterTts.setLanguage(language);
+  void speakText(String text) async {
+    String languageCode = await UserDataStorage.languageValue();
+    SupportedLanguage language = SupportedLanguage.fromCode(languageCode);
+    await _flutterTts.setLanguage(language.code);
     await _flutterTts.speak(text);
+  }
+  
+  void speakDuration(Duration timeLeftToEnd) async {
+    String languageCode = await UserDataStorage.languageValue();
+    SupportedLanguage language = SupportedLanguage.fromCode(languageCode);
+    await _flutterTts.setLanguage(language.code);
+    await _flutterTts.speak(DurationToVoice.covert(timeLeftToEnd, language));
   }
 
   void currentTime(BuildContext context) async {
     var now = DateTimeToString.shortConvert(DateTime.now());
     var localizations = AppLocalizations.of(context)!;
-    speak(localizations.timeAnnouncement(now));
+    speakText(localizations.timeAnnouncement(now));
   }
 
   void currentTimeWithoutContext() async {
     var now = DateTimeToString.shortConvert(DateTime.now());
-    var language = await UserDataStorage.languageValue();
-    
-    if (language.startsWith('en')) {
-      speak("It is $now o'clock");
-    } else {
-      speak("Jest godzina $now");
+    var languageCode = await UserDataStorage.languageValue();
+    var language = SupportedLanguage.fromCode(languageCode);
+
+    switch(language) {
+      case SupportedLanguage.polish:
+        speakText("Jest godzina $now");
+        break;
+      case SupportedLanguage.english:
+        speakText("It is $now o'clock");
+        break;
     }
   }
 
