@@ -28,6 +28,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
   @override
   Widget build(BuildContext context) {
     final textStyle = CustomTheme.clockTextTheme(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final wheelStyle = WheelPickerStyle(itemExtent: textStyle.fontSize! * textStyle.height!, diameterRatio: 1.5, squeeze: 0.8, surroundingOpacity: .50, magnification: 1.0);
 
     Widget itemBuilder(BuildContext context, int index) {
@@ -36,7 +37,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
 
     final timeWheels = <Widget>[
       for (final wheelController in [_hoursWheel, _minutesWheel])
-        Expanded(child: WheelPicker(builder: itemBuilder, controller: wheelController, looping: wheelController == _minutesWheel, style: wheelStyle, selectedIndexColor: CustomColors.textColor)),
+        Expanded(child: WheelPicker(builder: itemBuilder, controller: wheelController, looping: wheelController == _minutesWheel, style: wheelStyle, selectedIndexColor: isDark ? CustomColors.darkTextColor : CustomColors.textColor)),
     ];
     timeWheels.insert(1, Text(":", style: textStyle));
 
@@ -58,7 +59,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
                       controller: _hoursWheel,
                       looping: true,
                       style: wheelStyle,
-                      selectedIndexColor: CustomColors.textColor,
+                      selectedIndexColor: isDark ? CustomColors.darkTextColor : CustomColors.textColor,
                     ),
                   ),
                   Text(":", style: textStyle),
@@ -68,7 +69,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
                       controller: _minutesWheel,
                       looping: true,
                       style: wheelStyle,
-                      selectedIndexColor: CustomColors.textColor,
+                      selectedIndexColor: isDark ? CustomColors.darkTextColor : CustomColors.textColor,
                     ),
                   ),
                 ],
@@ -81,7 +82,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
           alignment: Alignment.bottomCenter,
           child: Padding(
             padding: const EdgeInsets.only(bottom: 20.0),
-            child: TextButton(onPressed: _confirmTimeSelection, style: CustomTheme.primaryButtonStyle, child: Text(AppLocalizations.of(context)!.start, style: CustomTheme.primaryButtonTextTheme)),
+            child: TextButton(onPressed: _confirmTimeSelection, style: CustomTheme.primaryButtonStyle(context), child: Text(AppLocalizations.of(context)!.start, style: CustomTheme.primaryButtonTextTheme(context))),
           ),
         ),
       ],
@@ -96,10 +97,11 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
   }
 
   Widget _centerBar(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: Container(height: 110.0, decoration: BoxDecoration(color: CustomColors.textColor.withAlpha(80), borderRadius: BorderRadius.circular(14.0))),
+        child: Container(height: 110.0, decoration: BoxDecoration(color: (isDark ? CustomColors.darkTextColor : CustomColors.textColor).withAlpha(80), borderRadius: BorderRadius.circular(14.0))),
       ),
     );
   }

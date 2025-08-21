@@ -31,7 +31,7 @@ class TimeDisplayRow extends StatelessWidget {
       padding: const EdgeInsets.only(left: 2.0, bottom: 8.0),
       child: Text(
         ":$secondsPart",
-        style: CustomTheme.smallClockTextTheme,
+        style: CustomTheme.smallClockTextTheme(context),
       ),
     ));
 
@@ -77,7 +77,7 @@ class TimeDisplayRow extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 2.0, bottom: 8.0),
                         child: Text(
                           ":$secondsPart",
-                          style: CustomTheme.smallClockTextTheme,
+                          style: CustomTheme.smallClockTextTheme(context),
                         )
                     ) : const SizedBox.shrink(),
                   ],

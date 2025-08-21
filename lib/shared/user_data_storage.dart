@@ -22,6 +22,7 @@ class UserDataStorage {
   static const String _vibrationValueKey = 'vibrationValue';
   static const String _continueAfterAlarmKey = 'continueAfterAlarmValue';
   static const String _lastVisitedPageValueKey = 'lastVisitedPageValue';
+  static const String _isDarkThemeKey = 'isDarkTheme';
 
   static const FlutterSecureStorage _storage = FlutterSecureStorage();
 
@@ -137,5 +138,14 @@ class UserDataStorage {
   static Future<AvailablePage> lastVisitedPageValue() async {
     var value = await _storage.read(key: _lastVisitedPageValueKey);
     return AvailablePage.values.firstWhere((val) => value == val.name, orElse: () => AvailablePage.clock);
+  }
+
+  static void storeIsDarkTheme(bool value) async {
+    _storage.write(key: _isDarkThemeKey, value: value.toString());
+  }
+
+  static Future<bool> isDarkTheme() async {
+    var value = await _storage.read(key: _isDarkThemeKey) ?? "false";
+    return value.toLowerCase() == 'true';
   }
 }

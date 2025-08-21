@@ -4,6 +4,7 @@ import 'package:atloud/l10n/supported_language.dart';
 import 'package:atloud/settings/settings.dart';
 import 'package:atloud/shared/available_page.dart';
 import 'package:atloud/theme/theme.dart';
+import 'package:atloud/theme/theme_notifier.dart';
 import 'package:atloud/timer/timer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,6 +21,7 @@ void main() async {
   var lastVisitedPage = AvailablePage.clock;
 
   LanguageNotifier().loadLocale();
+  ThemeNotifier().loadTheme();
   runApp(MyApp(lastVisitedPage: lastVisitedPage));
 }
 
@@ -30,12 +32,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      listenable: LanguageNotifier(),
+      listenable: Listenable.merge([LanguageNotifier(), ThemeNotifier()]),
       builder: (context, child) {
         SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
         return MaterialApp(
           title: 'Atloud',
           theme: CustomTheme.lightTheme,
+          darkTheme: CustomTheme.darkTheme,
+          themeMode: ThemeNotifier().themeMode,
           locale: LanguageNotifier().locale,
           localizationsDelegates: const [
             AppLocalizations.delegate,

@@ -13,9 +13,10 @@ class SettingsIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return constraints.maxHeight > 600
         ? Container(
-            margin: const EdgeInsets.only(bottom: 20.0), child: IconButton(icon: const Icon(Icons.settings, size: 70.0, color: CustomColors.textColor), onPressed: () => incrementShowVersionCounter()))
+            margin: const EdgeInsets.only(bottom: 20.0), child: IconButton(icon: Icon(Icons.settings, size: 70.0, color: isDark ? CustomColors.darkTextColor : CustomColors.textColor), onPressed: () => incrementShowVersionCounter()))
         : const SizedBox.shrink();
   }
 }

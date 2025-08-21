@@ -20,6 +20,7 @@ class TimerRing extends StatelessWidget {
         // Calculate optimal ring size - use 70% of screen width or height, whichever is smaller
         final screenWidth = MediaQuery.of(context).size.width;
         final screenHeight = MediaQuery.of(context).size.height;
+        final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
         
         // Use the smaller dimension to ensure ring fits on screen
         final smallerDimension = screenWidth < screenHeight ? screenWidth : screenHeight;
@@ -36,6 +37,7 @@ class TimerRing extends StatelessWidget {
                 painter: TimerRingPainter(
                   progress: _calculateProgress(),
                   isFinished: isFinished,
+                  isDarkTheme: isDarkTheme,
                 ),
               ),
             ),

@@ -15,7 +15,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         children: [
           AppBar(title: TextButton(
             onPressed: incrementShowVersionCounter != null ? () => incrementShowVersionCounter!() : null,
-            child: Text(text, style: CustomTheme.lightTheme.appBarTheme.titleTextStyle)
+            child: Text(text, style: CustomTheme.navigationTextTheme(context))
           ), automaticallyImplyLeading: false),
         ],
       ),

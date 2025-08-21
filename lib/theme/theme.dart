@@ -16,23 +16,50 @@ class CustomTheme {
       textButtonTheme: const TextButtonThemeData(style: ButtonStyle(foregroundColor: WidgetStatePropertyAll(CustomColors.textColor))),
     );
   }
-  static TextStyle primaryButtonTextTheme = TextStyle(
-    fontSize: 22,
-    color: CustomColors.footerTextColor,
-    fontFamily: CustomFonts.openSans.value,
-    fontWeight: FontWeight.bold,
-    letterSpacing: 6.0);
-  static TextStyle settingsTextTheme = TextStyle(fontSize: 20,
-      color: CustomColors.textColor,
-      fontFamily: CustomFonts.openSans.value,
-      letterSpacing: 1.0,
-      height: 0.95);
-  static EdgeInsetsGeometry settingsItemsMarginTheme = const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0);
-  static TextStyle navigationTextTheme = TextStyle(fontSize: 25, color: CustomColors.textColor, fontFamily: CustomFonts.openSans.value, fontWeight: FontWeight.bold, letterSpacing: 4.0);
 
-  static ButtonStyle get primaryButtonStyle {
+  static ThemeData get darkTheme {
+    return ThemeData(
+      useMaterial3: true,
+      brightness: Brightness.dark,
+      scaffoldBackgroundColor: CustomColors.darkBackgroundColor,
+      appBarTheme: AppBarTheme(
+          titleSpacing: 20,
+          backgroundColor: CustomColors.darkBackgroundColor,
+          centerTitle: true,
+          titleTextStyle: TextStyle(fontSize: 25, color: CustomColors.darkTextColor, fontFamily: CustomFonts.openSans.value, fontWeight: FontWeight.bold, letterSpacing: 4.0)),
+      textButtonTheme: const TextButtonThemeData(style: ButtonStyle(foregroundColor: WidgetStatePropertyAll(CustomColors.darkTextColor))),
+    );
+  }
+  static TextStyle primaryButtonTextTheme(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return TextStyle(
+      fontSize: 22,
+      color: isDark ? CustomColors.darkFooterTextColor : CustomColors.footerTextColor,
+      fontFamily: CustomFonts.openSans.value,
+      fontWeight: FontWeight.bold,
+      letterSpacing: 6.0);
+  }
+
+  static TextStyle settingsTextTheme(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return TextStyle(fontSize: 20,
+        color: isDark ? CustomColors.darkTextColor : CustomColors.textColor,
+        fontFamily: CustomFonts.openSans.value,
+        letterSpacing: 1.0,
+        height: 0.95);
+  }
+
+  static EdgeInsetsGeometry settingsItemsMarginTheme = const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0);
+
+  static TextStyle navigationTextTheme(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return TextStyle(fontSize: 25, color: isDark ? CustomColors.darkTextColor : CustomColors.textColor, fontFamily: CustomFonts.openSans.value, fontWeight: FontWeight.bold, letterSpacing: 4.0);
+  }
+
+  static ButtonStyle primaryButtonStyle(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return ElevatedButton.styleFrom(
-      backgroundColor: CustomColors.footerBackgroundColor,
+      backgroundColor: isDark ? CustomColors.darkFooterBackgroundColor : CustomColors.footerBackgroundColor,
       padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
@@ -42,7 +69,8 @@ class CustomTheme {
 
   static TextStyle clockTextTheme(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    return TextStyle(fontSize: _getAdaptiveWidth(screenWidth, 65, 100), color: CustomColors.textColor, fontFamily: CustomFonts.abril.value, height: 1.0);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return TextStyle(fontSize: _getAdaptiveWidth(screenWidth, 65, 100), color: isDark ? CustomColors.darkTextColor : CustomColors.textColor, fontFamily: CustomFonts.abril.value, height: 1.0);
   }
 
   static double navigationBarHeight(BuildContext context) {
@@ -50,7 +78,10 @@ class CustomTheme {
     return _getAdaptiveHeight(screenHeight, 80, 110);
   }
 
-  static TextStyle smallClockTextTheme = TextStyle(fontSize: 25, color: CustomColors.textColor, fontFamily: CustomFonts.abril.value, height: 1.0);
+  static TextStyle smallClockTextTheme(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return TextStyle(fontSize: 25, color: isDark ? CustomColors.darkTextColor : CustomColors.textColor, fontFamily: CustomFonts.abril.value, height: 1.0);
+  }
 
   static double _getAdaptiveHeight(double screenHeight, double minElementSize, double maxElementSize) {
     const double smallestScreenHeight = 640.0;

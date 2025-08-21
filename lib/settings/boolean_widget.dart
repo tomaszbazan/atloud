@@ -30,7 +30,7 @@ class _BooleanWidgetState extends State<BooleanWidget> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(child: Container(margin: CustomTheme.settingsItemsMarginTheme, child: Text(widget.label, style: CustomTheme.settingsTextTheme))),
+        Expanded(child: Container(margin: CustomTheme.settingsItemsMarginTheme, child: Text(widget.label, style: CustomTheme.settingsTextTheme(context)))),
         Switch(
             value: _currentValue,
             activeTrackColor: Colors.black,

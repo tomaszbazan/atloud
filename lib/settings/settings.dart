@@ -6,6 +6,7 @@ import 'package:atloud/settings/language_setting.dart';
 import 'package:atloud/settings/settings_data.dart';
 import 'package:atloud/settings/settings_icon.dart';
 import 'package:atloud/settings/slider_widget.dart';
+import 'package:atloud/settings/theme_setting.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -81,6 +82,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               AlarmTypeSetting(data: data, setState: setState),
                               BooleanWidget(label: localizations.vibrationSettings, value: data.vibrationValue, onChange: (value) => UserDataStorage.storeVibrationValue(value)),
                               BooleanWidget(label: localizations.continueAfterAlarm, value: data.continuationAfterAlarmValue, onChange: (value) => UserDataStorage.storeContinueAfterAlarmValue(value)),
+                              const ThemeSetting(),
                               LanguageSetting(data: data, setState: setState),
                             ],
                           ),

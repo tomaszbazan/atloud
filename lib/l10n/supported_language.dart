@@ -10,7 +10,7 @@ enum SupportedLanguage {
 
   const SupportedLanguage(this.code, this.locale);
 
-  static const SupportedLanguage defaultLanguage = polish;
+  static const SupportedLanguage defaultLanguage = english;
 
   static SupportedLanguage fromCode(String code) {
     return values.firstWhere(
