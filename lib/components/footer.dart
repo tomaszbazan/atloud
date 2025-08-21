@@ -27,17 +27,18 @@ class FooterWidget extends StatelessWidget {
     required bool isActive,
     required VoidCallback onTap,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Expanded(
       child: InkWell(
         onTap: onTap,
         child: Container(
-          color: isActive ? CustomColors.secondColor : CustomColors.footerBackgroundColor,
+          color: isActive ? (isDark ? CustomColors.darkTimerRingColor : CustomColors.timerRingColor) : (isDark ? CustomColors.darkFooterBackgroundColor : CustomColors.footerBackgroundColor),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               iconWidget,
               const SizedBox(height: 8),
-              Text(label, style: const TextStyle(color: CustomColors.footerTextColor, fontSize: 12)),
+              Text(label, style: TextStyle(color: isDark ? CustomColors.darkFooterTextColor : CustomColors.footerTextColor, fontSize: 12)),
             ],
           ),
         ),
@@ -48,16 +49,17 @@ class FooterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       height: CustomTheme.navigationBarHeight(context),
-      color: CustomColors.footerBackgroundColor,
+      color: isDark ? CustomColors.darkFooterBackgroundColor : CustomColors.footerBackgroundColor,
       child: SafeArea(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _buildNavItem(
               context,
-              iconWidget: Image.asset('assets/icons/clock.png', width: iconWidth, height: iconHeight, color: CustomColors.footerTextColor),
+              iconWidget: Image.asset('assets/icons/clock.png', width: iconWidth, height: iconHeight, color: isDark ? CustomColors.darkFooterTextColor : CustomColors.footerTextColor),
               label: localizations.clockTab,
               isActive: currentPage == AvailablePage.clock,
               onTap: () => actionOnClick != null ? actionOnClick!() : Navigator.pushReplacement(
@@ -71,7 +73,7 @@ class FooterWidget extends StatelessWidget {
             ),
             _buildNavItem(
               context,
-              iconWidget: Image.asset('assets/icons/timer.png', width: iconWidth, height: iconHeight, color: CustomColors.footerTextColor),
+              iconWidget: Image.asset('assets/icons/timer.png', width: iconWidth, height: iconHeight, color: isDark ? CustomColors.darkFooterTextColor : CustomColors.footerTextColor),
               label: localizations.timerTab,
               isActive: currentPage == AvailablePage.timer,
                 onTap: () => actionOnClick != null ? actionOnClick!() : Navigator.pushReplacement(
@@ -85,7 +87,7 @@ class FooterWidget extends StatelessWidget {
             ),
             _buildNavItem(
               context,
-              iconWidget: Image.asset('assets/icons/feedback.png', width: iconWidth, height: iconHeight, color: CustomColors.footerTextColor),
+              iconWidget: Image.asset('assets/icons/feedback.png', width: iconWidth, height: iconHeight, color: isDark ? CustomColors.darkFooterTextColor : CustomColors.footerTextColor),
               label: localizations.feedbackTab,
               isActive: currentPage == AvailablePage.feedback,
               onTap: () => Navigator.pushReplacement(
@@ -99,7 +101,7 @@ class FooterWidget extends StatelessWidget {
             ),
             _buildNavItem(
               context,
-              iconWidget: Icon(Icons.settings_outlined, size: iconWidth, color: CustomColors.footerTextColor),
+              iconWidget: Icon(Icons.settings_outlined, size: iconWidth, color: isDark ? CustomColors.darkFooterTextColor : CustomColors.footerTextColor),
               label: localizations.settingsTab,
               isActive: currentPage == AvailablePage.settings,
                 onTap: () => Navigator.pushReplacement(

@@ -5,10 +5,12 @@ import 'package:atloud/theme/colors.dart';
 class TimerRingPainter extends CustomPainter {
   final double progress;
   final bool isFinished;
+  final bool isDarkTheme;
   
   TimerRingPainter({
     required this.progress,
     required this.isFinished,
+    required this.isDarkTheme,
   });
 
   @override
@@ -17,7 +19,7 @@ class TimerRingPainter extends CustomPainter {
     final radius = math.min(size.width, size.height) / 1.6;
     
     final paint = Paint()
-      ..color = isFinished ? CustomColors.alarmRingColor : CustomColors.timerRingColor
+      ..color = isFinished ? CustomColors.alarmRingColor : (isDarkTheme ? CustomColors.darkTimerRingColor : CustomColors.timerRingColor)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 20.0
       ..strokeCap = StrokeCap.round;
@@ -46,6 +48,6 @@ class TimerRingPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(TimerRingPainter oldDelegate) {
-    return oldDelegate.progress != progress || oldDelegate.isFinished != isFinished;
+    return oldDelegate.progress != progress || oldDelegate.isFinished != isFinished || oldDelegate.isDarkTheme != isDarkTheme;
   }
 }

@@ -162,8 +162,8 @@ class _FeedbackPageState extends State<FeedbackPage> {
                         ? const Center(child: CircularProgressIndicator())
                         : ElevatedButton(
                             onPressed: _submitFeedback,
-                            style: CustomTheme.primaryButtonStyle,
-                            child: Text(localizations.sendButton, style: CustomTheme.primaryButtonTextTheme),
+                            style: CustomTheme.primaryButtonStyle(context),
+                            child: Text(localizations.sendButton, style: CustomTheme.primaryButtonTextTheme(context)),
                           ),
                   ],
                 ),

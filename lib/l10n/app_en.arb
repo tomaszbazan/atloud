@@ -17,6 +17,7 @@
   "screenLockSettings": "Screen lock",
   "continueAfterAlarm": "Continue timer countdown after time",
   "language": "Language",
+  "darkMode": "Dark theme",
   "feedback": "Send feedback",
   "version": "Version",
   "periodSettings": "Every how many minutes",

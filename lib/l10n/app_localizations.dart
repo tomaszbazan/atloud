@@ -200,6 +200,12 @@ abstract class AppLocalizations {
   /// **'Język'**
   String get language;
 
+  /// No description provided for @darkMode.
+  ///
+  /// In pl, this message translates to:
+  /// **'Ciemny motyw'**
+  String get darkMode;
+
   /// No description provided for @feedback.
   ///
   /// In pl, this message translates to:

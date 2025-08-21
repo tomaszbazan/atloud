@@ -36,18 +36,19 @@ class _SliderWidgetState extends State<SliderWidget> {
   @override
   Widget build(BuildContext context) {
     const double iconSize = 40.0;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       children: [
         Row(children: [
-          Icon(widget.icon, size: iconSize, color: CustomColors.textColor),
-          Container(margin: const EdgeInsets.symmetric(horizontal: 10.0), child: Text(widget.label, style: CustomTheme.settingsTextTheme)),
+          Icon(widget.icon, size: iconSize, color: isDark ? CustomColors.darkTextColor : CustomColors.textColor),
+          Container(margin: const EdgeInsets.symmetric(horizontal: 10.0), child: Text(widget.label, style: CustomTheme.settingsTextTheme(context))),
         ]),
         Row(children: [
           const SizedBox(width: 27.0),
           Expanded(
             child: Slider(
-                activeColor: CustomColors.textColor,
-                inactiveColor: CustomColors.textColor,
+                activeColor: isDark ? CustomColors.darkTextColor : CustomColors.textColor,
+                inactiveColor: isDark ? CustomColors.darkTextColor : CustomColors.textColor,
                 value: _currentValue.toDouble(),
                 min: widget.min.toDouble(),
                 max: widget.max.toDouble(),
@@ -58,7 +59,7 @@ class _SliderWidgetState extends State<SliderWidget> {
                   widget.onChange(value.toInt());
                 })),
           ),
-          SizedBox(width: 40.0, child: Text(_currentValue.toString(), textAlign: TextAlign.end, style: CustomTheme.settingsTextTheme)),
+          SizedBox(width: 40.0, child: Text(_currentValue.toString(), textAlign: TextAlign.end, style: CustomTheme.settingsTextTheme(context))),
         ]),
       ],
     );

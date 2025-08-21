@@ -31,7 +31,7 @@ class _LanguageSettingState extends State<LanguageSetting> {
             margin: CustomTheme.settingsItemsMarginTheme,
             child: Text(
               localizations.language,
-              style: CustomTheme.settingsTextTheme,
+              style: CustomTheme.settingsTextTheme(context),
             ),
           ),
         ),
@@ -47,7 +47,7 @@ class _LanguageSettingState extends State<LanguageSetting> {
               icon: const SizedBox.shrink(),
               dropdownColor: Colors.white,
               alignment: AlignmentDirectional.center,
-              style: CustomTheme.settingsTextTheme,
+              style: const TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.normal),
               underline: const SizedBox(),
               value: widget.data.languageValue.code,
               items:

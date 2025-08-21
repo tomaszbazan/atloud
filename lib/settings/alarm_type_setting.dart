@@ -24,7 +24,7 @@ class _AlarmTypeSettingState extends State<AlarmTypeSetting> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(child: Container(margin: CustomTheme.settingsItemsMarginTheme, child: Text(AppLocalizations.of(context)!.alarmSettings, style: CustomTheme.settingsTextTheme))),
+        Expanded(child: Container(margin: CustomTheme.settingsItemsMarginTheme, child: Text(AppLocalizations.of(context)!.alarmSettings, style: CustomTheme.settingsTextTheme(context)))),
         Container(
           width: 140,
           height: 40,
@@ -37,7 +37,7 @@ class _AlarmTypeSettingState extends State<AlarmTypeSetting> {
               icon: const SizedBox.shrink(),
               dropdownColor: Colors.white,
               alignment: AlignmentDirectional.center,
-              style: CustomTheme.settingsTextTheme,
+              style: const TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.normal),
               underline: const SizedBox(),
               value: widget.data.alarmTypeValue.name,
               items: AlarmType.values.map((e) => DropdownMenuItem(value: e.name, child: Text(e.getDisplayName(AppLocalizations.of(context)!)))).toList(),
