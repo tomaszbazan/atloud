@@ -156,8 +156,8 @@ class _FeedbackPageState extends State<FeedbackPage> {
                     const SizedBox(height: 16),
                     _buildTextField(_appWorksController, localizations.appWorksField, maxLines: 3),
                     const SizedBox(height: 16),
-                    _buildTextField(_featuresController, localizations.featuresField, maxLines: 5),
-                    const SizedBox(height: 24),
+                    _buildTextField(_featuresController, localizations.featuresField, maxLines: 4),
+                    const SizedBox(height: 16),
                     _isLoading
                         ? const Center(child: CircularProgressIndicator())
                         : ElevatedButton(
