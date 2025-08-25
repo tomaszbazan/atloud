@@ -70,7 +70,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     Expanded(
                       child: SingleChildScrollView(
                         child: Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 30),
+                          margin: const EdgeInsets.symmetric(horizontal: 25),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -78,12 +78,12 @@ class _SettingsPageState extends State<SettingsPage> {
                               SettingsIcon(constraints: constraints, incrementShowVersionCounter: _incrementShowVersionCounter),
                               SliderWidget(icon: Icons.volume_up, label: localizations.volumeSettings, min: 0, max: 100, value: data.volumeValue, onChange: (value) => UserDataStorage.storeVolumeValue(value)),
                               SliderWidget(icon: Icons.play_circle_outline, label: localizations.periodSettings, min: 1, max: 60, value: data.periodValue, onChange: (value) => UserDataStorage.storePeriodValue(value)),
-                              BooleanWidget(label: localizations.screenLockSettings, value: data.screenLockValue, onChange: (value) => UserDataStorage.storeScreenLockValue(value)),
                               AlarmTypeSetting(data: data, setState: setState),
-                              BooleanWidget(label: localizations.vibrationSettings, value: data.vibrationValue, onChange: (value) => UserDataStorage.storeVibrationValue(value)),
-                              BooleanWidget(label: localizations.continueAfterAlarm, value: data.continuationAfterAlarmValue, onChange: (value) => UserDataStorage.storeContinueAfterAlarmValue(value)),
-                              const ThemeSetting(),
                               LanguageSetting(data: data, setState: setState),
+                              const ThemeSetting(),
+                              BooleanWidget(label: localizations.continueAfterAlarm, value: data.continuationAfterAlarmValue, onChange: (value) => UserDataStorage.storeContinueAfterAlarmValue(value)),
+                              BooleanWidget(label: localizations.vibrationSettings, value: data.vibrationValue, onChange: (value) => UserDataStorage.storeVibrationValue(value)),
+                              BooleanWidget(label: localizations.screenLockSettings, value: data.screenLockValue, onChange: (value) => UserDataStorage.storeScreenLockValue(value)),
                             ],
                           ),
                         ),
