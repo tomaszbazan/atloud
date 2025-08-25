@@ -24,7 +24,15 @@ class _AlarmTypeSettingState extends State<AlarmTypeSetting> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(child: Container(margin: CustomTheme.settingsItemsMarginTheme, child: Text(AppLocalizations.of(context)!.alarmSettings, style: CustomTheme.settingsTextTheme(context)))),
+        Expanded(
+          child: Container(
+            margin: CustomTheme.settingsItemsMarginTheme,
+            child: Text(
+              AppLocalizations.of(context)!.alarmSettings,
+              style: CustomTheme.settingsTextTheme(context),
+            ),
+          ),
+        ),
         Container(
           width: 140,
           height: 40,
@@ -33,19 +41,56 @@ class _AlarmTypeSettingState extends State<AlarmTypeSetting> {
             borderRadius: BorderRadius.circular(30),
           ),
           child: Center(
-            child: DropdownButton<String>(
-              icon: const SizedBox.shrink(),
-              dropdownColor: Colors.white,
-              alignment: AlignmentDirectional.center,
-              style: const TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.normal),
-              underline: const SizedBox(),
-              value: widget.data.alarmTypeValue.name,
-              items: AlarmType.values.map((e) => DropdownMenuItem(value: e.name, child: Text(e.getDisplayName(AppLocalizations.of(context)!)))).toList(),
-              onChanged: (value) {
-                widget.setState(() {
-                  UserDataStorage.storeAlarmTypeValue(value!);
-                });
-              },
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                icon: const SizedBox.shrink(),
+                dropdownColor: Colors.white,
+                alignment: AlignmentDirectional.center,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.normal,
+                ),
+                borderRadius: BorderRadius.circular(20),
+                itemHeight: 48,
+                selectedItemBuilder: (BuildContext context) {
+                  return AlarmType.values.map((e) {
+                    return Container(
+                      width: 140,
+                      alignment: Alignment.center,
+                      child: Text(
+                        e.getDisplayName(AppLocalizations.of(context)!),
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    );
+                  }).toList();
+                },
+                value: widget.data.alarmTypeValue.name,
+                items:
+                    AlarmType.values
+                        .map(
+                          (e) => DropdownMenuItem(
+                            value: e.name,
+                            child: Container(
+                              width: 140,
+                              alignment: Alignment.center,
+                              child: Text(
+                                e.getDisplayName(AppLocalizations.of(context)!),
+                              ),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                onChanged: (value) {
+                  widget.setState(() {
+                    UserDataStorage.storeAlarmTypeValue(value!);
+                  });
+                },
+              ),
             ),
           ),
         ),

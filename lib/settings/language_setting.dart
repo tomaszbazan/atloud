@@ -43,27 +43,46 @@ class _LanguageSettingState extends State<LanguageSetting> {
             borderRadius: BorderRadius.circular(30),
           ),
           child: Center(
-            child: DropdownButton<String>(
-              icon: const SizedBox.shrink(),
-              dropdownColor: Colors.white,
-              alignment: AlignmentDirectional.center,
-              style: const TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.normal),
-              underline: const SizedBox(),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                icon: const SizedBox.shrink(),
+                dropdownColor: Colors.white,
+                alignment: AlignmentDirectional.center,
+                style: const TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.normal),
+                borderRadius: BorderRadius.circular(20),
+                itemHeight: 48,
+                selectedItemBuilder: (BuildContext context) {
+                  return SupportedLanguage.values.map((language) {
+                    return Container(
+                      width: 140,
+                      alignment: Alignment.center,
+                      child: Text(
+                        language.getDisplayName(localizations).toUpperCase(),
+                        style: const TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.normal),
+                      ),
+                    );
+                  }).toList();
+                },
               value: widget.data.languageValue.code,
               items:
                   SupportedLanguage.values.map((language) {
                     return DropdownMenuItem(
                       value: language.code,
-                      child: Text(
-                        language.getDisplayName(localizations).toUpperCase(),
+                      child: Container(
+                        width: 140,
+                        alignment: Alignment.center,
+                        child: Text(
+                          language.getDisplayName(localizations).toUpperCase(),
+                        ),
                       ),
                     );
                   }).toList(),
-              onChanged: (value) {
-                widget.setState(() {
-                  LanguageNotifier().changeLanguage(value!);
-                });
-              },
+                onChanged: (value) {
+                  widget.setState(() {
+                    LanguageNotifier().changeLanguage(value!);
+                  });
+                },
+              ),
             ),
           ),
         ),
