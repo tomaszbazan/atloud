@@ -77,6 +77,11 @@ class _TimerPageState extends State<TimerPage> {
     _loadUserPreferences().then((preferences) => _initPage(preferences));
   }
 
+  void _switchToPage(bool isTimer) {
+    if (_isTimerPage == isTimer) return;
+    _switchPage();
+  }
+
   @override
   void dispose() {
     ForegroundTaskStarter.stopService();
@@ -157,7 +162,11 @@ class _TimerPageState extends State<TimerPage> {
                   ),
                 ),
       ),
-      bottomNavigationBar: FooterWidget(currentPage: _isTimerPage ? AvailablePage.timer : AvailablePage.clock, actionOnClick: _switchPage),
+      bottomNavigationBar: FooterWidget(
+        currentPage: _isTimerPage ? AvailablePage.timer : AvailablePage.clock,
+        onClockTap: () => _switchToPage(false),
+        onTimerTap: () => _switchToPage(true),
+      ),
     );
   }
 }

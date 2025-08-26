@@ -81,8 +81,11 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-            padding: const EdgeInsets.only(bottom: 20.0),
-            child: TextButton(onPressed: _confirmTimeSelection, style: CustomTheme.primaryButtonStyle(context), child: Text(AppLocalizations.of(context)!.start, style: CustomTheme.primaryButtonTextTheme(context))),
+            padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(onPressed: _confirmTimeSelection, style: CustomTheme.primaryButtonStyle(context), child: Text(AppLocalizations.of(context)!.start, style: CustomTheme.primaryButtonTextTheme(context))),
+            ),
           ),
         ),
       ],

@@ -148,25 +148,37 @@ class _FeedbackPageState extends State<FeedbackPage> {
                   ],
                 ),
               )
-            : Form(
-                key: _formKey,
-                child: ListView(
-                  children: [
-                    _buildTextField(_emailController, localizations.emailField, isEmail: true),
-                    const SizedBox(height: 16),
-                    _buildTextField(_appWorksController, localizations.appWorksField, maxLines: 3),
-                    const SizedBox(height: 16),
-                    _buildTextField(_featuresController, localizations.featuresField, maxLines: 4),
-                    const SizedBox(height: 16),
-                    _isLoading
+            : Column(
+                children: [
+                  Expanded(
+                    child: Form(
+                      key: _formKey,
+                      child: ListView(
+                        children: [
+                          _buildTextField(_emailController, localizations.emailField, isEmail: true),
+                          const SizedBox(height: 16),
+                          _buildTextField(_appWorksController, localizations.appWorksField, maxLines: 3),
+                          const SizedBox(height: 16),
+                          _buildTextField(_featuresController, localizations.featuresField, maxLines: 4),
+                          const SizedBox(height: 16),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: _isLoading
                         ? const Center(child: CircularProgressIndicator())
-                        : ElevatedButton(
-                            onPressed: _submitFeedback,
-                            style: CustomTheme.primaryButtonStyle(context),
-                            child: Text(localizations.sendButton, style: CustomTheme.primaryButtonTextTheme(context)),
+                        : SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: _submitFeedback,
+                              style: CustomTheme.primaryButtonStyle(context),
+                              child: Text(localizations.sendButton, style: CustomTheme.primaryButtonTextTheme(context)),
+                            ),
                           ),
-                  ],
-                ),
+                  ),
+                ],
               ),
       ),
       bottomNavigationBar: const FooterWidget(currentPage: AvailablePage.feedback),
