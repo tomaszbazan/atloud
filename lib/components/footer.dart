@@ -3,8 +3,7 @@ import 'package:atloud/settings/settings.dart';
 import 'package:atloud/theme/colors.dart';
 import 'package:flutter/material.dart';
 
-// Import FeedbackPage instead of FeedbackLauncher
-import '../feedback/feedback_page.dart'; 
+import '../feedback/feedback_page.dart';
 import '../shared/available_page.dart';
 import '../theme/theme.dart';
 import '../timer/timer.dart';
@@ -12,6 +11,8 @@ import '../timer/timer.dart';
 class FooterWidget extends StatelessWidget {
   final AvailablePage currentPage;
   final Function()? actionOnClick;
+  final Function()? onClockTap;
+  final Function()? onTimerTap;
   final iconWidth = 30.0;
   final iconHeight = 30.0;
 
@@ -19,6 +20,8 @@ class FooterWidget extends StatelessWidget {
     super.key,
     required this.currentPage,
     this.actionOnClick,
+    this.onClockTap,
+    this.onTimerTap,
   });
 
   Widget _buildNavItem(BuildContext context, {
@@ -62,28 +65,44 @@ class FooterWidget extends StatelessWidget {
               iconWidget: Image.asset('assets/icons/clock.png', width: iconWidth, height: iconHeight, color: isDark ? CustomColors.darkFooterTextColor : CustomColors.footerTextColor),
               label: localizations.clockTab,
               isActive: currentPage == AvailablePage.clock,
-              onTap: () => actionOnClick != null ? actionOnClick!() : Navigator.pushReplacement(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation1, animation2) => const TimerPage(isTimerPage: false),
-                  transitionDuration: Duration.zero,
-                  reverseTransitionDuration: Duration.zero,
-                ),
-              )
+              onTap: () {
+                if (onClockTap != null) {
+                  onClockTap!();
+                } else if (actionOnClick != null) {
+                  actionOnClick!();
+                } else {
+                  Navigator.pushReplacement(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation1, animation2) => const TimerPage(isTimerPage: false),
+                      transitionDuration: Duration.zero,
+                      reverseTransitionDuration: Duration.zero,
+                    ),
+                  );
+                }
+              }
             ),
             _buildNavItem(
               context,
               iconWidget: Image.asset('assets/icons/timer.png', width: iconWidth, height: iconHeight, color: isDark ? CustomColors.darkFooterTextColor : CustomColors.footerTextColor),
               label: localizations.timerTab,
               isActive: currentPage == AvailablePage.timer,
-                onTap: () => actionOnClick != null ? actionOnClick!() : Navigator.pushReplacement(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) => const TimerPage(isTimerPage: true),
-                    transitionDuration: Duration.zero,
-                    reverseTransitionDuration: Duration.zero,
-                  ),
-                )
+              onTap: () {
+                if (onTimerTap != null) {
+                  onTimerTap!();
+                } else if (actionOnClick != null) {
+                  actionOnClick!();
+                } else {
+                  Navigator.pushReplacement(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation1, animation2) => const TimerPage(isTimerPage: true),
+                      transitionDuration: Duration.zero,
+                      reverseTransitionDuration: Duration.zero,
+                    ),
+                  );
+                }
+              }
             ),
             _buildNavItem(
               context,
