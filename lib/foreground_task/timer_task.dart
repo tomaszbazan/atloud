@@ -101,8 +101,7 @@ class TimerTaskHandler extends TaskHandler {
   String _passInformationToSpeaker(DateTime timestamp) {
     var speaker = Speaker();
     if (_taskType == TaskType.clock) {
-      if (timestamp.second == 0 &&
-          (_secondsFromTimerStart ~/ 60) % _period! == 0) {
+      if (timestamp.second == 0 && (_secondsFromTimerStart ~/ 60) % _period! == 0) {
         speaker.currentTimeWithoutContext();
       }
       return DateTimeToString.shortConvert(DateTime.now());
@@ -126,8 +125,7 @@ class TimerTaskHandler extends TaskHandler {
             0;
         if (_secondsFromTimerStart > 5 &&
             secondsToTimerEnd % 60 == 0 &&
-            ((_continueAfterAlarm! && secondsToTimerEnd < 0) ||
-                informationNeeded)) {
+            ((_continueAfterAlarm! && secondsToTimerEnd < 0) || informationNeeded)) {
           speaker.speakDuration(timeLeftToEnd);
         }
         return DurationToString.convert(timeLeftToEnd);

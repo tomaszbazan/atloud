@@ -4,6 +4,7 @@ import 'package:atloud/l10n/supported_language.dart';
 import 'package:atloud/shared/available_page.dart';
 import 'package:atloud/sound/alarm_type.dart';
 import 'package:atloud/sound/speaker.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:volume_controller/volume_controller.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -110,7 +111,18 @@ class UserDataStorage {
 
   static Future<SupportedLanguage> languageValue() async {
     var value = await _storage.read(key: _languageValueKey);
-    return SupportedLanguage.fromCode(value ?? SupportedLanguage.defaultLanguage.code);
+    if (value != null) {
+      return SupportedLanguage.fromCode(value);
+    }
+
+    var systemLocale = WidgetsBinding.instance.platformDispatcher.locale;
+    var systemLanguageCode = '${systemLocale.languageCode}-${systemLocale.countryCode}';
+
+    try {
+      return SupportedLanguage.fromCode(systemLanguageCode);
+    } catch (e) {
+      return SupportedLanguage.defaultLanguage;
+    }
   }
 
   static void storeVibrationValue(bool value) async {
