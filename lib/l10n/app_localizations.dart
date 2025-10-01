@@ -379,6 +379,24 @@ abstract class AppLocalizations {
   /// In pl, this message translates to:
   /// **'Error getting device info: {error}, {screenInfo}'**
   String errorGettingDeviceInfo(String error, String screenInfo);
+
+  /// No description provided for @nextAnnouncementIn.
+  ///
+  /// In pl, this message translates to:
+  /// **'na głos za'**
+  String get nextAnnouncementIn;
+
+  /// No description provided for @airtableApiError.
+  ///
+  /// In pl, this message translates to:
+  /// **'Błąd API Airtable: {statusCode} {reasonPhrase}'**
+  String airtableApiError(String statusCode, String reasonPhrase);
+
+  /// No description provided for @airtableSendError.
+  ///
+  /// In pl, this message translates to:
+  /// **'Błąd podczas wysyłania danych do AirTable: {error}'**
+  String airtableSendError(String error);
 }
 
 class _AppLocalizationsDelegate

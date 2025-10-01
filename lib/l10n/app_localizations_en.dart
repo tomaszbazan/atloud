@@ -158,4 +158,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String errorGettingDeviceInfo(String error, String screenInfo) {
     return 'Error getting device info: $error, $screenInfo';
   }
+
+  @override
+  String get nextAnnouncementIn => 'at loud for';
+
+  @override
+  String airtableApiError(String statusCode, String reasonPhrase) {
+    return 'Airtable API Error: $statusCode $reasonPhrase';
+  }
+
+  @override
+  String airtableSendError(String error) {
+    return 'Error sending data to AirTable: $error';
+  }
 }

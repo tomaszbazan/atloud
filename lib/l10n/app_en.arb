@@ -77,5 +77,19 @@
       "error": {"type": "String"},
       "screenInfo": {"type": "String"}
     }
+  },
+  "nextAnnouncementIn": "at loud for",
+  "airtableApiError": "Airtable API Error: {statusCode} {reasonPhrase}",
+  "@airtableApiError": {
+    "placeholders": {
+      "statusCode": {"type": "String"},
+      "reasonPhrase": {"type": "String"}
+    }
+  },
+  "airtableSendError": "Error sending data to AirTable: {error}",
+  "@airtableSendError": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
   }
 }

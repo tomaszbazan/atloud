@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:atloud/services/airtable_exception.dart';
 import 'package:http/http.dart' as http;
 
 class AirtableService {
@@ -11,12 +12,14 @@ class AirtableService {
   static const String _futureFunctionalitiesField = 'fldfCBH1gWCQUCJzq';
   static const String _deviceInfoField = 'fldqbzQnibueS43Cb';
 
-  static Future<String?> sendFeedback({
+  static Future<void> sendFeedback({
     required String email,
     required String appWorksCorrectly,
     required String futureFunctionalities,
     required String deviceInfo,
+    http.Client? client,
   }) async {
+    final httpClient = client ?? http.Client();
     final url = Uri.parse('https://api.airtable.com/v0/$_baseId/$_tableName');
 
     final headers = {
@@ -38,14 +41,19 @@ class AirtableService {
     });
 
     try {
-      final response = await http.post(url, headers: headers, body: body);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return null;
-      } else {
-        return 'Błąd API Airtable: ${response.statusCode} ${response.reasonPhrase}';
+      final response = await httpClient.post(url, headers: headers, body: body);
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw AirtableException(response.statusCode, response.reasonPhrase);
       }
     } catch (e) {
-      return 'Błąd podczas wysyłania danych do AirTable: $e';
+      if (client == null) {
+        httpClient.close();
+      }
+      rethrow;
+    } finally {
+      if (client == null) {
+        httpClient.close();
+      }
     }
   }
 }
