@@ -48,10 +48,10 @@ class TimerTaskHandler extends TaskHandler {
     final calculator = _calculator;
     if (calculator == null) return;
 
-    _secondsFromTimerStart++;
-
     final decision = calculator.alarmNeeded(_secondsFromTimerStart);
     _handleAnnouncementDecision(decision);
+
+    _secondsFromTimerStart++;
 
     final displayTime = decision.displayTime;
     final timeToNextAnnouncement = decision.nextAnnouncement;
