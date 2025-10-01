@@ -10,6 +10,7 @@ import 'package:atloud/shared/user_data_storage.dart';
 import 'package:atloud/timer/timer_display_row.dart';
 import 'package:atloud/timer/timer_picker_widget.dart';
 import 'package:atloud/timer/timer_ring.dart';
+import 'package:atloud/timer/next_announcement_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -101,66 +102,79 @@ class _TimerPageState extends State<TimerPage> {
     final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBarWidget(text: _isTimerPage ? localizations.timerTab : localizations.clockTab),
-      body: Center(
-        child:
-            _isPickingTime
+      body: Stack(
+        children: [
+          Center(
+            child: _isPickingTime
                 ? TimePickerWidget(
-                  initialTime: _startingTime ?? const Duration(),
-                  onTimeSelected: (newTime) {
-                    _startingTime = newTime;
-                    UserDataStorage.storeStartingTimerValue(_startingTime!);
-                    _loadUserPreferences().then((preferences) => _initPage(preferences));
-                    setState(() {
-                      _isPickingTime = false;
-                    });
-                  },
-                )
+                    initialTime: _startingTime ?? const Duration(),
+                    onTimeSelected: (newTime) {
+                      _startingTime = newTime;
+                      UserDataStorage.storeStartingTimerValue(_startingTime!);
+                      _loadUserPreferences().then((preferences) => _initPage(preferences));
+                      setState(() {
+                        _isPickingTime = false;
+                      });
+                    },
+                  )
                 : Container(
-                  margin: const EdgeInsets.symmetric(vertical: 60.0),
-                  child: ValueListenableBuilder(
-                    valueListenable: _taskDataListenable,
-                    builder: (context, data, _) {
-                      String displayText;
-                      Duration? currentDuration;
+                    margin: const EdgeInsets.symmetric(vertical: 60.0),
+                    child: ValueListenableBuilder(
+                      valueListenable: _taskDataListenable,
+                      builder: (context, data, _) {
+                        String displayText;
+                        Duration? currentDuration;
 
-                      if (_isTimerPage) {
-                        if (data != null) {
-                          displayText = data.toString();
-                          currentDuration = StringToDuration.convert(data.toString());
+                        if (_isTimerPage) {
+                          if (data != null) {
+                            if (data is Map<String, dynamic>) {
+                              displayText = data[TimerTaskHandler.returnedDisplayTime] ?? data.toString();
+                              currentDuration = StringToDuration.convert(displayText);
+                            } else {
+                              displayText = data.toString();
+                              currentDuration = StringToDuration.convert(data.toString());
+                            }
+                          } else {
+                            displayText = _startingTime != null ? DurationToString.convert(_startingTime!) : "--:--";
+                            currentDuration = _startingTime;
+                          }
                         } else {
-                          displayText = _startingTime != null ? DurationToString.convert(_startingTime!) : "--:--";
-                          currentDuration = _startingTime;
+                          if (data is Map<String, dynamic>) {
+                            displayText = data[TimerTaskHandler.returnedDisplayTime] ?? DateTimeToString.shortConvert(DateTime.now());
+                          } else {
+                            displayText = data?.toString() ?? DateTimeToString.shortConvert(DateTime.now());
+                          }
                         }
-                      } else {
-                        displayText = data?.toString() ?? DateTimeToString.shortConvert(DateTime.now());
-                      }
 
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.symmetric(vertical: 30.0),
-                            child: GestureDetector(
-                              onTap: _isTimerPage ? _enterTimePickingMode : () => _speaker.currentTime(context),
-                              child: TimerRing(
-                                duration: currentDuration,
-                                startingTime: _startingTime,
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    TimeDisplayRow(displayText: displayText),
-                                    const Align(alignment: Alignment.bottomCenter, child: Padding(padding: EdgeInsets.only(bottom: 20.0), child: VolumeSwitcher())),
-                                  ],
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.symmetric(vertical: 30.0),
+                              child: GestureDetector(
+                                onTap: _isTimerPage ? _enterTimePickingMode : () => _speaker.currentTime(context),
+                                child: TimerRing(
+                                  duration: currentDuration,
+                                  startingTime: _startingTime,
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      TimeDisplayRow(displayText: displayText),
+                                      const Align(alignment: Alignment.bottomCenter, child: Padding(padding: EdgeInsets.only(bottom: 20.0), child: VolumeSwitcher())),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      );
-                    },
+                          ],
+                        );
+                      },
+                    ),
                   ),
-                ),
+          ),
+          NextAnnouncementWidget(taskDataListenable: _taskDataListenable),
+        ],
       ),
       bottomNavigationBar: FooterWidget(
         currentPage: _isTimerPage ? AvailablePage.timer : AvailablePage.clock,
