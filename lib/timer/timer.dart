@@ -173,7 +173,7 @@ class _TimerPageState extends State<TimerPage> {
                     ),
                   ),
           ),
-          NextAnnouncementWidget(taskDataListenable: _taskDataListenable),
+          _isPickingTime ? Container() : NextAnnouncementWidget(taskDataListenable: _taskDataListenable),
         ],
       ),
       bottomNavigationBar: FooterWidget(
