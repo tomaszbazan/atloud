@@ -1,18 +1,20 @@
-import 'package:atloud/converters/date_time_to_string.dart';
 import 'package:atloud/converters/string_to_duration.dart';
 import 'package:atloud/sound/speaker.dart';
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 
 import '../converters/duration_to_string.dart';
 import '../l10n/supported_language.dart';
 import '../shared/user_data_storage.dart';
-
-enum TaskType { timer, clock }
+import '../timer/timer_alarm_calculator.dart';
 
 class TimerTaskHandler extends TaskHandler {
   static const String setTimerCommand = 'setTimerCommand';
   static const String setClockCommand = 'setClockCommand';
+
+  static const String returnedDisplayTime = 'displayTime';
+  static const String returnedNextAnnouncement = 'nextAnnouncementIn';
 
   static const String commandParameter = 'command';
   static const String startingTimeParameter = 'startingTime';
@@ -29,22 +31,48 @@ class TimerTaskHandler extends TaskHandler {
 
   var _secondsFromTimerStart = 0;
 
-  Future<void> _incrementTime(DateTime timestamp) async {
-    _speakTimeForFirstTime();
-    _secondsFromTimerStart++;
-    var returnedValue = _passInformationToSpeaker(timestamp);
-    _updateNotification(returnedValue);
-    FlutterForegroundTask.sendDataToMain(returnedValue);
+  TimerAlarmCalculator? get _calculator {
+    if (_period == null || (_taskType == TaskType.timer && _initialTime == null)) {
+      return null;
+    }
+    return TimerAlarmCalculator(
+      taskType: _taskType,
+      initialTime: _initialTime,
+      period: _period!,
+      continueAfterAlarm: _continueAfterAlarm ?? false,
+      clock: const Clock(),
+    );
   }
 
-  void _speakTimeForFirstTime() {
-    if (_secondsFromTimerStart == 0) {
-      var speaker = Speaker();
-      if (_taskType == TaskType.clock) {
-        speaker.currentTimeWithoutContext();
-      } else {
-        speaker.speakDuration(_initialTime!);
-      }
+  Future<void> _incrementTime() async {
+    final calculator = _calculator;
+    if (calculator == null) return;
+
+    _secondsFromTimerStart++;
+
+    final decision = calculator.alarmNeeded(_secondsFromTimerStart);
+    _handleAnnouncementDecision(decision);
+
+    final displayTime = decision.displayTime;
+    final timeToNextAnnouncement = decision.nextAnnouncement;
+
+    _updateNotification(displayTime);
+    FlutterForegroundTask.sendDataToMain({
+      returnedDisplayTime: displayTime,
+      returnedNextAnnouncement: DurationToString.convert(timeToNextAnnouncement),
+    });
+  }
+
+  void _handleAnnouncementDecision(AlarmDecision decision) {
+    if (!decision.shouldAnnounce) return;
+
+    final speaker = Speaker();
+    if (decision.shouldAnnounceCurrentTime) {
+      speaker.currentTimeWithoutContext();
+    } else if (decision.shouldAnnounceTimeLeft) {
+      speaker.speakDuration(decision.timeLeft!);
+    } else if (decision.shouldPlayAlarm) {
+      speaker.playAlarmSoundAndVibrate();
     }
   }
 
@@ -65,80 +93,40 @@ class TimerTaskHandler extends TaskHandler {
     );
   }
 
-  static String _hourText(language) {
+  static String _hourText(SupportedLanguage language) {
     switch (language) {
       case SupportedLanguage.polish:
         return 'Godzina: ';
       case SupportedLanguage.english:
         return 'Hour: ';
-      default:
-        return 'Hour: ';
     }
   }
 
-  static String _leftText(language) {
+  static String _leftText(SupportedLanguage language) {
     switch (language) {
       case SupportedLanguage.polish:
         return 'Pozostało:';
       case SupportedLanguage.english:
         return 'Left:';
-      default:
-        return 'Left:';
     }
   }
 
-  static String _stopButtonText(language) {
+  static String _stopButtonText(SupportedLanguage language) {
     switch (language) {
       case SupportedLanguage.polish:
         return 'Zatrzymaj';
       case SupportedLanguage.english:
         return 'Stop';
-      default:
-        return 'Stop';
     }
   }
 
-  String _passInformationToSpeaker(DateTime timestamp) {
-    var speaker = Speaker();
-    if (_taskType == TaskType.clock) {
-      if (timestamp.second == 0 && (_secondsFromTimerStart ~/ 60) % _period! == 0) {
-        speaker.currentTimeWithoutContext();
-      }
-      return DateTimeToString.shortConvert(DateTime.now());
-    } else {
-      var secondsToTimerEnd = _initialTime!.inSeconds - _secondsFromTimerStart;
-
-      if (secondsToTimerEnd == 0) {
-        speaker.playAlarmSoundAndVibrate();
-        return DurationToString.convert(const Duration(seconds: 0));
-      } else {
-        if (secondsToTimerEnd < 0 && !_continueAfterAlarm!) {
-          return DurationToString.convert(const Duration(seconds: 0));
-        }
-        var initialTimeSeconds = _initialTime!.inSeconds;
-        var timeLeftToEnd = Duration(
-          seconds: (initialTimeSeconds - _secondsFromTimerStart),
-        );
-        var informationNeeded =
-            (_initialTime!.inMinutes - timeLeftToEnd.inMinutes.abs()) %
-                _period! ==
-            0;
-        if (_secondsFromTimerStart > 5 &&
-            secondsToTimerEnd % 60 == 0 &&
-            ((_continueAfterAlarm! && secondsToTimerEnd < 0) || informationNeeded)) {
-          speaker.speakDuration(timeLeftToEnd);
-        }
-        return DurationToString.convert(timeLeftToEnd);
-      }
-    }
-  }
 
   @override
   Future<void> onStart(DateTime timestamp, TaskStarter starter) async {}
 
   @override
   void onRepeatEvent(DateTime timestamp) {
-    _incrementTime(timestamp);
+    _incrementTime();
   }
 
   @override
@@ -199,7 +187,6 @@ class TimerTaskHandler extends TaskHandler {
 
   @override
   void onNotificationPressed() {
-    print('onNotificationPressed');
   }
 
   @override
