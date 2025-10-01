@@ -46,24 +46,23 @@ class TimerAlarmCalculator {
 
   AlarmDecision _shouldAnnounceForTimer(int secondsFromStart, String displayTime, Duration nextAnnouncement) {
     if (_isTimerAtZero(secondsFromStart)) {
-      return AlarmDecision.announceDuration(initialTime!, displayTime, nextAnnouncement);
+      return AlarmDecision.announceDuration(initialTime!, displayTime, Duration.zero);
     }
 
     final secondsToTimerEnd = initialTime!.inSeconds - secondsFromStart;
-
-    // Check if timer has ended and we shouldn't continue
-    if (secondsToTimerEnd < 0 && !continueAfterAlarm) {
-      return AlarmDecision.noAnnouncement(displayTime, nextAnnouncement);
-    }
+    final timeLeftToEnd = Duration(
+      seconds: secondsToTimerEnd,
+    );
 
     // Check if timer exactly ends (alarm time)
     if (_isTimerAtZero(secondsToTimerEnd)) {
-      return AlarmDecision.playAlarm(displayTime, nextAnnouncement);
+      return AlarmDecision.announceDuration(Duration.zero, displayTime, nextAnnouncement);
     }
 
-    final timeLeftToEnd = Duration(
-      seconds: (initialTime!.inSeconds - secondsFromStart),
-    );
+    // Check if timer has ended and we shouldn't continue
+    if (secondsToTimerEnd < 0 && !continueAfterAlarm) {
+      return AlarmDecision.noAnnounceTimer(Duration.zero, displayTime, nextAnnouncement);
+    }
 
     final informationNeeded =
         (initialTime!.inMinutes - timeLeftToEnd.inMinutes.abs()) % period == 0;
@@ -71,10 +70,10 @@ class TimerAlarmCalculator {
     if (secondsFromStart > 5 &&
         secondsToTimerEnd % 60 == 0 &&
         ((continueAfterAlarm && secondsToTimerEnd < 0) || informationNeeded)) {
-      return AlarmDecision.announceDuration(timeLeftToEnd, displayTime, nextAnnouncement);
+      return AlarmDecision.announceDuration(timeLeftToEnd, displayTime, Duration.zero);
     }
 
-    return AlarmDecision.noAnnouncement(displayTime, nextAnnouncement);
+    return AlarmDecision.noAnnounceTimer(timeLeftToEnd, displayTime, nextAnnouncement);
   }
 
   Duration _calculateTimeToNextAnnouncementForClock(int secondsFromStart) {
@@ -97,7 +96,7 @@ class TimerAlarmCalculator {
 
   bool _isTimerAtZero(int secondsFromStart) => secondsFromStart == 0;
 
-  bool _isInFirstMinute(int secondsFromStart) => secondsFromStart < 60;
+  bool _isInFirstMinute(int secondsFromStart) => (clock.now().second - secondsFromStart) >= 0;
 
   Duration _calculateTimeToNextAnnouncementForTimer(int secondsFromStart) {
     final secondsToTimerEnd = initialTime!.inSeconds - secondsFromStart;
@@ -146,7 +145,7 @@ class TimerAlarmCalculator {
     }
 
     final timeLeftToEnd = Duration(
-      seconds: (initialTime!.inSeconds - secondsFromStart),
+      seconds: secondsToTimerEnd,
     );
     return DurationToString.convert(timeLeftToEnd);
   }
@@ -162,6 +161,9 @@ class AlarmDecision {
 
   static AlarmDecision noAnnouncement(String displayTime, Duration nextAnnouncement) =>
       AlarmDecision._(AnnouncementType.none, null, displayTime, nextAnnouncement);
+
+  static AlarmDecision noAnnounceTimer(Duration timeLeft, String displayTime, Duration nextAnnouncement) =>
+      AlarmDecision._(AnnouncementType.none, timeLeft, displayTime, nextAnnouncement);
 
   static AlarmDecision announceCurrentTime(String displayTime, Duration nextAnnouncement) =>
       AlarmDecision._(AnnouncementType.currentTime, null, displayTime, nextAnnouncement);

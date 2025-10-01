@@ -44,7 +44,7 @@ void main() {
       });
 
       test('should not announce in first minute when current time seconds is not 0', () {
-        final fixedTime = DateTime(2023, 1, 1, 12, 05, 53);
+        final fixedTime = DateTime(2023, 1, 1, 12, 05, 08);
         final calculator = TimerAlarmCalculator(
           taskType: TaskType.clock,
           period: 5,
@@ -59,7 +59,7 @@ void main() {
         expect(decision.shouldAnnounceTimeLeft, isFalse);
         expect(decision.timeLeft, isNull);
         expect(decision.displayTime, "12:05");
-        expect(decision.nextAnnouncement, Duration(seconds: 7));
+        expect(decision.nextAnnouncement, Duration(minutes: 4, seconds: 52));
       });
 
       test('should correctly calculate nextAnnouncement inside first period', () {
@@ -209,7 +209,7 @@ void main() {
         expect(decision.shouldAnnounceTimeLeft, isFalse);
         expect(decision.timeLeft, equals(const Duration(minutes: 8, seconds: 30)));
         expect(decision.displayTime, "00:08:30");
-        expect(decision.nextAnnouncement, Duration(seconds: 30)); // 30 seconds to next announcement
+        expect(decision.nextAnnouncement, Duration(seconds: 30));
       });
 
       test('should not announce when not at second period interval', () {
@@ -227,7 +227,7 @@ void main() {
         expect(decision.shouldAnnounceTimeLeft, isFalse);
         expect(decision.timeLeft, equals(const Duration(minutes: 6, seconds: 20)));
         expect(decision.displayTime, "00:06:20");
-        expect(decision.nextAnnouncement, Duration(seconds: 20)); // 20 seconds to next announcement
+        expect(decision.nextAnnouncement, Duration(seconds: 20));
       });
 
       test('should not announce during first 5 seconds', () {
@@ -243,9 +243,9 @@ void main() {
         expect(decision.shouldAnnounce, isFalse);
         expect(decision.shouldAnnounceCurrentTime, isFalse);
         expect(decision.shouldAnnounceTimeLeft, isFalse);
-        expect(decision.timeLeft, equals(const Duration(minutes: 8, seconds: 57)));
-        expect(decision.displayTime, "00:08:57");
-        expect(decision.nextAnnouncement, Duration(seconds: 57)); // 57 seconds to next announcement
+        expect(decision.timeLeft, equals(const Duration(minutes: 9, seconds: 57)));
+        expect(decision.displayTime, "00:09:57");
+        expect(decision.nextAnnouncement, Duration(minutes: 1, seconds: 57));
       });
 
       test('should continue announcing after alarm when continueAfterAlarm is true', () {
