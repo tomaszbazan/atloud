@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 import 'package:atloud/components/app_bar.dart';
 import 'package:atloud/components/footer.dart';
 import 'package:atloud/l10n/app_localizations.dart';
+import 'package:atloud/services/airtable_exception.dart';
 import 'package:atloud/services/airtable_service.dart';
 import 'package:atloud/shared/available_page.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -74,13 +75,13 @@ class _FeedbackPageState extends State<FeedbackPage> {
   }
 
   Future<void> _submitFeedback() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
+    if (!_formKey.currentState!.validate()) return;
 
+    setState(() => _isLoading = true);
+
+    try {
       final deviceInfo = await _getDeviceInfo();
-      final error = await AirtableService.sendFeedback(
+      await AirtableService.sendFeedback(
         email: _emailController.text,
         appWorksCorrectly: _appWorksController.text,
         futureFunctionalities: _featuresController.text,
@@ -90,15 +91,22 @@ class _FeedbackPageState extends State<FeedbackPage> {
       if (mounted) {
         setState(() {
           _isLoading = false;
-          if (error != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(error)),
-            );
-          } else {
-            _isSubmittedSuccessfully = true;
-          }
+          _isSubmittedSuccessfully = true;
         });
       }
+    } catch (e) {
+      if (!mounted) return;
+
+      setState(() => _isLoading = false);
+
+      final localizations = AppLocalizations.of(context)!;
+      final errorMessage = e is AirtableException
+          ? localizations.airtableApiError(e.statusCode.toString(), e.reasonPhrase ?? '')
+          : localizations.airtableSendError(e.toString());
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorMessage)),
+      );
     }
   }
 
