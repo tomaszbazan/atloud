@@ -383,8 +383,8 @@ abstract class AppLocalizations {
   /// No description provided for @nextAnnouncementIn.
   ///
   /// In pl, this message translates to:
-  /// **'na głos za'**
-  String get nextAnnouncementIn;
+  /// **'Na głos co {minute} min'**
+  String nextAnnouncementIn(String minute);
 
   /// No description provided for @airtableApiError.
   ///

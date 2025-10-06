@@ -160,7 +160,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get nextAnnouncementIn => 'at loud for';
+  String nextAnnouncementIn(String minute) {
+    return 'Out loud every $minute min';
+  }
 
   @override
   String airtableApiError(String statusCode, String reasonPhrase) {
