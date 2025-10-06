@@ -78,7 +78,14 @@
       "screenInfo": {"type": "String"}
     }
   },
-  "nextAnnouncementIn": "na głos za",
+  "nextAnnouncementIn": "Na głos co {minute} min",
+  "@nextAnnouncementIn": {
+    "placeholders": {
+      "minute": {
+        "type": "String"
+      }
+    }
+  },
   "airtableApiError": "Błąd API Airtable: {statusCode} {reasonPhrase}",
   "@airtableApiError": {
     "placeholders": {

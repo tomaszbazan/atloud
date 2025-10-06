@@ -30,6 +30,7 @@ class _TimerPageState extends State<TimerPage> {
   Duration? _startingTime;
 
   bool _isPickingTime = false;
+  int? _period;
 
   @override
   void initState() {
@@ -46,6 +47,9 @@ class _TimerPageState extends State<TimerPage> {
     } else {
       FlutterForegroundTask.sendDataToTask({...preferences, TimerTaskHandler.commandParameter: TimerTaskHandler.setClockCommand});
     }
+    setState(() {
+      _period = preferences[TimerTaskHandler.periodParameter] as int?;
+    });
   }
 
   void _timerTick(Object data) {
@@ -173,7 +177,7 @@ class _TimerPageState extends State<TimerPage> {
                     ),
                   ),
           ),
-          _isPickingTime ? Container() : NextAnnouncementWidget(taskDataListenable: _taskDataListenable),
+          _isPickingTime ? Container() : NextAnnouncementWidget(period: _period),
         ],
       ),
       bottomNavigationBar: FooterWidget(

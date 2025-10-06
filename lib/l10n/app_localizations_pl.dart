@@ -161,7 +161,9 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String get nextAnnouncementIn => 'na głos za';
+  String nextAnnouncementIn(String minute) {
+    return 'Na głos co $minute min';
+  }
 
   @override
   String airtableApiError(String statusCode, String reasonPhrase) {

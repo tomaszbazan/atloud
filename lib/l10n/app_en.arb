@@ -78,7 +78,14 @@
       "screenInfo": {"type": "String"}
     }
   },
-  "nextAnnouncementIn": "at loud for",
+  "nextAnnouncementIn": "Out loud every {minute} min",
+  "@nextAnnouncementIn": {
+    "placeholders": {
+      "minute": {
+        "type": "String"
+      }
+    }
+  },
   "airtableApiError": "Airtable API Error: {statusCode} {reasonPhrase}",
   "@airtableApiError": {
     "placeholders": {
