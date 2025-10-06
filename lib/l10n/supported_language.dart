@@ -2,8 +2,8 @@ import 'package:atloud/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 enum SupportedLanguage {
-  polish('pl-PL', Locale('pl')),
-  english('en-US', Locale('en'));
+  polish('pl', Locale('pl')),
+  english('en', Locale('en'));
 
   final String code;
   final Locale locale;
@@ -15,7 +15,7 @@ enum SupportedLanguage {
   static SupportedLanguage fromCode(String code) {
     return values.firstWhere(
       (lang) => lang.code == code,
-      orElse: () => throw ArgumentError("Unsupported language: $code"),
+      orElse: () => defaultLanguage,
     );
   }
 

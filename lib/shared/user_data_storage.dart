@@ -116,13 +116,9 @@ class UserDataStorage {
     }
 
     var systemLocale = WidgetsBinding.instance.platformDispatcher.locale;
-    var systemLanguageCode = '${systemLocale.languageCode}-${systemLocale.countryCode}';
 
-    try {
-      return SupportedLanguage.fromCode(systemLanguageCode);
-    } catch (e) {
-      return SupportedLanguage.defaultLanguage;
-    }
+    storeLanguageValue(systemLocale.languageCode);
+    return SupportedLanguage.fromCode(systemLocale.languageCode);
   }
 
   static void storeVibrationValue(bool value) async {

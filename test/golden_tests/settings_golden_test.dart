@@ -1,5 +1,4 @@
 import 'package:atloud/main.dart';
-import 'package:atloud/settings/settings.dart';
 import 'package:atloud/shared/available_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
