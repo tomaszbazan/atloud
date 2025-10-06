@@ -130,9 +130,6 @@ class TimerTaskHandler extends TaskHandler {
   }
 
   @override
-  Future<void> onDestroy(DateTime timestamp) async {}
-
-  @override
   void onReceiveData(Object data) {
     if (data is Map<String, dynamic>) {
       _handleStartingTime(data);
@@ -192,5 +189,9 @@ class TimerTaskHandler extends TaskHandler {
   @override
   void onNotificationDismissed() {
     FlutterForegroundTask.stopService();
+  }
+
+  @override
+  Future<void> onDestroy(DateTime timestamp, bool isTimeout) async {
   }
 }
