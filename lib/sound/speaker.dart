@@ -40,7 +40,7 @@ class Speaker {
         speakText("Jest godzina $now");
         break;
       case SupportedLanguage.english:
-        speakText("It is $now o'clock");
+        speakText("It is $now");
         break;
     }
   }
