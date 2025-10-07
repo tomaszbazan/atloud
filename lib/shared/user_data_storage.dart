@@ -19,7 +19,7 @@ class UserDataStorage {
   static const String _volumeValueKey = 'volumeValue';
   static const String _screenLockValueKey = 'screenLockValue';
   static const String _alarmTypeValueKey = 'alarmTypeValue';
-  static const String _languageValueKey = 'languageValue';
+  static const String _languageValueKey = 'languageValueV2';
   static const String _vibrationValueKey = 'vibrationValue';
   static const String _continueAfterAlarmKey = 'continueAfterAlarmValue';
   static const String _lastVisitedPageValueKey = 'lastVisitedPageValue';
@@ -117,8 +117,9 @@ class UserDataStorage {
 
     var systemLocale = WidgetsBinding.instance.platformDispatcher.locale;
 
-    storeLanguageValue(systemLocale.languageCode);
-    return SupportedLanguage.fromCode(systemLocale.languageCode);
+    var language = SupportedLanguage.fromCode(systemLocale.languageCode);
+    storeLanguageValue(language.code);
+    return language;
   }
 
   static void storeVibrationValue(bool value) async {

@@ -33,24 +33,20 @@ class ForegroundTaskStarter {
     );
   }
 
-  static String notificationText(language) {
+  static String notificationText(SupportedLanguage language) {
     switch (language) {
       case SupportedLanguage.polish:
         return 'Naciśnij aby powrócić do aplikacji';
       case SupportedLanguage.english:
         return 'Press to return to the application';
-      default:
-        return 'Press to return to the application';
     }
   }
 
-  static String stopButtonText(language) {
+  static String stopButtonText(SupportedLanguage language) {
     switch (language) {
       case SupportedLanguage.polish:
         return 'Zatrzymaj';
       case SupportedLanguage.english:
-        return 'Stop';
-      default:
         return 'Stop';
     }
   }

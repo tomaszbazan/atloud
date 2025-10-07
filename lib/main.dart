@@ -1,4 +1,5 @@
 import 'package:atloud/foreground_task/foreground_task_initializer.dart';
+import 'package:atloud/l10n/app_localizations.dart';
 import 'package:atloud/l10n/language_notifier.dart';
 import 'package:atloud/l10n/supported_language.dart';
 import 'package:atloud/settings/settings.dart';
@@ -10,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:atloud/l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +27,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final AvailablePage lastVisitedPage;
+
   const MyApp({super.key, required this.lastVisitedPage});
 
   @override
