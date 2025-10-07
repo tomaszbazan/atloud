@@ -76,7 +76,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String timeAnnouncement(String time) {
-    return 'It is $time o\'clock';
+    return 'It is $time';
   }
 
   @override

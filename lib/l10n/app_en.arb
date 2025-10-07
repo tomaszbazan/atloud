@@ -22,7 +22,7 @@
   "version": "Version",
   "periodSettings": "Every how many minutes",
   "automaticScreenLock": "Automatic screen lock",
-  "timeAnnouncement": "It is {time} o'clock",
+  "timeAnnouncement": "It is {time}",
   "@timeAnnouncement": {
     "placeholders": {
       "time": {
