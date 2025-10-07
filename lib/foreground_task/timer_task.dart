@@ -85,11 +85,8 @@ class TimerTaskHandler extends TaskHandler {
         metaDataName: 'pl.btsoftware.atloud.default_notification_icon',
         backgroundColor: Colors.black,
       ),
-      notificationInitialRoute:
-          _taskType == TaskType.clock ? '/clock' : '/timer',
-      notificationButtons: [
-        NotificationButton(id: stopButtonId, text: _stopButtonText(language)),
-      ],
+      notificationInitialRoute: _taskType == TaskType.clock ? '/clock' : '/timer',
+      notificationButtons: [NotificationButton(id: stopButtonId, text: _stopButtonText(language))],
     );
   }
 
@@ -119,7 +116,6 @@ class TimerTaskHandler extends TaskHandler {
         return 'Stop';
     }
   }
-
 
   @override
   Future<void> onStart(DateTime timestamp, TaskStarter starter) async {}
@@ -183,8 +179,7 @@ class TimerTaskHandler extends TaskHandler {
   }
 
   @override
-  void onNotificationPressed() {
-  }
+  void onNotificationPressed() {}
 
   @override
   void onNotificationDismissed() {
@@ -192,6 +187,5 @@ class TimerTaskHandler extends TaskHandler {
   }
 
   @override
-  Future<void> onDestroy(DateTime timestamp, bool isTimeout) async {
-  }
+  Future<void> onDestroy(DateTime timestamp, bool isTimeout) async {}
 }

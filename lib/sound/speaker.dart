@@ -15,10 +15,19 @@ class Speaker {
 
   void speakText(String text) async {
     var language = await UserDataStorage.languageValue();
-    await _flutterTts.setLanguage(language.code);
+    var availableVoices = await _flutterTts.getVoices as List<dynamic>;
+
+    var languageVoice = availableVoices.firstWhere(
+      (voice) => voice['locale'] == language.countryCode && voice['name'] == language.defaultVoice,
+      orElse: () => _flutterTts.getDefaultVoice,
+    );
+
+    await _flutterTts.setLanguage(language.countryCode);
+
+    await _flutterTts.setVoice(Map<String, String>.from(languageVoice as Map));
     await _flutterTts.speak(text);
   }
-  
+
   void speakDuration(Duration timeLeftToEnd) async {
     var language = await UserDataStorage.languageValue();
     await _flutterTts.setLanguage(language.code);
@@ -35,7 +44,7 @@ class Speaker {
     var now = DateTimeToString.shortConvert(DateTime.now());
     var language = await UserDataStorage.languageValue();
 
-    switch(language) {
+    switch (language) {
       case SupportedLanguage.polish:
         speakText("Jest godzina $now");
         break;

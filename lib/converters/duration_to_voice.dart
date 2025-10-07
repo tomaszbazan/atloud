@@ -5,7 +5,7 @@ class DurationToVoice {
     int hours = duration.inHours;
     int minutes = duration.inMinutes.abs().remainder(60);
 
-    switch(language) {
+    switch (language) {
       case SupportedLanguage.polish:
         return _convertPolish(duration, hours, minutes);
       case SupportedLanguage.english:
@@ -29,7 +29,7 @@ class DurationToVoice {
       22: "dwadzieścia dwie",
       32: "trzydzieści dwie",
       42: "czterdzieści dwie",
-      52: "pięćdziesiąt dwie"
+      52: "pięćdziesiąt dwie",
     };
     return numbersMap[value] ?? '$value';
   }
@@ -39,8 +39,10 @@ class DurationToVoice {
   }
 
   static String _convertPolish(Duration duration, int hours, int minutes) {
-    String hoursString = hours > 0 ? '${_numbersPolish(hours)} ${_pluralizePolish(hours, 'godzina', 'godziny', 'godzin')}' : '';
-    String minutesString = minutes > 0 ? '${_numbersPolish(minutes)} ${_pluralizePolish(minutes, 'minuta', 'minuty', 'minut')}' : '';
+    String hoursString =
+        hours > 0 ? '${_numbersPolish(hours)} ${_pluralizePolish(hours, 'godzina', 'godziny', 'godzin')}' : '';
+    String minutesString =
+        minutes > 0 ? '${_numbersPolish(minutes)} ${_pluralizePolish(minutes, 'minuta', 'minuty', 'minut')}' : '';
 
     if (duration.isNegative) {
       if (hours > 0 && minutes > 0) {
@@ -67,7 +69,8 @@ class DurationToVoice {
 
   static String _convertEnglish(Duration duration, int hours, int minutes) {
     String hoursString = hours > 0 ? '${_numbersEnglish(hours)} ${_pluralizeEnglish(hours, 'hour', 'hours')}' : '';
-    String minutesString = minutes > 0 ? '${_numbersEnglish(minutes)} ${_pluralizeEnglish(minutes, 'minute', 'minutes')}' : '';
+    String minutesString =
+        minutes > 0 ? '${_numbersEnglish(minutes)} ${_pluralizeEnglish(minutes, 'minute', 'minutes')}' : '';
 
     if (duration.isNegative) {
       if (hours > 0 && minutes > 0) {
