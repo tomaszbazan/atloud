@@ -17,13 +17,14 @@ void main() {
       };
 
       MockPlugins.setupMocks();
+      final ratingService = MockRatingService();
       await loadAppFonts();
       final builder = DeviceBuilder()
         ..overrideDevicesForAllScenarios(devices: [
           Device.phone
         ])
         ..addScenario(
-          widget: MyApp(lastVisitedPage: AvailablePage.timer),
+          widget: MyApp(lastVisitedPage: AvailablePage.timer, ratingService: ratingService),
           name: 'settings page',
           onCreate: (scenarioWidgetKey) async {
             final finder = find.descendant(

@@ -24,6 +24,7 @@ class UserDataStorage {
   static const String _continueAfterAlarmKey = 'continueAfterAlarmValue';
   static const String _lastVisitedPageValueKey = 'lastVisitedPageValue';
   static const String _isDarkThemeKey = 'isDarkTheme';
+  static const String _appLaunchCountKey = 'appLaunchCount';
 
   static const FlutterSecureStorage _storage = FlutterSecureStorage();
 
@@ -156,5 +157,14 @@ class UserDataStorage {
   static Future<bool> isDarkTheme() async {
     var value = await _storage.read(key: _isDarkThemeKey) ?? "false";
     return value.toLowerCase() == 'true';
+  }
+
+  static void storeAppLaunchCount(int value) async {
+    _storage.write(key: _appLaunchCountKey, value: value.toString());
+  }
+
+  static Future<int> appLaunchCount() async {
+    var value = await _storage.read(key: _appLaunchCountKey) ?? "0";
+    return int.parse(value);
   }
 }

@@ -397,6 +397,54 @@ abstract class AppLocalizations {
   /// In pl, this message translates to:
   /// **'Błąd podczas wysyłania danych do AirTable: {error}'**
   String airtableSendError(String error);
+
+  /// No description provided for @ratingDialogTitle1.
+  ///
+  /// In pl, this message translates to:
+  /// **'Lubisz naszą aplikację?'**
+  String get ratingDialogTitle1;
+
+  /// No description provided for @ratingDialogContent1.
+  ///
+  /// In pl, this message translates to:
+  /// **'Podziel się swoją opinią!\nKażda ocena pomaga nam tworzyć lepsze narzędzia.'**
+  String get ratingDialogContent1;
+
+  /// No description provided for @ratingDialogTitle2.
+  ///
+  /// In pl, this message translates to:
+  /// **'Cieszymy się, że korzystasz z naszej aplikacji!'**
+  String get ratingDialogTitle2;
+
+  /// No description provided for @ratingDialogContent2.
+  ///
+  /// In pl, this message translates to:
+  /// **'Dzięki ocenie pomagasz nam ją ulepszać :)'**
+  String get ratingDialogContent2;
+
+  /// No description provided for @ratingDialogTitle3.
+  ///
+  /// In pl, this message translates to:
+  /// **'Hurra! 🎉 Ciągle z nami jesteś!'**
+  String get ratingDialogTitle3;
+
+  /// No description provided for @ratingDialogContent3.
+  ///
+  /// In pl, this message translates to:
+  /// **'Prosimy o pozytywną ocenę abyśmy mogli dalej działać.'**
+  String get ratingDialogContent3;
+
+  /// No description provided for @ratingChoose.
+  ///
+  /// In pl, this message translates to:
+  /// **'Wybierz ocenę'**
+  String get ratingChoose;
+
+  /// No description provided for @ratingSubmit.
+  ///
+  /// In pl, this message translates to:
+  /// **'PRZEŚLIJ OPINIĘ'**
+  String get ratingSubmit;
 }
 
 class _AppLocalizationsDelegate

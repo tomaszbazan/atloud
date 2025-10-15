@@ -52,7 +52,7 @@ class _TimerPageState extends State<TimerPage> {
     });
   }
 
-  void _timerTick(Object data) {
+  void _timerTick(dynamic data) {
     _taskDataListenable.value = data;
   }
 

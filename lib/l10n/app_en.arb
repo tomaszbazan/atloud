@@ -98,5 +98,13 @@
     "placeholders": {
       "error": {"type": "String"}
     }
-  }
+  },
+  "ratingDialogTitle1": "Do you like our app?",
+  "ratingDialogContent1": "Share your opinion!\nEvery rating helps us create better tools.",
+  "ratingDialogTitle2": "We’re so glad you’re using our app!",
+  "ratingDialogContent2": "Your rating helps us make it even better :)",
+  "ratingDialogTitle3": "Hooray! 🎉 You’re still with us!",
+  "ratingDialogContent3": "Please leave a positive review so we can keep going.",
+  "ratingChoose": "Choose your rating",
+  "ratingSubmit": "SUBMIT"
 }

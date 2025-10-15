@@ -2,6 +2,7 @@ import 'package:atloud/foreground_task/foreground_task_initializer.dart';
 import 'package:atloud/l10n/app_localizations.dart';
 import 'package:atloud/l10n/language_notifier.dart';
 import 'package:atloud/l10n/supported_language.dart';
+import 'package:atloud/rating/rating_service.dart';
 import 'package:atloud/settings/settings.dart';
 import 'package:atloud/shared/available_page.dart';
 import 'package:atloud/theme/theme.dart';
@@ -20,15 +21,45 @@ void main() async {
   // var lastVisitedPage = await UserDataStorage.lastVisitedPageValue(); // TODO: Verify if it is working in all cases
   var lastVisitedPage = AvailablePage.clock;
 
+  final ratingService = RatingService();
+  await ratingService.incrementAppLaunchCount();
+
   LanguageNotifier().loadLocale();
   ThemeNotifier().loadTheme();
-  runApp(MyApp(lastVisitedPage: lastVisitedPage));
+  runApp(MyApp(
+    lastVisitedPage: lastVisitedPage,
+    ratingService: ratingService,
+  ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   final AvailablePage lastVisitedPage;
+  final RatingService ratingService;
 
-  const MyApp({super.key, required this.lastVisitedPage});
+  const MyApp({super.key, required this.lastVisitedPage, required this.ratingService});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _checkAndShowRatingDialog();
+  }
+
+  Future<void> _checkAndShowRatingDialog() async {
+    if (await widget.ratingService.shouldShowRatingDialog()) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_navigatorKey.currentContext != null) {
+          widget.ratingService.showRatingDialog(_navigatorKey.currentContext!);
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +68,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
         return MaterialApp(
+          navigatorKey: _navigatorKey,
           title: 'Atloud',
           theme: CustomTheme.lightTheme,
           darkTheme: CustomTheme.darkTheme,
@@ -49,7 +81,7 @@ class MyApp extends StatelessWidget {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: SupportedLanguage.supportedLocales,
-          home: TimerPage(isTimerPage: lastVisitedPage == AvailablePage.timer ? true : false),
+          home: TimerPage(isTimerPage: widget.lastVisitedPage == AvailablePage.timer ? true : false),
           routes: {
             '/timer': (context) => const TimerPage(isTimerPage: true),
             '/clock': (context) => const TimerPage(isTimerPage: false),
