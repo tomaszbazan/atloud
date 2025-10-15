@@ -11,7 +11,7 @@ void startCallback() {
 }
 
 class ForegroundTaskStarter {
-  static void startService(receivedServiceData) async {
+  static void startService(Function(dynamic) receivedServiceData) async {
     // Without this block service is not starting
     if (await FlutterForegroundTask.isRunningService) {}
     FlutterForegroundTask.addTaskDataCallback(receivedServiceData);
