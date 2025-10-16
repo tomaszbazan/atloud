@@ -1,3 +1,4 @@
+import 'package:atloud/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:atloud/l10n/app_localizations.dart';
 import 'package:atloud/rating/rating_service.dart';
@@ -17,6 +18,8 @@ class _RateUsDialogState extends State<RateUsDialog> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final customColors = theme.brightness == Brightness.dark ? CustomColors.darkSecondColor : CustomColors.secondColor;
 
     return FutureBuilder<int>(
       future: _ratingService.getAppLaunchCount(),
@@ -43,7 +46,7 @@ class _RateUsDialogState extends State<RateUsDialog> {
         return AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
-            side: BorderSide(color: Theme.of(context).primaryColor, width: 2),
+            side: BorderSide(color: customColors, width: 2),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -51,24 +54,36 @@ class _RateUsDialogState extends State<RateUsDialog> {
               Align(
                 alignment: Alignment.topRight,
                 child: IconButton(
-                  icon: const Icon(Icons.close),
+                  icon: Icon(Icons.close, color: Colors.grey.shade400),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
               ),
-              Text(
-                title,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headlineSmall,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                  ),
+                  if (launchCount <= 3) ...[
+                    const SizedBox(width: 8),
+                    Image.asset('assets/icons/clock.png', height: 20),
+                  ]
+                ],
               ),
               const SizedBox(height: 16),
               Text(
                 content,
                 textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 16),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 24),
               Text(
                 localizations.ratingChoose,
-                style: Theme.of(context).textTheme.titleMedium,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               Row(
@@ -77,7 +92,7 @@ class _RateUsDialogState extends State<RateUsDialog> {
                   return IconButton(
                     icon: Icon(
                       index < _rating ? Icons.star : Icons.star_border,
-                      color: Colors.amber,
+                      color: index < _rating ? customColors : Colors.grey,
                       size: 40,
                     ),
                     onPressed: () {
@@ -89,9 +104,22 @@ class _RateUsDialogState extends State<RateUsDialog> {
                 }),
               ),
               const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: _rating > 0 ? _submit : null,
-                child: Text(localizations.ratingSubmit),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: customColors,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
+                  onPressed: _rating > 0 ? _submit : null,
+                  child: Text(
+                    localizations.ratingSubmit,
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ),
               ),
             ],
           ),
