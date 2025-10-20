@@ -6,6 +6,7 @@ import 'package:atloud/sound/alarm_type.dart';
 import 'package:atloud/sound/speaker.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:volume_controller/volume_controller.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -24,8 +25,56 @@ class UserDataStorage {
   static const String _continueAfterAlarmKey = 'continueAfterAlarmValue';
   static const String _lastVisitedPageValueKey = 'lastVisitedPageValue';
   static const String _isDarkThemeKey = 'isDarkTheme';
+  static const String _migrationCompletedKey = 'migrationFromSecureStorageCompleted';
 
-  static const FlutterSecureStorage _storage = FlutterSecureStorage();
+  static SharedPreferences? _prefs;
+  static const FlutterSecureStorage _secureStorage = FlutterSecureStorage();
+
+  static Future<SharedPreferences> get _storage async {
+    if (_prefs != null) return _prefs!;
+    _prefs = await SharedPreferences.getInstance();
+    await _migrateFromSecureStorage();
+    return _prefs!;
+  }
+
+  @visibleForTesting
+  static void resetForTesting() {
+    _prefs = null;
+  }
+
+  static Future<void> _migrateFromSecureStorage() async {
+    if (_prefs == null) return;
+
+    final migrationCompleted = _prefs!.getBool(_migrationCompletedKey) ?? false;
+    if (migrationCompleted) return;
+
+    final allKeys = [
+      _currentTimerValueKey,
+      _startingTimerValueKey,
+      _periodValueKey,
+      _volumeValueKey,
+      _screenLockValueKey,
+      _alarmTypeValueKey,
+      _languageValueKey,
+      _vibrationValueKey,
+      _continueAfterAlarmKey,
+      _lastVisitedPageValueKey,
+      _isDarkThemeKey,
+    ];
+
+    for (final key in allKeys) {
+      try {
+        final value = await _secureStorage.read(key: key);
+        if (value != null) {
+          await _prefs!.setString(key, value);
+        }
+      } catch (e) {
+        continue;
+      }
+    }
+
+    await _prefs!.setBool(_migrationCompletedKey, true);
+  }
 
   static Future<SettingsData> settings() async {
     var volume = await volumeValue();
@@ -47,29 +96,35 @@ class UserDataStorage {
   }
 
   static void storeCurrentTimerValue(Duration value) async {
-    _storage.write(key: _currentTimerValueKey, value: DurationToString.convert(value));
+    final prefs = await _storage;
+    prefs.setString(_currentTimerValueKey, DurationToString.convert(value));
   }
 
   static Future<Duration> currentTimerValue() async {
-    var value = await _storage.read(key: _currentTimerValueKey) ?? "00:00";
+    final prefs = await _storage;
+    var value = prefs.getString(_currentTimerValueKey) ?? "00:00";
     return StringToDuration.convert(value);
   }
 
   static void storeStartingTimerValue(Duration value) async {
-    _storage.write(key: _startingTimerValueKey, value: DurationToString.convert(value));
+    final prefs = await _storage;
+    prefs.setString(_startingTimerValueKey, DurationToString.convert(value));
   }
 
   static Future<Duration> startingTimerValue() async {
-    var value = await _storage.read(key: _startingTimerValueKey) ?? "10:00";
+    final prefs = await _storage;
+    var value = prefs.getString(_startingTimerValueKey) ?? "10:00";
     return StringToDuration.convert(value);
   }
 
   static void storePeriodValue(int value) async {
-    _storage.write(key: _periodValueKey, value: value.toString());
+    final prefs = await _storage;
+    prefs.setString(_periodValueKey, value.toString());
   }
 
   static Future<int> periodValue() async {
-    var value = await _storage.read(key: _periodValueKey) ?? "1";
+    final prefs = await _storage;
+    var value = prefs.getString(_periodValueKey) ?? "1";
     return int.parse(value);
   }
 
@@ -77,40 +132,48 @@ class UserDataStorage {
     var currentValue = await volumeValue();
     if (currentValue == value) return;
     VolumeController().setVolume(value / 100, showSystemUI: true);
-    _storage.write(key: _volumeValueKey, value: value.toString());
+    final prefs = await _storage;
+    prefs.setString(_volumeValueKey, value.toString());
   }
 
   static Future<int> volumeValue() async {
-    var value = await _storage.read(key: _volumeValueKey) ?? "50";
+    final prefs = await _storage;
+    var value = prefs.getString(_volumeValueKey) ?? "50";
     return int.parse(value);
   }
 
   static void storeScreenLockValue(bool value) async {
     WakelockPlus.toggle(enable: value);
-    _storage.write(key: _screenLockValueKey, value: value.toString());
+    final prefs = await _storage;
+    prefs.setString(_screenLockValueKey, value.toString());
   }
 
   static Future<bool> screenLockValue() async {
-    var value = await _storage.read(key: _screenLockValueKey) ?? "true";
+    final prefs = await _storage;
+    var value = prefs.getString(_screenLockValueKey) ?? "true";
     return value.toLowerCase() == 'true';
   }
 
   static void storeAlarmTypeValue(String value) async {
-    _storage.write(key: _alarmTypeValueKey, value: value);
-    Speaker().playAlarmSound(); // Play sound to notify user of change
+    final prefs = await _storage;
+    prefs.setString(_alarmTypeValueKey, value);
+    Speaker().playAlarmSound();
   }
 
   static Future<AlarmType> alarmTypeValue() async {
-    var value = await _storage.read(key: _alarmTypeValueKey);
+    final prefs = await _storage;
+    var value = prefs.getString(_alarmTypeValueKey);
     return AlarmType.values.firstWhere((alarm) => alarm.name == value, orElse: () => AlarmType.brass);
   }
 
   static void storeLanguageValue(String value) async {
-    _storage.write(key: _languageValueKey, value: value);
+    final prefs = await _storage;
+    prefs.setString(_languageValueKey, value);
   }
 
   static Future<SupportedLanguage> languageValue() async {
-    var value = await _storage.read(key: _languageValueKey);
+    final prefs = await _storage;
+    var value = prefs.getString(_languageValueKey);
     if (value != null) {
       return SupportedLanguage.fromCode(value);
     }
@@ -123,38 +186,46 @@ class UserDataStorage {
   }
 
   static void storeVibrationValue(bool value) async {
-    _storage.write(key: _vibrationValueKey, value: value.toString());
+    final prefs = await _storage;
+    prefs.setString(_vibrationValueKey, value.toString());
   }
 
   static Future<bool> vibrationValue() async {
-    var value = await _storage.read(key: _vibrationValueKey) ?? "true";
+    final prefs = await _storage;
+    var value = prefs.getString(_vibrationValueKey) ?? "true";
     return value.toLowerCase() == 'true';
   }
 
   static void storeContinueAfterAlarmValue(bool value) async {
-    _storage.write(key: _continueAfterAlarmKey, value: value.toString());
+    final prefs = await _storage;
+    prefs.setString(_continueAfterAlarmKey, value.toString());
   }
 
   static Future<bool> continueAfterAlarmValue() async {
-    var value = await _storage.read(key: _continueAfterAlarmKey) ?? "true";
+    final prefs = await _storage;
+    var value = prefs.getString(_continueAfterAlarmKey) ?? "true";
     return value.toLowerCase() == 'true';
   }
 
   static void storeLastVisitedPageValue(AvailablePage value) async {
-    _storage.write(key: _lastVisitedPageValueKey, value: value.name);
+    final prefs = await _storage;
+    prefs.setString(_lastVisitedPageValueKey, value.name);
   }
 
   static Future<AvailablePage> lastVisitedPageValue() async {
-    var value = await _storage.read(key: _lastVisitedPageValueKey);
+    final prefs = await _storage;
+    var value = prefs.getString(_lastVisitedPageValueKey);
     return AvailablePage.values.firstWhere((val) => value == val.name, orElse: () => AvailablePage.clock);
   }
 
   static void storeIsDarkTheme(bool value) async {
-    _storage.write(key: _isDarkThemeKey, value: value.toString());
+    final prefs = await _storage;
+    prefs.setString(_isDarkThemeKey, value.toString());
   }
 
   static Future<bool> isDarkTheme() async {
-    var value = await _storage.read(key: _isDarkThemeKey) ?? "false";
+    final prefs = await _storage;
+    var value = prefs.getString(_isDarkThemeKey) ?? "false";
     return value.toLowerCase() == 'true';
   }
 }
