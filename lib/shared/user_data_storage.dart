@@ -6,6 +6,7 @@ import 'package:atloud/sound/alarm_type.dart';
 import 'package:atloud/sound/speaker.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:volume_controller/volume_controller.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -25,6 +26,7 @@ class UserDataStorage {
   static const String _lastVisitedPageValueKey = 'lastVisitedPageValue';
   static const String _isDarkThemeKey = 'isDarkTheme';
   static const String _appLaunchCountKey = 'appLaunchCount';
+  static const String _hasRatedKey = 'hasRated';
 
   static const FlutterSecureStorage _storage = FlutterSecureStorage();
 
@@ -47,8 +49,8 @@ class UserDataStorage {
     return TimerUserPreferences(screenLock, startingTime, period, continueAfterAlarm);
   }
 
-  static void storeCurrentTimerValue(Duration value) async {
-    _storage.write(key: _currentTimerValueKey, value: DurationToString.convert(value));
+  static Future<void> storeCurrentTimerValue(Duration value) async {
+    await _storage.write(key: _currentTimerValueKey, value: DurationToString.convert(value));
   }
 
   static Future<Duration> currentTimerValue() async {
@@ -56,8 +58,8 @@ class UserDataStorage {
     return StringToDuration.convert(value);
   }
 
-  static void storeStartingTimerValue(Duration value) async {
-    _storage.write(key: _startingTimerValueKey, value: DurationToString.convert(value));
+  static Future<void> storeStartingTimerValue(Duration value) async {
+    await _storage.write(key: _startingTimerValueKey, value: DurationToString.convert(value));
   }
 
   static Future<Duration> startingTimerValue() async {
@@ -65,8 +67,8 @@ class UserDataStorage {
     return StringToDuration.convert(value);
   }
 
-  static void storePeriodValue(int value) async {
-    _storage.write(key: _periodValueKey, value: value.toString());
+  static Future<void> storePeriodValue(int value) async {
+    await _storage.write(key: _periodValueKey, value: value.toString());
   }
 
   static Future<int> periodValue() async {
@@ -74,11 +76,11 @@ class UserDataStorage {
     return int.parse(value);
   }
 
-  static void storeVolumeValue(int value) async {
+  static Future<void> storeVolumeValue(int value) async {
     var currentValue = await volumeValue();
     if (currentValue == value) return;
     VolumeController().setVolume(value / 100, showSystemUI: true);
-    _storage.write(key: _volumeValueKey, value: value.toString());
+    await _storage.write(key: _volumeValueKey, value: value.toString());
   }
 
   static Future<int> volumeValue() async {
@@ -86,9 +88,9 @@ class UserDataStorage {
     return int.parse(value);
   }
 
-  static void storeScreenLockValue(bool value) async {
+  static Future<void> storeScreenLockValue(bool value) async {
     WakelockPlus.toggle(enable: value);
-    _storage.write(key: _screenLockValueKey, value: value.toString());
+    await _storage.write(key: _screenLockValueKey, value: value.toString());
   }
 
   static Future<bool> screenLockValue() async {
@@ -96,8 +98,8 @@ class UserDataStorage {
     return value.toLowerCase() == 'true';
   }
 
-  static void storeAlarmTypeValue(String value) async {
-    _storage.write(key: _alarmTypeValueKey, value: value);
+  static Future<void> storeAlarmTypeValue(String value) async {
+    await _storage.write(key: _alarmTypeValueKey, value: value);
     Speaker().playAlarmSound(); // Play sound to notify user of change
   }
 
@@ -106,8 +108,8 @@ class UserDataStorage {
     return AlarmType.values.firstWhere((alarm) => alarm.name == value, orElse: () => AlarmType.brass);
   }
 
-  static void storeLanguageValue(String value) async {
-    _storage.write(key: _languageValueKey, value: value);
+  static Future<void> storeLanguageValue(String value) async {
+    await _storage.write(key: _languageValueKey, value: value);
   }
 
   static Future<SupportedLanguage> languageValue() async {
@@ -123,8 +125,8 @@ class UserDataStorage {
     return language;
   }
 
-  static void storeVibrationValue(bool value) async {
-    _storage.write(key: _vibrationValueKey, value: value.toString());
+  static Future<void> storeVibrationValue(bool value) async {
+    await _storage.write(key: _vibrationValueKey, value: value.toString());
   }
 
   static Future<bool> vibrationValue() async {
@@ -132,8 +134,8 @@ class UserDataStorage {
     return value.toLowerCase() == 'true';
   }
 
-  static void storeContinueAfterAlarmValue(bool value) async {
-    _storage.write(key: _continueAfterAlarmKey, value: value.toString());
+  static Future<void> storeContinueAfterAlarmValue(bool value) async {
+    await _storage.write(key: _continueAfterAlarmKey, value: value.toString());
   }
 
   static Future<bool> continueAfterAlarmValue() async {
@@ -141,8 +143,8 @@ class UserDataStorage {
     return value.toLowerCase() == 'true';
   }
 
-  static void storeLastVisitedPageValue(AvailablePage value) async {
-    _storage.write(key: _lastVisitedPageValueKey, value: value.name);
+  static Future<void> storeLastVisitedPageValue(AvailablePage value) async {
+    await _storage.write(key: _lastVisitedPageValueKey, value: value.name);
   }
 
   static Future<AvailablePage> lastVisitedPageValue() async {
@@ -150,8 +152,8 @@ class UserDataStorage {
     return AvailablePage.values.firstWhere((val) => value == val.name, orElse: () => AvailablePage.clock);
   }
 
-  static void storeIsDarkTheme(bool value) async {
-    _storage.write(key: _isDarkThemeKey, value: value.toString());
+  static Future<void> storeIsDarkTheme(bool value) async {
+    await _storage.write(key: _isDarkThemeKey, value: value.toString());
   }
 
   static Future<bool> isDarkTheme() async {
@@ -159,12 +161,23 @@ class UserDataStorage {
     return value.toLowerCase() == 'true';
   }
 
-  static void storeAppLaunchCount(int value) async {
-    _storage.write(key: _appLaunchCountKey, value: value.toString());
+  static Future<void> storeAppLaunchCount(int value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_appLaunchCountKey, value);
   }
 
   static Future<int> appLaunchCount() async {
-    var value = await _storage.read(key: _appLaunchCountKey) ?? "0";
-    return int.parse(value);
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_appLaunchCountKey) ?? 0;
+  }
+
+  static Future<void> storeHasRated(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_hasRatedKey, value);
+  }
+
+  static Future<bool> hasRated() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_hasRatedKey) ?? false;
   }
 }

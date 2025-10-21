@@ -19,7 +19,7 @@ class TimerRingPainter extends CustomPainter {
     final radius = math.min(size.width, size.height) / 1.6;
     
     final paint = Paint()
-      ..color = isFinished ? CustomColors.alarmRingColor : (isDarkTheme ? CustomColors.darkTimerRingColor : CustomColors.timerRingColor)
+      ..color = isFinished ? CustomColors.alarmRingColor : (isDarkTheme ? CustomColors.darkSecondColor : CustomColors.timerRingColor)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 20.0
       ..strokeCap = StrokeCap.round;

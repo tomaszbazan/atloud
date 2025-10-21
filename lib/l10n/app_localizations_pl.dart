@@ -176,7 +176,7 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String get ratingDialogTitle1 => 'Lubisz naszą aplikację?';
+  String get ratingDialogTitle1 => 'Lubisz naszą aplikację? ⏰';
 
   @override
   String get ratingDialogContent1 =>
@@ -184,7 +184,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get ratingDialogTitle2 =>
-      'Cieszymy się, że korzystasz z naszej aplikacji!';
+      'Cieszymy się, że korzystasz z naszej aplikacji! 🌟';
 
   @override
   String get ratingDialogContent2 =>

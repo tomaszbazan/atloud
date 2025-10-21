@@ -4,6 +4,8 @@ import 'package:atloud/l10n/app_localizations.dart';
 import 'package:atloud/rating/rating_service.dart';
 import 'package:atloud/feedback/feedback_page.dart';
 
+import '../shared/user_data_storage.dart';
+
 class RateUsDialog extends StatefulWidget {
   const RateUsDialog({super.key});
 
@@ -12,7 +14,7 @@ class RateUsDialog extends StatefulWidget {
 }
 
 class _RateUsDialogState extends State<RateUsDialog> {
-  int _rating = 0;
+  int _rating = 5;
   final RatingService _ratingService = RatingService();
 
   @override
@@ -68,10 +70,6 @@ class _RateUsDialogState extends State<RateUsDialog> {
                       style: const TextStyle(fontSize: 18),
                     ),
                   ),
-                  if (launchCount <= 3) ...[
-                    const SizedBox(width: 8),
-                    Image.asset('assets/icons/clock.png', height: 20),
-                  ]
                 ],
               ),
               const SizedBox(height: 16),
@@ -91,7 +89,7 @@ class _RateUsDialogState extends State<RateUsDialog> {
                 children: List.generate(5, (index) {
                   return IconButton(
                     icon: Icon(
-                      index < _rating ? Icons.star : Icons.star_border,
+                      Icons.star,
                       color: index < _rating ? customColors : Colors.grey,
                       size: 40,
                     ),
@@ -128,16 +126,21 @@ class _RateUsDialogState extends State<RateUsDialog> {
     );
   }
 
-  void _submit() {
-    _ratingService.setHasRated();
-    Navigator.of(context).pop();
+  Future<void> _submit() async {
+    await UserDataStorage.storeHasRated(true);
 
     if (_rating == 5) {
-      _ratingService.openStoreForRating();
+      await _ratingService.openStoreForRating();
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
     } else {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => FeedbackPage()),
-      );
+      Navigator.of(context).pop();
+      if (mounted) {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const FeedbackPage()),
+        );
+      }
     }
   }
 }
