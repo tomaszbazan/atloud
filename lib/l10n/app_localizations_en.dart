@@ -175,14 +175,14 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get ratingDialogTitle1 => 'Do you like our app?';
+  String get ratingDialogTitle1 => 'Do you like our app? ⏰';
 
   @override
   String get ratingDialogContent1 =>
       'Share your opinion!\nEvery rating helps us create better tools.';
 
   @override
-  String get ratingDialogTitle2 => 'We’re so glad you’re using our app!';
+  String get ratingDialogTitle2 => 'We\'re so glad you\'re using our app! 🌟';
 
   @override
   String get ratingDialogContent2 =>

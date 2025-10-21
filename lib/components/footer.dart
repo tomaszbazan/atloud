@@ -35,7 +35,7 @@ class FooterWidget extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Container(
-          color: isActive ? (isDark ? CustomColors.darkTimerRingColor : CustomColors.timerRingColor) : (isDark ? CustomColors.darkFooterBackgroundColor : CustomColors.footerBackgroundColor),
+          color: isActive ? (isDark ? CustomColors.darkSecondColor : CustomColors.timerRingColor) : (isDark ? CustomColors.darkFooterBackgroundColor : CustomColors.footerBackgroundColor),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

@@ -401,7 +401,7 @@ abstract class AppLocalizations {
   /// No description provided for @ratingDialogTitle1.
   ///
   /// In pl, this message translates to:
-  /// **'Lubisz naszą aplikację?'**
+  /// **'Lubisz naszą aplikację? ⏰'**
   String get ratingDialogTitle1;
 
   /// No description provided for @ratingDialogContent1.
@@ -413,7 +413,7 @@ abstract class AppLocalizations {
   /// No description provided for @ratingDialogTitle2.
   ///
   /// In pl, this message translates to:
-  /// **'Cieszymy się, że korzystasz z naszej aplikacji!'**
+  /// **'Cieszymy się, że korzystasz z naszej aplikacji! 🌟'**
   String get ratingDialogTitle2;
 
   /// No description provided for @ratingDialogContent2.
