@@ -107,7 +107,7 @@ class CustomTheme {
   static double navigationBarHeight(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final bottomInset = MediaQuery.of(context).viewPadding.bottom;
-    return _getAdaptiveHeight(screenHeight, 80, 110) + bottomInset;
+    return _getAdaptiveHeight(screenHeight, 80, 90) + bottomInset;
   }
 
   static TextStyle smallClockTextTheme(BuildContext context) {

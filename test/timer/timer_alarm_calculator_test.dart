@@ -170,8 +170,8 @@ void main() {
 
         expect(decision.shouldAnnounce, isTrue);
         expect(decision.shouldAnnounceCurrentTime, isFalse);
-        expect(decision.shouldAnnounceTimeLeft, isTrue);
-        expect(decision.timeLeft, equals(const Duration(minutes: 0)));
+        expect(decision.shouldAnnounceTimeLeft, isFalse);
+        expect(decision.shouldPlayAlarm, isTrue);
         expect(decision.displayTime, "00:00:00");
         expect(decision.nextAnnouncement, Duration(seconds: 0));
       });

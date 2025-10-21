@@ -56,7 +56,7 @@ class TimerAlarmCalculator {
 
     // Check if timer exactly ends (alarm time)
     if (_isTimerAtZero(secondsToTimerEnd)) {
-      return AlarmDecision.announceDuration(Duration.zero, displayTime, nextAnnouncement);
+      return AlarmDecision.playAlarm(displayTime, nextAnnouncement);
     }
 
     // Check if timer has ended and we shouldn't continue
