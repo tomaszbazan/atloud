@@ -101,10 +101,12 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
 
   Widget _centerBar(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Container(height: 110.0, decoration: BoxDecoration(color: (isDark ? CustomColors.darkTextColor : CustomColors.textColor).withAlpha(80), borderRadius: BorderRadius.circular(14.0))),
+    return IgnorePointer(
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Container(height: 110.0, decoration: BoxDecoration(color: (isDark ? CustomColors.darkTextColor : CustomColors.textColor).withAlpha(80), borderRadius: BorderRadius.circular(14.0))),
+        ),
       ),
     );
   }
