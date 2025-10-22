@@ -119,8 +119,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get appWorksField => 'Czy masz problem z aplikacją?';
 
   @override
-  String get featuresField =>
-      'Jakie funkcje chciałbyś/chciałabyś abyśmy dodali?';
+  String get featuresField => 'Jakie funkcje chciałbyś/chciałabyś abyśmy dodali?';
 
   @override
   String get sendButton => 'WYŚLIJ';
@@ -179,23 +178,19 @@ class AppLocalizationsPl extends AppLocalizations {
   String get ratingDialogTitle1 => 'Lubisz naszą aplikację? ⏰';
 
   @override
-  String get ratingDialogContent1 =>
-      'Podziel się swoją opinią!\nKażda ocena pomaga nam tworzyć lepsze narzędzia.';
+  String get ratingDialogContent1 => 'Podziel się swoją opinią!\nKażda ocena pomaga nam tworzyć lepsze narzędzia.';
 
   @override
-  String get ratingDialogTitle2 =>
-      'Cieszymy się, że korzystasz z naszej aplikacji! 🌟';
+  String get ratingDialogTitle2 => 'Cieszymy się, że korzystasz z naszej aplikacji! 🌟';
 
   @override
-  String get ratingDialogContent2 =>
-      'Dzięki ocenie pomagasz nam ją ulepszać :)';
+  String get ratingDialogContent2 => 'Dzięki ocenie pomagasz nam ją ulepszać :)';
 
   @override
   String get ratingDialogTitle3 => 'Hurra! 🎉 Ciągle z nami jesteś!';
 
   @override
-  String get ratingDialogContent3 =>
-      'Prosimy o pozytywną ocenę abyśmy mogli dalej działać.';
+  String get ratingDialogContent3 => 'Prosimy o pozytywną ocenę abyśmy mogli dalej działać.';
 
   @override
   String get ratingChoose => 'Wybierz ocenę';
