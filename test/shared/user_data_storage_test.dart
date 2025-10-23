@@ -27,8 +27,7 @@ void main() {
       test('should store and retrieve current timer value', () async {
         const testDuration = Duration(minutes: 15, seconds: 30);
 
-        UserDataStorage.storeCurrentTimerValue(testDuration);
-        await Future.delayed(Duration.zero);
+        await UserDataStorage.storeCurrentTimerValue(testDuration);
 
         final result = await UserDataStorage.currentTimerValue();
 
@@ -46,8 +45,7 @@ void main() {
       test('should store and retrieve starting timer value', () async {
         const testDuration = Duration(minutes: 20);
 
-        UserDataStorage.storeStartingTimerValue(testDuration);
-        await Future.delayed(Duration.zero);
+        await UserDataStorage.storeStartingTimerValue(testDuration);
 
         final result = await UserDataStorage.startingTimerValue();
 
@@ -65,8 +63,7 @@ void main() {
       test('should store and retrieve period value', () async {
         const testValue = 5;
 
-        UserDataStorage.storePeriodValue(testValue);
-        await Future.delayed(Duration.zero);
+        await UserDataStorage.storePeriodValue(testValue);
 
         final result = await UserDataStorage.periodValue();
 
@@ -84,8 +81,7 @@ void main() {
       test('should store and retrieve volume value', () async {
         const testValue = 75;
 
-        UserDataStorage.storeVolumeValue(testValue);
-        await Future.delayed(Duration.zero);
+        await UserDataStorage.storeVolumeValue(testValue);
 
         final result = await UserDataStorage.volumeValue();
 
@@ -103,8 +99,7 @@ void main() {
 
         SharedPreferences.setMockInitialValues({'volumeValue': '50'});
 
-        UserDataStorage.storeVolumeValue(testValue);
-        await Future.delayed(Duration.zero);
+        await UserDataStorage.storeVolumeValue(testValue);
 
         final result = await UserDataStorage.volumeValue();
 
@@ -116,8 +111,7 @@ void main() {
       test('should store and retrieve screen lock value true', () async {
         const testValue = true;
 
-        UserDataStorage.storeScreenLockValue(testValue);
-        await Future.delayed(Duration.zero);
+        await UserDataStorage.storeScreenLockValue(testValue);
 
         final result = await UserDataStorage.screenLockValue();
 
@@ -127,8 +121,7 @@ void main() {
       test('should store and retrieve screen lock value false', () async {
         const testValue = false;
 
-        UserDataStorage.storeScreenLockValue(testValue);
-        await Future.delayed(Duration.zero);
+        await UserDataStorage.storeScreenLockValue(testValue);
 
         final result = await UserDataStorage.screenLockValue();
 
@@ -146,8 +139,7 @@ void main() {
       test('should store and retrieve alarm type value', () async {
         const testValue = 'fanfare';
 
-        UserDataStorage.storeAlarmTypeValue(testValue);
-        await Future.delayed(Duration.zero);
+        await UserDataStorage.storeAlarmTypeValue(testValue);
 
         final result = await UserDataStorage.alarmTypeValue();
 
@@ -165,8 +157,7 @@ void main() {
       test('should store and retrieve language value', () async {
         const testValue = 'en';
 
-        UserDataStorage.storeLanguageValue(testValue);
-        await Future.delayed(Duration.zero);
+        await UserDataStorage.storeLanguageValue(testValue);
 
         final result = await UserDataStorage.languageValue();
 
@@ -184,8 +175,7 @@ void main() {
       test('should store and retrieve vibration value true', () async {
         const testValue = true;
 
-        UserDataStorage.storeVibrationValue(testValue);
-        await Future.delayed(Duration.zero);
+        await UserDataStorage.storeVibrationValue(testValue);
 
         final result = await UserDataStorage.vibrationValue();
 
@@ -195,8 +185,7 @@ void main() {
       test('should store and retrieve vibration value false', () async {
         const testValue = false;
 
-        UserDataStorage.storeVibrationValue(testValue);
-        await Future.delayed(Duration.zero);
+        await UserDataStorage.storeVibrationValue(testValue);
 
         final result = await UserDataStorage.vibrationValue();
 
@@ -214,8 +203,7 @@ void main() {
       test('should store and retrieve continue after alarm value true', () async {
         const testValue = true;
 
-        UserDataStorage.storeContinueAfterAlarmValue(testValue);
-        await Future.delayed(Duration.zero);
+        await UserDataStorage.storeContinueAfterAlarmValue(testValue);
 
         final result = await UserDataStorage.continueAfterAlarmValue();
 
@@ -225,8 +213,7 @@ void main() {
       test('should store and retrieve continue after alarm value false', () async {
         const testValue = false;
 
-        UserDataStorage.storeContinueAfterAlarmValue(testValue);
-        await Future.delayed(Duration.zero);
+        await UserDataStorage.storeContinueAfterAlarmValue(testValue);
 
         final result = await UserDataStorage.continueAfterAlarmValue();
 
@@ -244,8 +231,7 @@ void main() {
       test('should store and retrieve last visited page value', () async {
         const testValue = AvailablePage.timer;
 
-        UserDataStorage.storeLastVisitedPageValue(testValue);
-        await Future.delayed(Duration.zero);
+        await UserDataStorage.storeLastVisitedPageValue(testValue);
 
         final result = await UserDataStorage.lastVisitedPageValue();
 
@@ -263,8 +249,7 @@ void main() {
       test('should store and retrieve dark theme value true', () async {
         const testValue = true;
 
-        UserDataStorage.storeIsDarkTheme(testValue);
-        await Future.delayed(Duration.zero);
+        await UserDataStorage.storeIsDarkTheme(testValue);
 
         final result = await UserDataStorage.isDarkTheme();
 
@@ -274,8 +259,7 @@ void main() {
       test('should store and retrieve dark theme value false', () async {
         const testValue = false;
 
-        UserDataStorage.storeIsDarkTheme(testValue);
-        await Future.delayed(Duration.zero);
+        await UserDataStorage.storeIsDarkTheme(testValue);
 
         final result = await UserDataStorage.isDarkTheme();
 
@@ -326,6 +310,52 @@ void main() {
         expect(timerData.screenLockValue, equals(true));
         expect(timerData.startingTimerValue, equals(const Duration(minutes: 15)));
         expect(timerData.continuationAfterAlarmValue, equals(true));
+      });
+    });
+
+    group('App Launch Count', () {
+      test('should store and retrieve app launch count', () async {
+        const testValue = 5;
+
+        await UserDataStorage.storeAppLaunchCount(testValue);
+
+        final result = await UserDataStorage.appLaunchCount();
+
+        expect(result, equals(testValue));
+      });
+
+      test('should return default value when no app launch count is stored', () async {
+        final result = await UserDataStorage.appLaunchCount();
+
+        expect(result, equals(0));
+      });
+    });
+
+    group('Has Rated', () {
+      test('should store and retrieve has rated value true', () async {
+        const testValue = true;
+
+        await UserDataStorage.storeHasRated(testValue);
+
+        final result = await UserDataStorage.hasRated();
+
+        expect(result, equals(testValue));
+      });
+
+      test('should store and retrieve has rated value false', () async {
+        const testValue = false;
+
+        await UserDataStorage.storeHasRated(testValue);
+
+        final result = await UserDataStorage.hasRated();
+
+        expect(result, equals(testValue));
+      });
+
+      test('should return default value when no has rated value is stored', () async {
+        final result = await UserDataStorage.hasRated();
+
+        expect(result, equals(false));
       });
     });
 

@@ -62,8 +62,7 @@ import 'app_localizations_pl.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -71,8 +70,7 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -84,19 +82,15 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
-      <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[
-    Locale('en'),
-    Locale('pl'),
-  ];
+  static const List<Locale> supportedLocales = <Locale>[Locale('en'), Locale('pl')];
 
   /// No description provided for @appTitle.
   ///
@@ -397,10 +391,57 @@ abstract class AppLocalizations {
   /// In pl, this message translates to:
   /// **'Błąd podczas wysyłania danych do AirTable: {error}'**
   String airtableSendError(String error);
+
+  /// No description provided for @ratingDialogTitle1.
+  ///
+  /// In pl, this message translates to:
+  /// **'Lubisz naszą aplikację? ⏰'**
+  String get ratingDialogTitle1;
+
+  /// No description provided for @ratingDialogContent1.
+  ///
+  /// In pl, this message translates to:
+  /// **'Podziel się swoją opinią!\nKażda ocena pomaga nam tworzyć lepsze narzędzia.'**
+  String get ratingDialogContent1;
+
+  /// No description provided for @ratingDialogTitle2.
+  ///
+  /// In pl, this message translates to:
+  /// **'Cieszymy się, że korzystasz z naszej aplikacji! 🌟'**
+  String get ratingDialogTitle2;
+
+  /// No description provided for @ratingDialogContent2.
+  ///
+  /// In pl, this message translates to:
+  /// **'Dzięki ocenie pomagasz nam ją ulepszać :)'**
+  String get ratingDialogContent2;
+
+  /// No description provided for @ratingDialogTitle3.
+  ///
+  /// In pl, this message translates to:
+  /// **'Hurra! 🎉 Ciągle z nami jesteś!'**
+  String get ratingDialogTitle3;
+
+  /// No description provided for @ratingDialogContent3.
+  ///
+  /// In pl, this message translates to:
+  /// **'Prosimy o pozytywną ocenę abyśmy mogli dalej działać.'**
+  String get ratingDialogContent3;
+
+  /// No description provided for @ratingChoose.
+  ///
+  /// In pl, this message translates to:
+  /// **'Wybierz ocenę'**
+  String get ratingChoose;
+
+  /// No description provided for @ratingSubmit.
+  ///
+  /// In pl, this message translates to:
+  /// **'PRZEŚLIJ OPINIĘ'**
+  String get ratingSubmit;
 }
 
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -409,8 +450,7 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['en', 'pl'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'pl'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;

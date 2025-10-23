@@ -29,7 +29,7 @@ class ThemeSetting extends StatelessWidget {
               value: ThemeNotifier().isDarkTheme,
               activeTrackColor: Colors.black,
               inactiveTrackColor: Colors.black,
-              activeColor: Colors.white,
+              activeThumbColor: Colors.white,
               onChanged: (value) => ThemeNotifier().setTheme(value),
             ),
           ],

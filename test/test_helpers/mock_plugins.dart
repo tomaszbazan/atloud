@@ -1,5 +1,9 @@
+import 'package:atloud/rating/rating_service.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+
+class MockRatingService extends Mock implements RatingService {}
 
 class MockPlugins {
   static void setupMocks() {
@@ -132,6 +136,31 @@ class MockPlugins {
     );
   }
 
+  //   TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+  //     const MethodChannel('dev.flutter.pigeon.WakelockPlusApi.toggle'),
+  //     (MethodCall methodCall) async => {'enabled': false},
+  //   );
+  //
+  //   TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+  //     const MethodChannel('dev.flutter.pigeon.WakelockPlusApi.isEnabled'),
+  //     (MethodCall methodCall) async => {'enabled': false},
+  //   );
+  //
+  //   TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+  //     const MethodChannel('dev.flutter.plugins/in_app_review'),
+  //     (MethodCall methodCall) async {
+  //       switch (methodCall.method) {
+  //         case 'isAvailable':
+  //           return true;
+  //         case 'requestReview':
+  //           return null;
+  //         default:
+  //           return null;
+  //       }
+  //     },
+  //   );
+  // }
+
   static void clearMocks() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
       const MethodChannel('flutter_foreground_task/methods'),
@@ -177,5 +206,20 @@ class MockPlugins {
       'dev.flutter.pigeon.wakelock_plus_platform_interface.WakelockPlusApi.isEnabled',
       null,
     );
+
+    // TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+    //   const MethodChannel('dev.flutter.pigeon.WakelockPlusApi.toggle'),
+    //   null,
+    // );
+    //
+    // TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+    //   const MethodChannel('dev.flutter.pigeon.WakelockPlusApi.isEnabled'),
+    //   null,
+    // );
+    //
+    // TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+    //   const MethodChannel('dev.flutter.plugins/in_app_review'),
+    //   null,
+    // );
   }
 }

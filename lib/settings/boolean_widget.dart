@@ -35,7 +35,7 @@ class _BooleanWidgetState extends State<BooleanWidget> {
             value: _currentValue,
             activeTrackColor: Colors.black,
             inactiveTrackColor: Colors.black,
-            activeColor: Colors.white,
+            activeThumbColor: Colors.white,
             onChanged: (_) => setState(() {
                   _currentValue = !_currentValue;
                   widget.onChange(_currentValue);

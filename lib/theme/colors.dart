@@ -13,6 +13,5 @@ class CustomColors {
   static const Color darkTextColor = Color(0xFFE0E0E0);
   static const Color darkFooterBackgroundColor = Color(0xFF2C2C2C);
   static const Color darkFooterTextColor = Colors.white;
-  static const Color darkSecondColor = Color(0xFF4FC3F7);
-  static const Color darkTimerRingColor = Color(0xFF26A69A);
+  static const Color darkSecondColor = Color(0xFF26A69A);
 }

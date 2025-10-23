@@ -25,7 +25,7 @@ linter:
     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
 
 formatter:
-  lineLength: 120
+  page_width: 180
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

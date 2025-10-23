@@ -98,5 +98,13 @@
     "placeholders": {
       "error": {"type": "String"}
     }
-  }
+  },
+  "ratingDialogTitle1": "Lubisz naszą aplikację? ⏰",
+  "ratingDialogContent1": "Podziel się swoją opinią!\nKażda ocena pomaga nam tworzyć lepsze narzędzia.",
+  "ratingDialogTitle2": "Cieszymy się, że korzystasz z naszej aplikacji! 🌟",
+  "ratingDialogContent2": "Dzięki ocenie pomagasz nam ją ulepszać :)",
+  "ratingDialogTitle3": "Hurra! 🎉 Ciągle z nami jesteś!",
+  "ratingDialogContent3": "Prosimy o pozytywną ocenę abyśmy mogli dalej działać.",
+  "ratingChoose": "Wybierz ocenę",
+  "ratingSubmit": "PRZEŚLIJ OPINIĘ"
 }
