@@ -35,10 +35,14 @@ class _TimerPageState extends State<TimerPage> {
   @override
   void initState() {
     _isTimerPage = widget.isTimerPage;
-    ForegroundTaskStarter.startService(_timerTick);
-    _loadUserPreferences().then((preferences) => _initPage(preferences));
-
+    _initializePageAsync();
     super.initState();
+  }
+
+  Future<void> _initializePageAsync() async {
+    await ForegroundTaskStarter.startService(_timerTick);
+    final preferences = await _loadUserPreferences();
+    _initPage(preferences);
   }
 
   void _initPage(Map<String, dynamic> preferences) {
@@ -69,22 +73,13 @@ class _TimerPageState extends State<TimerPage> {
     };
   }
 
-  void _switchPage() {
+  Future<void> _switchPage() async {
     setState(() {
       _isPickingTime = false;
       _isTimerPage = !_isTimerPage;
     });
-    if (_isTimerPage) {
-      UserDataStorage.storeLastVisitedPageValue(AvailablePage.timer);
-    } else {
-      UserDataStorage.storeLastVisitedPageValue(AvailablePage.clock);
-    }
-    _loadUserPreferences().then((preferences) => _initPage(preferences));
-  }
-
-  void _switchToPage(bool isTimer) {
-    if (_isTimerPage == isTimer) return;
-    _switchPage();
+    final preferences = await _loadUserPreferences();
+    _initPage(preferences);
   }
 
   @override
@@ -113,10 +108,11 @@ class _TimerPageState extends State<TimerPage> {
                 _isPickingTime
                     ? TimePickerWidget(
                       initialTime: _startingTime ?? const Duration(),
-                      onTimeSelected: (newTime) {
+                      onTimeSelected: (newTime) async {
                         _startingTime = newTime;
                         UserDataStorage.storeStartingTimerValue(_startingTime!);
-                        _loadUserPreferences().then((preferences) => _initPage(preferences));
+                        final preferences = await _loadUserPreferences();
+                        _initPage(preferences);
                         setState(() {
                           _isPickingTime = false;
                         });
@@ -183,8 +179,8 @@ class _TimerPageState extends State<TimerPage> {
       ),
       bottomNavigationBar: FooterWidget(
         currentPage: _isTimerPage ? AvailablePage.timer : AvailablePage.clock,
-        onClockTap: () => _switchToPage(false),
-        onTimerTap: () => _switchToPage(true),
+        onClockTap: () => _switchPage(),
+        onTimerTap: () => _switchPage(),
       ),
     );
   }

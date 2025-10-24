@@ -11,13 +11,16 @@ void startCallback() {
 }
 
 class ForegroundTaskStarter {
-  static void startService(Function(dynamic) receivedServiceData) async {
-    // Without this block service is not starting
-    if (await FlutterForegroundTask.isRunningService) {}
+  static Future<void> startService(Function(dynamic) receivedServiceData) async {
+    if (await FlutterForegroundTask.isRunningService) {
+      FlutterForegroundTask.addTaskDataCallback(receivedServiceData);
+      return;
+    }
+
     FlutterForegroundTask.addTaskDataCallback(receivedServiceData);
     var language = await UserDataStorage.languageValue();
 
-    FlutterForegroundTask.startService(
+    await FlutterForegroundTask.startService(
         serviceId: 8882,
         notificationTitle: 'At Loud!',
         notificationText: notificationText(language),

@@ -1,5 +1,4 @@
 import 'package:atloud/main.dart';
-import 'package:atloud/shared/available_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
@@ -24,7 +23,7 @@ void main() {
           Device.phone
         ])
         ..addScenario(
-          widget: MyApp(lastVisitedPage: AvailablePage.timer, ratingService: ratingService),
+          widget: MyApp(ratingService: ratingService),
           name: 'settings page',
           onCreate: (scenarioWidgetKey) async {
             final finder = find.descendant(

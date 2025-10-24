@@ -10,32 +10,23 @@ import '../timer/timer.dart';
 
 class FooterWidget extends StatelessWidget {
   final AvailablePage currentPage;
-  final Function()? actionOnClick;
   final Function()? onClockTap;
   final Function()? onTimerTap;
   final iconWidth = 30.0;
   final iconHeight = 30.0;
 
-  const FooterWidget({
-    super.key,
-    required this.currentPage,
-    this.actionOnClick,
-    this.onClockTap,
-    this.onTimerTap,
-  });
+  const FooterWidget({super.key, required this.currentPage, this.onClockTap, this.onTimerTap});
 
-  Widget _buildNavItem(BuildContext context, {
-    required Widget iconWidget,
-    required String label,
-    required bool isActive,
-    required VoidCallback onTap,
-  }) {
+  Widget _buildNavItem(BuildContext context, {required Widget iconWidget, required String label, required bool isActive, required VoidCallback onTap}) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Expanded(
       child: InkWell(
-        onTap: onTap,
+        onTap: isActive ? null : onTap,
         child: Container(
-          color: isActive ? (isDark ? CustomColors.darkSecondColor : CustomColors.timerRingColor) : (isDark ? CustomColors.darkFooterBackgroundColor : CustomColors.footerBackgroundColor),
+          color:
+              isActive
+                  ? (isDark ? CustomColors.darkSecondColor : CustomColors.timerRingColor)
+                  : (isDark ? CustomColors.darkFooterBackgroundColor : CustomColors.footerBackgroundColor),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -62,14 +53,17 @@ class FooterWidget extends StatelessWidget {
           children: [
             _buildNavItem(
               context,
-              iconWidget: Image.asset('assets/icons/clock.png', width: iconWidth, height: iconHeight, color: isDark ? CustomColors.darkFooterTextColor : CustomColors.footerTextColor),
+              iconWidget: Image.asset(
+                'assets/icons/clock.png',
+                width: iconWidth,
+                height: iconHeight,
+                color: isDark ? CustomColors.darkFooterTextColor : CustomColors.footerTextColor,
+              ),
               label: localizations.clockTab,
               isActive: currentPage == AvailablePage.clock,
               onTap: () {
                 if (onClockTap != null) {
                   onClockTap!();
-                } else if (actionOnClick != null) {
-                  actionOnClick!();
                 } else {
                   Navigator.pushReplacement(
                     context,
@@ -80,18 +74,21 @@ class FooterWidget extends StatelessWidget {
                     ),
                   );
                 }
-              }
+              },
             ),
             _buildNavItem(
               context,
-              iconWidget: Image.asset('assets/icons/timer.png', width: iconWidth, height: iconHeight, color: isDark ? CustomColors.darkFooterTextColor : CustomColors.footerTextColor),
+              iconWidget: Image.asset(
+                'assets/icons/timer.png',
+                width: iconWidth,
+                height: iconHeight,
+                color: isDark ? CustomColors.darkFooterTextColor : CustomColors.footerTextColor,
+              ),
               label: localizations.timerTab,
               isActive: currentPage == AvailablePage.timer,
               onTap: () {
                 if (onTimerTap != null) {
                   onTimerTap!();
-                } else if (actionOnClick != null) {
-                  actionOnClick!();
                 } else {
                   Navigator.pushReplacement(
                     context,
@@ -102,35 +99,42 @@ class FooterWidget extends StatelessWidget {
                     ),
                   );
                 }
-              }
+              },
             ),
             _buildNavItem(
               context,
-              iconWidget: Image.asset('assets/icons/feedback.png', width: iconWidth, height: iconHeight, color: isDark ? CustomColors.darkFooterTextColor : CustomColors.footerTextColor),
+              iconWidget: Image.asset(
+                'assets/icons/feedback.png',
+                width: iconWidth,
+                height: iconHeight,
+                color: isDark ? CustomColors.darkFooterTextColor : CustomColors.footerTextColor,
+              ),
               label: localizations.feedbackTab,
               isActive: currentPage == AvailablePage.feedback,
-              onTap: () => Navigator.pushReplacement(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation1, animation2) => const FeedbackPage(),
-                  transitionDuration: Duration.zero,
-                  reverseTransitionDuration: Duration.zero,
-                ),
-              ),
+              onTap:
+                  () => Navigator.pushReplacement(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation1, animation2) => const FeedbackPage(),
+                      transitionDuration: Duration.zero,
+                      reverseTransitionDuration: Duration.zero,
+                    ),
+                  ),
             ),
             _buildNavItem(
               context,
               iconWidget: Icon(Icons.settings_outlined, size: iconWidth, color: isDark ? CustomColors.darkFooterTextColor : CustomColors.footerTextColor),
               label: localizations.settingsTab,
               isActive: currentPage == AvailablePage.settings,
-                onTap: () => Navigator.pushReplacement(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) => const SettingsPage(),
-                    transitionDuration: Duration.zero,
-                    reverseTransitionDuration: Duration.zero,
+              onTap:
+                  () => Navigator.pushReplacement(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation1, animation2) => const SettingsPage(),
+                      transitionDuration: Duration.zero,
+                      reverseTransitionDuration: Duration.zero,
+                    ),
                   ),
-                )
             ),
           ],
         ),

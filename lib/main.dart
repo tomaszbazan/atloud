@@ -4,7 +4,6 @@ import 'package:atloud/l10n/language_notifier.dart';
 import 'package:atloud/l10n/supported_language.dart';
 import 'package:atloud/rating/rating_service.dart';
 import 'package:atloud/settings/settings.dart';
-import 'package:atloud/shared/available_page.dart';
 import 'package:atloud/theme/theme.dart';
 import 'package:atloud/theme/theme_notifier.dart';
 import 'package:atloud/timer/timer.dart';
@@ -18,25 +17,20 @@ void main() async {
   FlutterForegroundTask.initCommunicationPort();
   ForegroundTaskInitializer.initService();
 
-  // var lastVisitedPage = await UserDataStorage.lastVisitedPageValue(); // TODO: Verify if it is working in all cases
-  var lastVisitedPage = AvailablePage.clock;
-
   final ratingService = RatingService();
   await ratingService.incrementAppLaunchCount();
 
   LanguageNotifier().loadLocale();
   ThemeNotifier().loadTheme();
   runApp(MyApp(
-    lastVisitedPage: lastVisitedPage,
     ratingService: ratingService,
   ));
 }
 
 class MyApp extends StatefulWidget {
-  final AvailablePage lastVisitedPage;
   final RatingService ratingService;
 
-  const MyApp({super.key, required this.lastVisitedPage, required this.ratingService});
+  const MyApp({super.key, required this.ratingService});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -81,7 +75,7 @@ class _MyAppState extends State<MyApp> {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: SupportedLanguage.supportedLocales,
-          home: TimerPage(isTimerPage: widget.lastVisitedPage == AvailablePage.timer ? true : false),
+          home: TimerPage(isTimerPage: false),
           routes: {
             '/timer': (context) => const TimerPage(isTimerPage: true),
             '/clock': (context) => const TimerPage(isTimerPage: false),

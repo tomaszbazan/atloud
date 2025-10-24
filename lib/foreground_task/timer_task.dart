@@ -118,7 +118,13 @@ class TimerTaskHandler extends TaskHandler {
   }
 
   @override
-  Future<void> onStart(DateTime timestamp, TaskStarter starter) async {}
+  Future<void> onStart(DateTime timestamp, TaskStarter starter) async {
+    if (_taskType == TaskType.clock) {
+      var speaker = Speaker();
+      speaker.currentTimeWithoutContext();
+    }
+    _incrementTime();
+  }
 
   @override
   void onRepeatEvent(DateTime timestamp) {
