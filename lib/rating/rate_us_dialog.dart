@@ -50,6 +50,7 @@ class _RateUsDialogState extends State<RateUsDialog> {
             borderRadius: BorderRadius.circular(20),
             side: BorderSide(color: customColors, width: 2),
           ),
+          insetPadding: const EdgeInsets.symmetric(horizontal: 16),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -88,10 +89,11 @@ class _RateUsDialogState extends State<RateUsDialog> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(5, (index) {
                   return IconButton(
+                    constraints: const BoxConstraints(),
+                    iconSize: 40,
                     icon: Icon(
                       Icons.star,
                       color: index < _rating ? customColors : Colors.grey,
-                      size: 40,
                     ),
                     onPressed: () {
                       setState(() {
