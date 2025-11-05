@@ -1,4 +1,4 @@
-import 'package:atloud/foreground_task/foreground_task_initializer.dart';
+import 'package:atloud/app_initializer.dart';
 import 'package:atloud/l10n/app_localizations.dart';
 import 'package:atloud/l10n/language_notifier.dart';
 import 'package:atloud/l10n/supported_language.dart';
@@ -9,16 +9,11 @@ import 'package:atloud/theme/theme_notifier.dart';
 import 'package:atloud/timer/timer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  FlutterForegroundTask.initCommunicationPort();
-  ForegroundTaskInitializer.initService();
-
   final ratingService = RatingService();
-  await ratingService.incrementAppLaunchCount();
 
   LanguageNotifier().loadLocale();
   ThemeNotifier().loadTheme();
@@ -75,7 +70,7 @@ class _MyAppState extends State<MyApp> {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: SupportedLanguage.supportedLocales,
-          home: TimerPage(isTimerPage: false),
+          home: AppInitializer(ratingService: widget.ratingService),
           routes: {
             '/timer': (context) => const TimerPage(isTimerPage: true),
             '/clock': (context) => const TimerPage(isTimerPage: false),

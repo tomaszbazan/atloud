@@ -439,6 +439,138 @@ abstract class AppLocalizations {
   /// In pl, this message translates to:
   /// **'PRZEŚLIJ OPINIĘ'**
   String get ratingSubmit;
+
+  /// No description provided for @onboardingTitle1.
+  ///
+  /// In pl, this message translates to:
+  /// **'Mówiący zegar i minutnik AtLoud'**
+  String get onboardingTitle1;
+
+  /// No description provided for @onboardingWelcome.
+  ///
+  /// In pl, this message translates to:
+  /// **'Dziękujemy za instalację! 🎉'**
+  String get onboardingWelcome;
+
+  /// No description provided for @onboardingHappy.
+  ///
+  /// In pl, this message translates to:
+  /// **'Cieszymy się, że jesteś z nami.'**
+  String get onboardingHappy;
+
+  /// No description provided for @onboardingTips.
+  ///
+  /// In pl, this message translates to:
+  /// **'Oto kilka wskazówek na początek.'**
+  String get onboardingTips;
+
+  /// No description provided for @onboardingMuteClock.
+  ///
+  /// In pl, this message translates to:
+  /// **'Możesz wyciszyć zegar, dotykając ikony głośnika na środku ekranu.'**
+  String get onboardingMuteClock;
+
+  /// No description provided for @onboardingMuteUseful.
+  ///
+  /// In pl, this message translates to:
+  /// **'Przydatne w miejscach publicznych i w czasie nocy.'**
+  String get onboardingMuteUseful;
+
+  /// No description provided for @onboardingSetTimer.
+  ///
+  /// In pl, this message translates to:
+  /// **'Aby ustawić minutnik, stuknij w cyfry na środku ekranu.'**
+  String get onboardingSetTimer;
+
+  /// No description provided for @onboardingSetTime.
+  ///
+  /// In pl, this message translates to:
+  /// **'Następnie ustaw czas.'**
+  String get onboardingSetTime;
+
+  /// No description provided for @onboardingPermissions.
+  ///
+  /// In pl, this message translates to:
+  /// **'Za chwilę poprosimy Cię o 2 zgody potrzebne do poprawnego działania aplikacji.'**
+  String get onboardingPermissions;
+
+  /// No description provided for @onboardingAccept.
+  ///
+  /// In pl, this message translates to:
+  /// **'Prosimy, zaakceptuj je.'**
+  String get onboardingAccept;
+
+  /// No description provided for @onboardingEnjoy.
+  ///
+  /// In pl, this message translates to:
+  /// **'Miłego korzystania! ⏰💛 Dziękujemy'**
+  String get onboardingEnjoy;
+
+  /// No description provided for @onboardingNext.
+  ///
+  /// In pl, this message translates to:
+  /// **'DALEJ >>'**
+  String get onboardingNext;
+
+  /// No description provided for @batteryOptimizationTitle.
+  ///
+  /// In pl, this message translates to:
+  /// **'Optymalizacja baterii włączona'**
+  String get batteryOptimizationTitle;
+
+  /// No description provided for @batteryOptimizationMessage.
+  ///
+  /// In pl, this message translates to:
+  /// **'Optymalizacja baterii jest włączona dla tej aplikacji, co może uniemożliwić poprawne działanie usługi w tle. Wyłącz optymalizację baterii dla Atloud w ustawieniach urządzenia, aby zapewnić prawidłowe działanie.'**
+  String get batteryOptimizationMessage;
+
+  /// No description provided for @cancel.
+  ///
+  /// In pl, this message translates to:
+  /// **'Anuluj'**
+  String get cancel;
+
+  /// No description provided for @openSettings.
+  ///
+  /// In pl, this message translates to:
+  /// **'Otwórz ustawienia'**
+  String get openSettings;
+
+  /// No description provided for @permissionsTitle.
+  ///
+  /// In pl, this message translates to:
+  /// **'Wymagane zgody'**
+  String get permissionsTitle;
+
+  /// No description provided for @permissionNotifications.
+  ///
+  /// In pl, this message translates to:
+  /// **'Powiadomienia'**
+  String get permissionNotifications;
+
+  /// No description provided for @permissionBattery.
+  ///
+  /// In pl, this message translates to:
+  /// **'Optymalizacja baterii'**
+  String get permissionBattery;
+
+  /// No description provided for @permissionGranted.
+  ///
+  /// In pl, this message translates to:
+  /// **'Udzielono'**
+  String get permissionGranted;
+
+  /// No description provided for @permissionNotGranted.
+  ///
+  /// In pl, this message translates to:
+  /// **'Nie udzielono'**
+  String get permissionNotGranted;
+
+  /// No description provided for @permissionGrant.
+  ///
+  /// In pl, this message translates to:
+  /// **'USTAW'**
+  String get permissionGrant;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

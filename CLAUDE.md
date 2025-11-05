@@ -22,3 +22,6 @@
 - Handle async operations with proper Future/async-await patterns
 - Follow standard error handling with try/catch blocks where needed
 - Don't use comments in code, except very complicated, unclear logic
+
+## Definition of done
+- Always run "flutter analyze" before mark task as done

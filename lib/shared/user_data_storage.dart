@@ -27,6 +27,7 @@ class UserDataStorage {
   static const String _isDarkThemeKey = 'isDarkTheme';
   static const String _appLaunchCountKey = 'appLaunchCount';
   static const String _hasRatedKey = 'hasRated';
+  static const String _hasCompletedOnboardingKey = 'hasCompletedOnboarding';
   static const String _migrationCompletedKey = 'migrationFromSecureStorageCompleted';
 
   static SharedPreferences? _prefs;
@@ -249,5 +250,15 @@ class UserDataStorage {
   static Future<bool> hasRated() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_hasRatedKey) ?? false;
+  }
+
+  static Future<void> storeHasCompletedOnboarding(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_hasCompletedOnboardingKey, value);
+  }
+
+  static Future<bool> hasCompletedOnboarding() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_hasCompletedOnboardingKey) ?? false;
   }
 }

@@ -197,4 +197,71 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ratingSubmit => 'SUBMIT';
+
+  @override
+  String get onboardingTitle1 => 'Talking Clock and Timer AtLoud';
+
+  @override
+  String get onboardingWelcome => 'Thank you for installing! 🎉';
+
+  @override
+  String get onboardingHappy => 'We\'re happy to have you with us.';
+
+  @override
+  String get onboardingTips => 'Here are a few tips to get started.';
+
+  @override
+  String get onboardingMuteClock => 'You can mute the clock by tapping the speaker icon in the middle of the screen.';
+
+  @override
+  String get onboardingMuteUseful => 'Useful in public places or at night.';
+
+  @override
+  String get onboardingSetTimer => 'To set the timer, tap the numbers in the middle of the screen.';
+
+  @override
+  String get onboardingSetTime => 'Then set your desired time.';
+
+  @override
+  String get onboardingPermissions => 'In a moment, we\'ll ask for 2 permissions required for the app to work properly.';
+
+  @override
+  String get onboardingAccept => 'Please allow them.';
+
+  @override
+  String get onboardingEnjoy => 'Enjoy using the app! ⏰💛 Thank you';
+
+  @override
+  String get onboardingNext => 'NEXT >>';
+
+  @override
+  String get batteryOptimizationTitle => 'Battery Optimization Enabled';
+
+  @override
+  String get batteryOptimizationMessage =>
+      'Battery optimization is enabled for this app, which may prevent the background service from running correctly. Please disable battery optimization for Atloud in your device settings to ensure proper functionality.';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get openSettings => 'Open Settings';
+
+  @override
+  String get permissionsTitle => 'Required Permissions';
+
+  @override
+  String get permissionNotifications => 'Notifications';
+
+  @override
+  String get permissionBattery => 'Battery Optimization';
+
+  @override
+  String get permissionGranted => 'Granted';
+
+  @override
+  String get permissionNotGranted => 'Not granted';
+
+  @override
+  String get permissionGrant => 'GRANT';
 }

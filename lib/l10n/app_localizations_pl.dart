@@ -197,4 +197,71 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get ratingSubmit => 'PRZEŚLIJ OPINIĘ';
+
+  @override
+  String get onboardingTitle1 => 'Mówiący zegar i minutnik AtLoud';
+
+  @override
+  String get onboardingWelcome => 'Dziękujemy za instalację! 🎉';
+
+  @override
+  String get onboardingHappy => 'Cieszymy się, że jesteś z nami.';
+
+  @override
+  String get onboardingTips => 'Oto kilka wskazówek na początek.';
+
+  @override
+  String get onboardingMuteClock => 'Możesz wyciszyć zegar, dotykając ikony głośnika na środku ekranu.';
+
+  @override
+  String get onboardingMuteUseful => 'Przydatne w miejscach publicznych i w czasie nocy.';
+
+  @override
+  String get onboardingSetTimer => 'Aby ustawić minutnik, stuknij w cyfry na środku ekranu.';
+
+  @override
+  String get onboardingSetTime => 'Następnie ustaw czas.';
+
+  @override
+  String get onboardingPermissions => 'Za chwilę poprosimy Cię o 2 zgody potrzebne do poprawnego działania aplikacji.';
+
+  @override
+  String get onboardingAccept => 'Prosimy, zaakceptuj je.';
+
+  @override
+  String get onboardingEnjoy => 'Miłego korzystania! ⏰💛 Dziękujemy';
+
+  @override
+  String get onboardingNext => 'DALEJ >>';
+
+  @override
+  String get batteryOptimizationTitle => 'Optymalizacja baterii włączona';
+
+  @override
+  String get batteryOptimizationMessage =>
+      'Optymalizacja baterii jest włączona dla tej aplikacji, co może uniemożliwić poprawne działanie usługi w tle. Wyłącz optymalizację baterii dla Atloud w ustawieniach urządzenia, aby zapewnić prawidłowe działanie.';
+
+  @override
+  String get cancel => 'Anuluj';
+
+  @override
+  String get openSettings => 'Otwórz ustawienia';
+
+  @override
+  String get permissionsTitle => 'Wymagane zgody';
+
+  @override
+  String get permissionNotifications => 'Powiadomienia';
+
+  @override
+  String get permissionBattery => 'Optymalizacja baterii';
+
+  @override
+  String get permissionGranted => 'Udzielono';
+
+  @override
+  String get permissionNotGranted => 'Nie udzielono';
+
+  @override
+  String get permissionGrant => 'USTAW';
 }
