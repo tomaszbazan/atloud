@@ -3,6 +3,8 @@ import 'package:atloud/theme/colors.dart';
 import 'package:atloud/theme/fonts.dart';
 import 'package:flutter/material.dart';
 
+import '../../theme/theme.dart';
+
 class OnboardingPage3 extends StatelessWidget {
   const OnboardingPage3({super.key});
 
@@ -12,11 +14,11 @@ class OnboardingPage3 extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Padding(
-      padding: const EdgeInsets.all(30.0),
+      padding: EdgeInsets.all(CustomTheme.onBoardingSpacing(context)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const SizedBox(height: 30),
+          SizedBox(height: CustomTheme.onBoardingSpacing(context)),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -25,7 +27,7 @@ class OnboardingPage3 extends StatelessWidget {
                   '👉 ${localizations.onboardingSetTimer}',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: CustomTheme.onBoardingTextBig(context) * 0.9,
                     fontFamily: CustomFonts.openSans.value,
                     fontWeight: FontWeight.bold,
                     color: isDark ? CustomColors.darkTextColor : CustomColors.textColor,
@@ -39,7 +41,7 @@ class OnboardingPage3 extends StatelessWidget {
             localizations.onboardingSetTime,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: CustomTheme.onBoardingTextSmall(context) * 0.9,
               fontFamily: CustomFonts.openSans.value,
               fontStyle: FontStyle.italic,
               color: isDark ? CustomColors.darkTextColor : CustomColors.textColor,
@@ -48,7 +50,7 @@ class OnboardingPage3 extends StatelessWidget {
           const Spacer(),
           Image.asset(
             'assets/onboarding/page3_screenshot.png',
-            height: 450,
+            height: CustomTheme.onBoardingImageHeight(context),
             fit: BoxFit.contain,
           ),
         ],

@@ -110,6 +110,31 @@ class CustomTheme {
     return _getAdaptiveHeight(screenHeight, 80, 90) + bottomInset;
   }
 
+  static double onBoardingLogoHeight(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    return _getAdaptiveHeight(screenHeight, 80, 120);
+  }
+
+  static double onBoardingImageHeight(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    return _getAdaptiveHeight(screenHeight, 300, 450);
+  }
+
+  static double onBoardingSpacing(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    return _getAdaptiveHeight(screenHeight, 15, 30);
+  }
+
+  static double onBoardingTextBig(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    return _getAdaptiveHeight(screenHeight, 25, 36);
+  }
+
+  static double onBoardingTextSmall(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    return _getAdaptiveHeight(screenHeight, 21, 30);
+  }
+
   static TextStyle smallClockTextTheme(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return TextStyle(

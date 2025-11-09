@@ -1,6 +1,7 @@
 import 'package:atloud/l10n/app_localizations.dart';
 import 'package:atloud/theme/colors.dart';
 import 'package:atloud/theme/fonts.dart';
+import 'package:atloud/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class OnboardingPage1 extends StatelessWidget {
@@ -12,52 +13,52 @@ class OnboardingPage1 extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Padding(
-      padding: const EdgeInsets.all(30.0),
+      padding: EdgeInsets.all(CustomTheme.onBoardingSpacing(context)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const SizedBox(height: 30),
+          SizedBox(height: CustomTheme.onBoardingSpacing(context)),
           Image.asset(
             'assets/onboarding/logo.png',
-            height: 120,
+            height: CustomTheme.onBoardingLogoHeight(context),
           ),
-          const SizedBox(height: 60),
+          SizedBox(height: CustomTheme.onBoardingSpacing(context) * 2),
           Text(
             localizations.onboardingTitle1,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 30,
+              fontSize: CustomTheme.onBoardingTextBig(context),
               fontFamily: CustomFonts.openSans.value,
               fontWeight: FontWeight.bold,
               color: isDark ? CustomColors.darkTextColor : CustomColors.textColor,
             ),
           ),
-          const SizedBox(height: 40),
+          SizedBox(height: CustomTheme.onBoardingSpacing(context) * 1.5),
           Text(
             localizations.onboardingWelcome,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 24,
+              fontSize: CustomTheme.onBoardingTextSmall(context),
               fontFamily: CustomFonts.openSans.value,
               color: isDark ? CustomColors.darkTextColor : CustomColors.textColor,
             ),
           ),
-          const SizedBox(height: 40),
+          SizedBox(height: CustomTheme.onBoardingSpacing(context) * 1.5),
           Text(
             localizations.onboardingHappy,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 24,
+              fontSize: CustomTheme.onBoardingTextSmall(context),
               fontFamily: CustomFonts.openSans.value,
               color: isDark ? CustomColors.darkTextColor : CustomColors.textColor,
             ),
           ),
-          const SizedBox(height: 40),
+          SizedBox(height: CustomTheme.onBoardingSpacing(context) * 1.5),
           Text(
             localizations.onboardingTips,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 24,
+              fontSize: CustomTheme.onBoardingTextSmall(context),
               fontFamily: CustomFonts.openSans.value,
               fontWeight: FontWeight.bold,
               color: isDark ? CustomColors.darkTextColor : CustomColors.textColor,

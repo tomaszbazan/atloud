@@ -81,7 +81,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 40.0),
+                  padding: const EdgeInsets.only(bottom: 20.0),
                   child: ElevatedButton(
                     onPressed: _nextPage,
                     style: ElevatedButton.styleFrom(

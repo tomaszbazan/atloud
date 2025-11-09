@@ -3,6 +3,8 @@ import 'package:atloud/theme/colors.dart';
 import 'package:atloud/theme/fonts.dart';
 import 'package:flutter/material.dart';
 
+import '../../theme/theme.dart';
+
 class OnboardingPage4 extends StatelessWidget {
   const OnboardingPage4({super.key});
 
@@ -25,7 +27,7 @@ class OnboardingPage4 extends StatelessWidget {
                   '👉 ${localizations.onboardingPermissions}',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 30,
+                    fontSize: CustomTheme.onBoardingTextBig(context),
                     fontFamily: CustomFonts.openSans.value,
                     fontWeight: FontWeight.bold,
                     color: isDark ? CustomColors.darkTextColor : CustomColors.textColor,
@@ -39,7 +41,7 @@ class OnboardingPage4 extends StatelessWidget {
             localizations.onboardingAccept,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 30,
+              fontSize: CustomTheme.onBoardingTextBig(context),
               fontFamily: CustomFonts.openSans.value,
               fontWeight: FontWeight.bold,
               color: isDark ? CustomColors.darkTextColor : CustomColors.textColor,
@@ -50,7 +52,7 @@ class OnboardingPage4 extends StatelessWidget {
             localizations.onboardingEnjoy,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 30,
+              fontSize: CustomTheme.onBoardingTextBig(context),
               fontFamily: CustomFonts.openSans.value,
               fontWeight: FontWeight.bold,
               color: isDark ? CustomColors.darkTextColor : CustomColors.textColor,
